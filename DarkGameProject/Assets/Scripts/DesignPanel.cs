@@ -19,6 +19,8 @@ public class DesignPanel : MonoBehaviour
     private GameObject designPanelContent;
     private GameObject designPanelClose;
 
+    private GameObject itemRotationBtn;
+
     private void Awake()
     {
         mainSceneUI = this.gameObject.transform.Find("MainSceneUI").gameObject;
@@ -28,6 +30,7 @@ public class DesignPanel : MonoBehaviour
         designPanelContent = designPanel.transform.Find("DesignPanelContent").gameObject;
         designPanelClose = designPanel.transform.Find("DesignPanelClose").gameObject;
         designPanelPosCheckPoint = designPanel.transform.Find("PosCheckPoint").gameObject;
+        itemRotationBtn = designPanel.transform.Find("ItemRotationBtn").gameObject;
 
     }
 
@@ -38,11 +41,34 @@ public class DesignPanel : MonoBehaviour
 
         designItemBtn.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
         designPanelClose.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
+
+        itemRotationBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            if(BasicAction.gameplayItemRotationMode == false)
+            {
+                BasicAction.gameplayItemRotationMode = true;
+            }
+            else
+            {
+                BasicAction.gameplayItemRotationMode = false;
+            }
+        });
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(BasicAction.gameplayItemSetMode == true)
+        {
+            if(Input.mousePosition.x > designPanelPosCheckPoint.transform.position.x)
+            {
+                CameraControl.cameraCanMove = false;
+            }
+            else
+            {
+                CameraControl.cameraCanMove = true;
+            }
+        }
         
     }
 
@@ -57,6 +83,7 @@ public class DesignPanel : MonoBehaviour
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x + 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x - 450f, tt);
                 designItemBtnState = true;
+                BasicAction.gameplayItemSetMode = true;
                 anime.OnComplete(() => designItemBtnAnime = false);
             }
             else
@@ -64,6 +91,7 @@ public class DesignPanel : MonoBehaviour
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x - 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x + 450f, tt);
                 designItemBtnState = false;
+                BasicAction.gameplayItemSetMode = false;
                 anime.OnComplete(() => designItemBtnAnime = false);
             }
         }
@@ -74,5 +102,13 @@ public class DesignPanel : MonoBehaviour
         GameObject oj = Instantiate(gameplayItemUIItem) as GameObject;
         oj.transform.SetParent(designPanelContent.transform);
         oj.transform.localPosition = new Vector3(0, 0, 0);
+        //测试ID=101
+        oj.GetComponent<GameplayItemUIItem>().SetItemID(101);
+        //
+        GameObject oj2 = Instantiate(gameplayItemUIItem) as GameObject;
+        oj2.transform.SetParent(designPanelContent.transform);
+        oj2.transform.localPosition = new Vector3(0, 150f, 0);
+        //测试ID=102
+        oj2.GetComponent<GameplayItemUIItem>().SetItemID(102);
     }
 }

@@ -7,9 +7,15 @@ public class GameplayItemUIItem : MonoBehaviour
 {
     private GameObject gameplayItemBtn;
 
+    private GameObject itemText;
+
+    public int itemID;
+
+
     private void Awake()
     {
         gameplayItemBtn = this.gameObject.transform.Find("GameplayItemBtn").gameObject;
+        itemText = gameplayItemBtn.transform.Find("Text").gameObject;
 
     }
 
@@ -24,4 +30,11 @@ public class GameplayItemUIItem : MonoBehaviour
     {
         
     }
+
+    public void SetItemID(int id)
+    {
+        itemID = id;
+        itemText.GetComponent<Text>().text = id.ToString();
+    }
+
 }

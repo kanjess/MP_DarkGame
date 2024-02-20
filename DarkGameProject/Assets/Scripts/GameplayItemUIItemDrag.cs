@@ -32,6 +32,10 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         startPosition = transform.position; // 记录开始拖拽时的位置
         designPenel.designItemDragState = true;
         basicAction.targetPanelItem = this.gameObject;
+        //临时指示物
+        basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false);
+        //禁用地图拖拽
+        BasicAction.gameplayItemAction = true;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -40,6 +44,17 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         {
             // 更新UI元素的位置
             transform.position = Input.mousePosition;
+            BasicAction.gameplayItemAction = true;
+            //位置判断
+            if(Input.mousePosition.x > designPenel.GetComponent<DesignPanel>().designPanelPosCheckPoint.transform.position.x)
+            {
+                this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                this.gameObject.transform.localScale = new Vector3(1, 0, 1);
+            }
+
         }
     }
 
@@ -47,13 +62,24 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
     {
         if (designPenel.designItemDragState == true)
         {
-            // 在场景中生成2D物体
-            basicAction.InsNewGameplayItem();
+            if(basicAction.dragMapValid == true)
+            {
+                // 在场景中生成2D物体
+                basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, true);
+                
+            }
+            else
+            {
+
+            } 
         }
         //
         designPenel.designItemDragState = false;
         // 将UI元素放回原位或进行其他处理
         transform.position = startPosition;
+        this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        //
+        BasicAction.gameplayItemAction = false;
     }
 
     public void CancelDrag()
@@ -62,5 +88,8 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         designPenel.designItemDragState = false;
         // 取消拖拽，物体返回原位置
         transform.position = startPosition;
+        this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        //
+        BasicAction.gameplayItemAction = false;
     }
 }
