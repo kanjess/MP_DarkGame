@@ -453,6 +453,7 @@ Transform:
   - {fileID: 3736070822292447660}
   - {fileID: 5415809607919993350}
   - {fileID: 770717256441845689}
+  - {fileID: 5472035986550528955}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -521,6 +522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 102
   isMain: 1
+  canPutBack: 1
   canRotate: 1
   isValidItem: 0
   gameplayPic: {fileID: 3221285792318422933}
@@ -541,11 +543,21 @@ MonoBehaviour:
   moveBtn: {fileID: 5641725782951827165}
   itemOccupiedAreaList: []
   outputLinkItemList: []
+  specialOutputLinkItemList: []
   inputLinkItemList: []
+  specialInputLinkItemList: []
   outputPathItemList: []
   outputPathPosList: []
+  specialOutputPathItemList: []
+  specialOutputPathPosList: []
   outputCount: 1
   inputCount: 1
+  specialOutputCount: 0
+  specialInputCount: 0
+  specialOutputLinkTargetList: 
+  specialInputLinkTargetList: 
+  darkSocketPoint: {fileID: 7398769773100664049}
+  darkPlugPoint: {fileID: 0}
 --- !u!1 &4023811943120544831
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +846,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1244,6 +1256,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7398769773100664049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5472035986550528955}
+  m_Layer: 0
+  m_Name: DarkSocketPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5472035986550528955
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398769773100664049}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.45, y: 0.42, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4480513686453019444}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7636888414012667552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,7 +1625,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

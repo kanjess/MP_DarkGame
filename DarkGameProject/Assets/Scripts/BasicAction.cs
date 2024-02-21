@@ -18,6 +18,7 @@ public class BasicAction : MonoBehaviour
     public GameObject gpItem_101;
     public GameObject gpItem_102;
     public GameObject gpItem_999;
+    public GameObject gpItem_401;
 
     private GameplayMapping gameplayMapping;
 
@@ -61,6 +62,8 @@ public class BasicAction : MonoBehaviour
     public bool specialItemLink = false;
 
     private GameObject roadLayer;
+
+    private GameObject startItemObject;
 
     private void Awake()
     {
@@ -166,7 +169,7 @@ public class BasicAction : MonoBehaviour
                     }
                 }
                 //拖拽路线
-                else if (hit.collider.gameObject.name == "OutputBtn" || hit.collider.gameObject.name == "InputBtn" || hit.collider.gameObject.name == "SpecialInputBtn" || hit.collider.gameObject.name == "SpecialOutputBtn")
+                else if ((hit.collider.gameObject.name == "OutputBtn" || hit.collider.gameObject.name == "InputBtn" || hit.collider.gameObject.name == "SpecialInputBtn" || hit.collider.gameObject.name == "SpecialOutputBtn") && gameplayItemRotationMode == false)
                 {
                     //寻路标记开启
                     roadEditMode = true;
@@ -654,6 +657,8 @@ public class BasicAction : MonoBehaviour
             TemGameplayItemClear();
             //
             gameplayItemAction = false;
+
+            Item101StartCheck();  //判定是否形成闭环
         }
 
         // 释放鼠标左键（拖拽路线）
@@ -764,11 +769,12 @@ public class BasicAction : MonoBehaviour
                     //
                     for (int i = 0; i < temRoadObjectLayer.transform.childCount; i++)
                     {
+                        //Debug.Log(temRoadObjectLayer.transform.childCount);
                         GameObject pathIII = temRoadObjectLayer.transform.GetChild(i).gameObject;
                         pathIII.GetComponent<MainPathItem>().linkGameItemList.Add(outout);
                         pathIII.GetComponent<MainPathItem>().linkGameItemList.Add(inin);
                         pathIII.GetComponent<MainPathItem>().TemRoadDestroy(true);
-                    }
+                    }                    
                 }
             }
             else
@@ -788,6 +794,8 @@ public class BasicAction : MonoBehaviour
             roadEditMode = false;
             //
             gameplayItemAction = false;
+
+            Item101StartCheck();  //判定是否形成闭环
         }
 
 
@@ -914,6 +922,10 @@ public class BasicAction : MonoBehaviour
         else if (id == 999)
         {
             gameplayItem = gpItem_999;
+        }
+        else if (id == 401)
+        {
+            gameplayItem = gpItem_401;
         }
     }
 
@@ -1357,6 +1369,29 @@ public class BasicAction : MonoBehaviour
             }
         }
     }
+
+    void Item101StartCheck()
+    {
+        if(gameplayMapping.mainGameplayItemList.Count > 0 && startItemObject == null)
+        {
+            for(int i = 0; i < gameplayMapping.mainGameplayItemList.Count; i++)
+            {
+                GameObject aa = gameplayMapping.mainGameplayItemList[i];
+                if(aa.gameObject.name == "GameplayItem_101(Clone)")
+                {
+                    startItemObject = aa;
+                    break;
+                }
+            }
+        }
+
+        if(startItemObject != null)
+        {
+            startItemObject.GetComponent<GameplayItem>().GameProcessStart();
+        }
+
+    }
+
 
 }
 

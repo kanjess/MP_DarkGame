@@ -715,6 +715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 101
   isMain: 1
+  canPutBack: 1
   canRotate: 0
   isValidItem: 0
   gameplayPic: {fileID: 3221285792318422933}
@@ -735,13 +736,19 @@ MonoBehaviour:
   moveBtn: {fileID: 1144530506727386184}
   itemOccupiedAreaList: []
   outputLinkItemList: []
+  specialOutputLinkItemList: []
   inputLinkItemList: []
+  specialInputLinkItemList: []
   outputPathItemList: []
   outputPathPosList: []
+  specialOutputPathItemList: []
+  specialOutputPathPosList: []
   outputCount: 1
   inputCount: 1
   specialOutputCount: 0
   specialInputCount: 0
+  specialOutputLinkTargetList: 
+  specialInputLinkTargetList: 
 --- !u!1 &4072526714732023847
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,7 +1097,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1260,7 +1267,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1369,7 +1376,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

@@ -141,47 +141,56 @@ public class MainPathItem : MonoBehaviour
         }
         else if(beValid == true) //正式道路-转移
         {
-            GameObject pItem = Instantiate(pathItem) as GameObject;
-            pItem.transform.SetParent(pathLayer.transform);
-            pItem.transform.position = this.gameObject.transform.position;
-            pItem.GetComponent<MainPathItem>().SetDetail(pos, startEndPosList[0], startEndPosList[1]);
-            pItem.GetComponent<MainPathItem>().RoadPicSet();
-            pItem.GetComponent<MainPathItem>().SetValid(true);
-            pItem.GetComponent<MainPathItem>().linkGameItemList = new List<GameObject>();
-            pItem.GetComponent<MainPathItem>().linkGameItemList.AddRange(linkGameItemList);
-            pItem.GetComponent<MainPathItem>().defaltDirection = true;
-
-            //路点数据
-            if(basicAction.specialItemLink == false)
+            if(this.gameObject.transform.localScale == new Vector3(1, 1, 1))
             {
-                int count = linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList.Count - 1;
-                if (defaltDirection == true)
-                {
-                    linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList[count].Add(pos);
-                    linkGameItemList[0].GetComponent<GameplayItem>().outputPathItemListList[count].Add(pItem);
-                }
-                else
-                {
-                    linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList[count].Insert(0, pos);
-                    linkGameItemList[0].GetComponent<GameplayItem>().outputPathItemListList[count].Insert(0, pItem);
-                }
-            }
-            else if (basicAction.specialItemLink == true)
-            {
-                int count = linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList.Count - 1;
-                if (defaltDirection == true)
-                {
-                    linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList[count].Add(pos);
-                    linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathItemListList[count].Add(pItem);
-                }
-                else
-                {
-                    linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList[count].Insert(0, pos);
-                    linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathItemListList[count].Insert(0, pItem);
-                }
-            }
+                GameObject pItem = Instantiate(pathItem) as GameObject;
+                pItem.transform.SetParent(pathLayer.transform);
+                pItem.transform.position = this.gameObject.transform.position;
+                pItem.GetComponent<MainPathItem>().SetDetail(pos, startEndPosList[0], startEndPosList[1]);
+                pItem.GetComponent<MainPathItem>().RoadPicSet();
+                pItem.GetComponent<MainPathItem>().SetValid(true);
+                pItem.GetComponent<MainPathItem>().linkGameItemList = new List<GameObject>();
+                pItem.GetComponent<MainPathItem>().linkGameItemList.AddRange(linkGameItemList);
+                pItem.GetComponent<MainPathItem>().defaltDirection = true;
 
-            Destroy(this.gameObject);
+                //路点数据
+                if (basicAction.specialItemLink == false)
+                {
+                    int count = linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList.Count - 1;
+                    if (defaltDirection == true)
+                    {
+                        linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList[count].Add(pos);
+                        linkGameItemList[0].GetComponent<GameplayItem>().outputPathItemListList[count].Add(pItem);
+                    }
+                    else
+                    {
+                        linkGameItemList[0].GetComponent<GameplayItem>().outputPathPosListList[count].Insert(0, pos);
+                        linkGameItemList[0].GetComponent<GameplayItem>().outputPathItemListList[count].Insert(0, pItem);
+                    }
+                }
+                else if (basicAction.specialItemLink == true)
+                {
+                    int count = linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList.Count - 1;
+                    if (defaltDirection == true)
+                    {
+                        linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList[count].Add(pos);
+                        linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathItemListList[count].Add(pItem);
+                    }
+                    else
+                    {
+                        linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathPosListList[count].Insert(0, pos);
+                        linkGameItemList[0].GetComponent<GameplayItem>().specialOutputPathItemListList[count].Insert(0, pItem);
+                    }
+                }
+
+                Destroy(this.gameObject);
+
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+            
         }
     }
 }

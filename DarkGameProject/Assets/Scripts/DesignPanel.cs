@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Tilemaps;
 
 public class DesignPanel : MonoBehaviour
 {
@@ -21,8 +22,27 @@ public class DesignPanel : MonoBehaviour
 
     private GameObject itemRotationBtn;
 
+    private GameMode gameMode;
+    private CameraControl cameraControl;
+
+    private GameObject moneyShow;
+
+    private int sceneNo = 2;
+    private GameObject sceneContent;
+    private GameObject sceneContentBg;
+    private GameObject companySceneBtn;
+    private GameObject gameSceneBtn;
+    private GameObject playerSceneBtn;
+    private GameObject companyPanel;
+    private GameObject playerPanel;
+    private bool scenePanelAnime = false;
+    private Tweener scenePanelTweener;
+
+
     private void Awake()
     {
+        sceneNo = 2;
+
         mainSceneUI = this.gameObject.transform.Find("MainSceneUI").gameObject;
         designItemBtn = mainSceneUI.transform.Find("DesignItemBtn").gameObject;
         designPanel = mainSceneUI.transform.Find("DesignPanel").gameObject;
@@ -32,12 +52,28 @@ public class DesignPanel : MonoBehaviour
         designPanelPosCheckPoint = designPanel.transform.Find("PosCheckPoint").gameObject;
         itemRotationBtn = designPanel.transform.Find("ItemRotationBtn").gameObject;
 
+        gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
+        cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
+
+        GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
+        GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
+        moneyShow = topContent.transform.Find("MoneyShow").gameObject;
+
+        sceneContent = mainSceneUI.transform.Find("SceneContent").gameObject;
+        sceneContentBg = sceneContent.transform.Find("Bg").gameObject;
+        companySceneBtn = sceneContent.transform.Find("CompanySceneBtn").gameObject;
+        gameSceneBtn = sceneContent.transform.Find("GameSceneBtn").gameObject;
+        playerSceneBtn = sceneContent.transform.Find("PlayerSceneBtn").gameObject;
+        companyPanel = sceneContent.transform.Find("CompanyPanel").gameObject;
+        playerPanel = sceneContent.transform.Find("PlayerPanel").gameObject;
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
         GameItemIn();
+        sceneContentBg.transform.localScale = new Vector3(0, 0, 0);
 
         designItemBtn.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
         designPanelClose.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
@@ -53,6 +89,21 @@ public class DesignPanel : MonoBehaviour
                 BasicAction.gameplayItemRotationMode = false;
             }
         });
+
+        companySceneBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            ScenePanelSwitch(1);
+        });
+        gameSceneBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            ScenePanelSwitch(2);
+        });
+        playerSceneBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            ScenePanelSwitch(3);
+        });
+
+
     }
 
     // Update is called once per frame
@@ -60,16 +111,33 @@ public class DesignPanel : MonoBehaviour
     {
         if(BasicAction.gameplayItemSetMode == true)
         {
-            if(Input.mousePosition.x > designPanelPosCheckPoint.transform.position.x)
+            if (Input.mousePosition.x > designPanelPosCheckPoint.transform.position.x)
             {
-                CameraControl.cameraCanMove = false;
+                cameraControl.cameraCanMove = false;
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    cameraControl.inDragScreen = true;
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    cameraControl.inDragScreen = false;
+                }
             }
             else
             {
-                CameraControl.cameraCanMove = true;
+                cameraControl.cameraCanMove = true;
+
+                if (Input.GetMouseButtonUp(0))
+                {
+                    cameraControl.inDragScreen = false;
+                }
+
             }
         }
-        
+
+        UIUpdate();
+
     }
 
     void DesignPanelAnime()
@@ -83,32 +151,143 @@ public class DesignPanel : MonoBehaviour
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x + 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x - 450f, tt);
                 designItemBtnState = true;
+
                 BasicAction.gameplayItemSetMode = true;
+
                 anime.OnComplete(() => designItemBtnAnime = false);
+                //暂停游戏
+                gameMode.gameProcessPause = true;
             }
             else
             {
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x - 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x + 450f, tt);
                 designItemBtnState = false;
+
                 BasicAction.gameplayItemSetMode = false;
+                BasicAction.gameplayItemAction = false;
+                BasicAction.gameplayItemRotationMode = false;
+                BasicAction.roadEditMode = false;
+
+                cameraControl.inDragScreen = false;
+                cameraControl.cameraCanMove = true;
+
                 anime.OnComplete(() => designItemBtnAnime = false);
+                //继续游戏
+                gameMode.gameProcessPause = false;
             }
         }
     }
 
     void GameItemIn()
     {
+        //测试ID=101
         GameObject oj = Instantiate(gameplayItemUIItem) as GameObject;
         oj.transform.SetParent(designPanelContent.transform);
         oj.transform.localPosition = new Vector3(0, 0, 0);
-        //测试ID=101
         oj.GetComponent<GameplayItemUIItem>().SetItemID(101);
-        //
+
+        //测试ID=102
         GameObject oj2 = Instantiate(gameplayItemUIItem) as GameObject;
         oj2.transform.SetParent(designPanelContent.transform);
-        oj2.transform.localPosition = new Vector3(0, 150f, 0);
-        //测试ID=102
+        oj2.transform.localPosition = new Vector3(0, -150f, 0);
         oj2.GetComponent<GameplayItemUIItem>().SetItemID(102);
+
+        //测试ID=401
+        GameObject oj3 = Instantiate(gameplayItemUIItem) as GameObject;
+        oj3.transform.SetParent(designPanelContent.transform);
+        oj3.transform.localPosition = new Vector3(0, -300f, 0);
+        oj3.GetComponent<GameplayItemUIItem>().SetItemID(401);
     }
+
+    void UIUpdate()
+    {
+        moneyShow.GetComponent<Text>().text = "Income: " + gameMode.companyMoney.ToString();
+    }
+
+    /**
+    void MapSceneSwitch(int sceneN)
+    {
+        if(sceneChangeAnime == false && sceneN != sceneNo)
+        {
+            sceneChangeAnime = true;
+            cameraControl.cameraCanMove = false;
+
+            Tilemap tt = new Tilemap();
+            if(sceneN == 1)
+            {
+                tt = cameraControl.upMap;
+            }
+            else if(sceneN == 2)
+            {
+                tt = cameraControl.normalMap;
+            }
+            else if (sceneN == 3)
+            {
+                tt = cameraControl.downMap;
+            }
+
+            float dis = 30f;
+
+            dis = dis * (sceneN - sceneNo);
+
+            Tweener anime = mainSceneContent.transform.DOMoveY(dis, 0.5f).SetRelative();
+
+            sceneNo = sceneN;
+
+            anime.OnComplete(() => cameraControl.TileSetup(tt));
+            anime.OnKill(() => MapSceneSwitchAnimeEnd());
+        }
+    }
+    void MapSceneSwitchAnimeEnd()
+    {
+        sceneChangeAnime = false;
+        cameraControl.cameraCanMove = true;
+    }
+    **/
+    void ScenePanelSwitch(int no)
+    {
+        if(scenePanelAnime == false && sceneNo != no)
+        {
+            if(no == 1 || no == 3)
+            {
+                scenePanelAnime = true;
+
+                sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
+                sceneContentBg.GetComponent<Image>().DOFade(0.8f, 0.3f);
+
+                if(no == 1)
+                {
+                    scenePanelTweener = companyPanel.transform.DOLocalMoveY(0f, 0.5f);
+                    playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+                }
+                else if (no == 3)
+                {
+                    scenePanelTweener = playerPanel.transform.DOLocalMoveY(0f, 0.5f);
+                    companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
+                }
+
+                sceneNo = no;
+
+                scenePanelTweener.OnComplete(() => scenePanelAnime = false);
+            }
+            else if(no == 2)
+            {
+                scenePanelAnime = true;
+
+                sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
+                sceneContentBg.GetComponent<Image>().DOFade(0f, 0.3f);
+
+                scenePanelTweener = companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
+                playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+
+                sceneNo = no;
+
+                scenePanelTweener.OnComplete(() => scenePanelAnime = false);
+                scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0,0,0));
+            }
+        }
+
+    }
+
 }

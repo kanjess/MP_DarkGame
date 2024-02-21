@@ -71,11 +71,18 @@ public class GameplayItem : MonoBehaviour
     public List<int> specialOutputLinkTargetList;
     public List<int> specialInputLinkTargetList;
 
+    private GameMode gameMode;
+
+    //黑暗模式
+    public GameObject darkSocketPoint;
+    public GameObject darkPlugPoint;
+
 
     private void Awake()
     {
         basicAction = GameObject.Find("Main Camera").gameObject.GetComponent<BasicAction>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
+        gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
 
         itemOccupiedAreaList = new List<Vector3Int>();
 
@@ -100,6 +107,7 @@ public class GameplayItem : MonoBehaviour
         specialOutputLinkTargetList = new List<int>();
         specialInputLinkTargetList = new List<int>();
 
+        //初始赋值
         if (itemID == 101)
         {
             outputCount = 1;
@@ -120,6 +128,11 @@ public class GameplayItem : MonoBehaviour
             //
             specialOutputLinkTargetList.Add(101);
             specialOutputCount = 1;
+        }
+        else if (itemID == 401)
+        {
+            outputCount = 0;
+            inputCount = 0;
         }
 
     }
@@ -393,6 +406,12 @@ public class GameplayItem : MonoBehaviour
             }
 
         }
+        else
+        {
+            rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+            moveBtn.transform.localScale = new Vector3(1, 1, 1);
+        }
+
 
     }
 
@@ -526,6 +545,67 @@ public class GameplayItem : MonoBehaviour
             }
         }
     }
+
+
+    //101特殊逻辑，gamemode打开监听
+    public void GameProcessStart()
+    {
+        if(itemID == 101)
+        {
+            GameObject item999 = GameObject.Find("GameplayItem_999(Clone)").gameObject;
+            //上游连接了999
+            if (specialInputLinkItemList.Contains(item999))
+            {
+                //下游连接了一圈包含自己
+                if(outputLinkItemList.Count > 0)
+                {
+                    gameMode.gameDynamicProcess = false;
+                    List<GameObject> checkL = new List<GameObject>();
+                    checkL.AddRange(outputLinkItemList);
+
+                    for(int ceng = 1; ceng < 100; ceng ++)
+                    {
+                        //如果包含101则闭环
+                        if(checkL.Contains(this.gameObject))
+                        {
+                            gameMode.gameDynamicProcess = true;
+                            break;
+                        }
+
+                        //查看下一级
+                        List<GameObject> nextLevelList = new List<GameObject>();
+                        for(int i = 0; i < checkL.Count; i ++)
+                        {
+                            GameObject nextLevelT = checkL[i];
+                            if(nextLevelT.GetComponent<GameplayItem>().outputLinkItemList.Count > 0)
+                            {
+                                //还有下一级
+                                nextLevelList.AddRange(nextLevelT.GetComponent<GameplayItem>().outputLinkItemList);
+                            }
+                        }
+                        checkL.Clear();
+                        checkL.AddRange(nextLevelList);
+
+                        //如果没有下一级，则停止
+                        if(checkL.Count == 0)
+                        {
+                            break;
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+        //出生点获取
+        if(gameMode.playerBornPoint == null && gameMode.gameDynamicProcess == true)
+        {
+            gameMode.playerStartObject = GameObject.Find("GameplayItem_999(Clone)").gameObject;
+            gameMode.playerBornPoint = GameObject.Find("GameplayItem_999(Clone)").gameObject.transform.Find("PlayerBornPoint").gameObject;
+        }
+
+    }
+
 
 
 

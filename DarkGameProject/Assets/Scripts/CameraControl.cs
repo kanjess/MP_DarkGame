@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class CameraControl : MonoBehaviour
 {
-    static public bool cameraCanMove = true;
+    public bool cameraCanMove = true;
+    public bool inDragScreen = false;
 
     public float panSpeed;
     public float zoomSensitivity;
@@ -20,9 +21,15 @@ public class CameraControl : MonoBehaviour
 
     public Tilemap map; // 地图的Tilemap组件
 
+    public Tilemap normalMap; 
+    //public Tilemap upMap; 
+    //public Tilemap downMap; 
+
     private void Awake()
     {
-        map = GameObject.Find("Tilemap").gameObject.GetComponent<Tilemap>();
+        normalMap = GameObject.Find("Tilemap").gameObject.GetComponent<Tilemap>();
+        //upMap = GameObject.Find("UpTile").gameObject.GetComponent<Tilemap>();
+        //downMap = GameObject.Find("DownTile").gameObject.GetComponent<Tilemap>();
     }
 
 
@@ -30,19 +37,13 @@ public class CameraControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // 获取Tilemap的边界
-        bounds = map.cellBounds;
-        // 转换为世界坐标的边角点
-        minCorner = map.CellToWorld(new Vector3Int(bounds.xMin, bounds.yMin, 0));
-        maxCorner = map.CellToWorld(new Vector3Int(bounds.xMax, bounds.yMax, 0));
-
-
+        TileSetup(normalMap);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (cameraCanMove == true && BasicAction.gameplayItemAction == false)
+        if (cameraCanMove == true && BasicAction.gameplayItemAction == false && inDragScreen == false)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -88,5 +89,17 @@ public class CameraControl : MonoBehaviour
         return clampedPosition;
     }
 
+
+    public void TileSetup(Tilemap mmm)
+    {
+        map = mmm;
+        // 获取Tilemap的边界
+        bounds = map.cellBounds;
+        // 转换为世界坐标的边角点
+        minCorner = map.CellToWorld(new Vector3Int(bounds.xMin, bounds.yMin, 0));
+        maxCorner = map.CellToWorld(new Vector3Int(bounds.xMax, bounds.yMax, 0));
+
+        //Debug.Log(bounds.yMin + " - " + bounds.yMax);
+    }
 
 }
