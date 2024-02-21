@@ -18,6 +18,7 @@ public class GameplayItem : MonoBehaviour
     public bool isValidItem = false;
 
     public GameObject gameplayPic;
+    public GameObject stablePic;
 
     public GameObject occupiedArea;
 
@@ -74,6 +75,7 @@ public class GameplayItem : MonoBehaviour
     private GameMode gameMode;
 
     //黑暗模式
+    public GameObject darkItemContent;
     public GameObject darkSocketPoint;
     public GameObject darkPlugPoint;
 
@@ -412,7 +414,6 @@ public class GameplayItem : MonoBehaviour
             moveBtn.transform.localScale = new Vector3(1, 1, 1);
         }
 
-
     }
 
     public void SetItemID(int id)
@@ -470,9 +471,9 @@ public class GameplayItem : MonoBehaviour
             occupiedArea.transform.localEulerAngles = new Vector3(0,0,z);
             for(int i = 0; i < occupiedArea.transform.childCount; i++)
             {
-                int xx = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.x;
-                int yy = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.y;
-                int zz = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.z;
+                int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
+                int yy = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.y);
+                int zz = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.z);
                 if(gameplayMapping.mapIllegalList.Contains(new Vector3Int(xx, yy, zz)) && itemOccupiedAreaList.Contains(new Vector3Int(xx, yy, zz)) == false)
                 {
                     //旋转失败
@@ -486,11 +487,17 @@ public class GameplayItem : MonoBehaviour
             //归位
             occupiedArea.transform.localEulerAngles = new Vector3(0, 0, 0);
 
+            //可以旋转
             if(noBlock == true)
             {
                 Tweener anime = this.gameObject.transform.DOLocalRotate(new Vector3(0, 0, z), 0.3f);
                 rotationBtn.transform.DOLocalRotate(new Vector3(0, 0, rz), 0.3f);
+                if(stablePic != null)
+                {
+                    stablePic.transform.DOLocalRotate(new Vector3(0, 0, rz), 0.3f);
+                }
                 anime.OnComplete(() => rotationAnime = false);
+                anime.OnKill(() => basicAction.AutoRoadRecreateForItem(this.gameObject));
             }
 
             //
@@ -503,9 +510,9 @@ public class GameplayItem : MonoBehaviour
     {
         for(int i = 0; i < occupiedArea.transform.childCount; i++)
         {
-            int xx = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.x;
-            int yy = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.y;
-            int zz = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.z;
+            int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
+            int yy = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.y);
+            int zz = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.z);
             Vector3Int pp = new Vector3Int(xx,yy,zz);
             if (gameplayMapping.mapIllegalList.Contains(pp) == false)
             {
@@ -519,9 +526,9 @@ public class GameplayItem : MonoBehaviour
     {
         for (int i = 0; i < occupiedArea.transform.childCount; i++)
         {
-            int xx = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.x;
-            int yy = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.y;
-            int zz = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.z;
+            int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
+            int yy = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.y);
+            int zz = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.z);
             Vector3Int pp = new Vector3Int(xx, yy, zz);
             if (gameplayMapping.mapIllegalList.Contains(pp) == true)
             {
@@ -535,9 +542,9 @@ public class GameplayItem : MonoBehaviour
     {
         for (int i = 0; i < occupiedArea.transform.childCount; i++)
         {
-            int xx = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.x;
-            int yy = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.y;
-            int zz = (int)occupiedArea.transform.GetChild(i).gameObject.transform.position.z;
+            int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
+            int yy = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.y);
+            int zz = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.z);
             Vector3Int pp = new Vector3Int(xx, yy, zz);
             if (itemOccupiedAreaList.Contains(pp) == false)
             {
@@ -605,7 +612,6 @@ public class GameplayItem : MonoBehaviour
         }
 
     }
-
 
 
 

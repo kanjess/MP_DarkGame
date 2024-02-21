@@ -79,7 +79,7 @@ public class MainPathItem : MonoBehaviour
             //
             Vector3Int p1 = startEndPosList[0];
             Vector3Int p2 = startEndPosList[1];
-            Vector3Int p0 = new Vector3Int((int)this.gameObject.transform.position.x, (int)this.gameObject.transform.position.y, (int)this.gameObject.transform.position.z);
+            Vector3Int p0 = new Vector3Int(Mathf.RoundToInt(this.gameObject.transform.position.x), Mathf.RoundToInt(this.gameObject.transform.position.y), Mathf.RoundToInt(this.gameObject.transform.position.z));
 
 
             if (p1.x == p2.x && p1.y != p2.y)

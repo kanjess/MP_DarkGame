@@ -100,6 +100,7 @@ public class BasicAction : MonoBehaviour
 
     }
 
+    //各种动作
     public void MouseDragCheck()
     {
         //鼠标移动监听
@@ -113,6 +114,7 @@ public class BasicAction : MonoBehaviour
         {
             mousHitObject = null;
         }
+
         //旋转
         if(mousHitObject != null && mousHitObject.gameObject.name == "RotationBtn" && gameplayItemRotationMode == true)
         {
@@ -122,6 +124,7 @@ public class BasicAction : MonoBehaviour
                 gameplayItemAction = true;
             }
         }
+
         // 检测鼠标左键按下（一般拖拽）&& (拖拽路线）
         if (Input.GetMouseButtonDown(0))
         {
@@ -155,14 +158,16 @@ public class BasicAction : MonoBehaviour
                                 uijt.transform.position = Input.mousePosition;
                             }
                         }
-                        //创建临时实体
+                        //创建临时实体（创建本体）
                         int temID = hit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().itemID;
-                        InsGameplayItemSet(temID);
+                        //InsGameplayItemSet(temID);
+                        gameplayItem = targetOJ;
                         temTargetOJ = Instantiate(gameplayItem) as GameObject;
                         temTargetOJ.transform.SetParent(temGameplayObjectLayer.transform);
                         temTargetOJ.transform.position = ojt.transform.position;
                         temTargetOJ.GetComponent<GameplayItem>().SetItemID(temID);
                         temTargetOJ.GetComponent<GameplayItem>().SetValid(false);
+                        temTargetOJ.transform.rotation = targetOJ.transform.rotation;
                         temTargetOJ.GetComponent<GameplayItem>().gameplayPic.transform.localRotation = targetOJ.GetComponent<GameplayItem>().gameplayPic.transform.localRotation;
 
                         gameplayItemAction = true;
@@ -187,16 +192,16 @@ public class BasicAction : MonoBehaviour
                             specialItemLink = false;
                             GameObject start0P = targetOJ.GetComponent<GameplayItem>().outputPoint.gameObject;
                             GameObject startP = targetOJ.GetComponent<GameplayItem>().outputStartPoint.gameObject;
-                            roadEditStart0Pos = new Vector3Int((int)start0P.transform.position.x, (int)start0P.transform.position.y, (int)start0P.transform.position.z);
-                            roadEditStartPos = new Vector3Int((int)startP.transform.position.x, (int)startP.transform.position.y, (int)startP.transform.position.z);
+                            roadEditStart0Pos = new Vector3Int(Mathf.RoundToInt(start0P.transform.position.x), Mathf.RoundToInt(start0P.transform.position.y), Mathf.RoundToInt(start0P.transform.position.z));
+                            roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         else if (hit.collider.gameObject.name == "SpecialOutputBtn")
                         {
                             specialItemLink = true;
                             GameObject start0P = targetOJ.GetComponent<GameplayItem>().specialOutputPoint.gameObject;
                             GameObject startP = targetOJ.GetComponent<GameplayItem>().specialOutputStartPoint.gameObject;
-                            roadEditStart0Pos = new Vector3Int((int)start0P.transform.position.x, (int)start0P.transform.position.y, (int)start0P.transform.position.z);
-                            roadEditStartPos = new Vector3Int((int)startP.transform.position.x, (int)startP.transform.position.y, (int)startP.transform.position.z);
+                            roadEditStart0Pos = new Vector3Int(Mathf.RoundToInt(start0P.transform.position.x), Mathf.RoundToInt(start0P.transform.position.y), Mathf.RoundToInt(start0P.transform.position.z));
+                            roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         //
                         ojt.transform.Find("InputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
@@ -209,16 +214,16 @@ public class BasicAction : MonoBehaviour
                             specialItemLink = false;
                             GameObject start0P = targetOJ.GetComponent<GameplayItem>().inputPoint.gameObject;
                             GameObject startP = targetOJ.GetComponent<GameplayItem>().inputStartPoint.gameObject;
-                            roadEditStart0Pos = new Vector3Int((int)start0P.transform.position.x, (int)start0P.transform.position.y, (int)start0P.transform.position.z);
-                            roadEditStartPos = new Vector3Int((int)startP.transform.position.x, (int)startP.transform.position.y, (int)startP.transform.position.z);
+                            roadEditStart0Pos = new Vector3Int(Mathf.RoundToInt(start0P.transform.position.x), Mathf.RoundToInt(start0P.transform.position.y), Mathf.RoundToInt(start0P.transform.position.z));
+                            roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         else if (hit.collider.gameObject.name == "SpecialInputBtn")
                         {
                             specialItemLink = true;
                             GameObject start0P = targetOJ.GetComponent<GameplayItem>().specialInputPoint.gameObject;
                             GameObject startP = targetOJ.GetComponent<GameplayItem>().specialInputStartPoint.gameObject;
-                            roadEditStart0Pos = new Vector3Int((int)start0P.transform.position.x, (int)start0P.transform.position.y, (int)start0P.transform.position.z);
-                            roadEditStartPos = new Vector3Int((int)startP.transform.position.x, (int)startP.transform.position.y, (int)startP.transform.position.z);
+                            roadEditStart0Pos = new Vector3Int(Mathf.RoundToInt(start0P.transform.position.x), Mathf.RoundToInt(start0P.transform.position.y), Mathf.RoundToInt(start0P.transform.position.z));
+                            roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         //
                         ojt.transform.Find("OutputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
@@ -292,21 +297,29 @@ public class BasicAction : MonoBehaviour
                 }
 
                 //放置格是否合法判定
-                GameObject occupiedArea = temTargetOJ.GetComponent<GameplayItem>().occupiedArea;
-                dragMapValid = true;
-                for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                //普通检测占位格；dark检测碰撞体
+                if(temTargetOJ.GetComponent<GameplayItem>().isMain == true)
                 {
-                    GameObject occupiedPoint = occupiedArea.transform.GetChild(i).gameObject;
-                    Vector3Int p1 = new Vector3Int((int)occupiedPoint.transform.position.x, (int)occupiedPoint.transform.position.y, (int)occupiedPoint.transform.position.z);
-                    if (gameplayMapping.mapIllegalList.Contains(p1))
+                    GameObject occupiedArea = temTargetOJ.GetComponent<GameplayItem>().occupiedArea;
+                    dragMapValid = true;
+                    for (int i = 0; i < occupiedArea.transform.childCount; i++)
                     {
-                        //虽然包含，但也要看下是否是自己占位的
-                        if (targetOJ != null && targetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(p1) == false)
+                        GameObject occupiedPoint = occupiedArea.transform.GetChild(i).gameObject;
+                        Vector3Int p1 = new Vector3Int(Mathf.RoundToInt(occupiedPoint.transform.position.x), Mathf.RoundToInt(occupiedPoint.transform.position.y), Mathf.RoundToInt(occupiedPoint.transform.position.z));
+                        if (gameplayMapping.mapIllegalList.Contains(p1))
                         {
-                            dragMapValid = false;
-                            break;
-                        } 
+                            //虽然包含，但也要看下是否是自己占位的
+                            if (targetOJ != null && targetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(p1) == false)
+                            {
+                                dragMapValid = false;
+                                break;
+                            }
+                        }
                     }
+                }
+                else if (temTargetOJ.GetComponent<GameplayItem>().isMain == false)
+                {
+
                 }
             } 
         }
@@ -374,7 +387,8 @@ public class BasicAction : MonoBehaviour
                             otherTargetOJ = mmhit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject;
                         }
                     }
-                    //
+
+                    //起点-终点
                     if (otherTarget == true)
                     {
                         if (roadEditDefaultDirection == true)
@@ -385,18 +399,17 @@ public class BasicAction : MonoBehaviour
                                 {
                                     Vector3 roadPP = otherTargetOJ.GetComponent<GameplayItem>().inputStartPoint.transform.position;
                                     ojt.transform.position = otherTargetOJ.GetComponent<GameplayItem>().inputBtn.transform.position;
-                                    //
-                                    roadEditEndPos = new Vector3Int((int)roadPP.x, (int)roadPP.y, (int)roadPP.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(roadPP.x), Mathf.RoundToInt(roadPP.y), Mathf.RoundToInt(roadPP.z));
                                     //
                                     Vector3 road1PP = otherTargetOJ.GetComponent<GameplayItem>().inputPoint.transform.position;
-                                    roadEditEnd1Pos = new Vector3Int((int)road1PP.x, (int)road1PP.y, (int)road1PP.z);
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(road1PP.x), Mathf.RoundToInt(road1PP.y), Mathf.RoundToInt(road1PP.z));
                                 }
                                 else
                                 {
                                     ojt.transform.position = cellPosition;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                                    roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                                 }  
                             }
                             else if (specialItemLink == true)
@@ -406,17 +419,17 @@ public class BasicAction : MonoBehaviour
                                     Vector3 roadPP = otherTargetOJ.GetComponent<GameplayItem>().specialInputStartPoint.transform.position;
                                     ojt.transform.position = otherTargetOJ.GetComponent<GameplayItem>().specialInputBtn.transform.position;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)roadPP.x, (int)roadPP.y, (int)roadPP.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(roadPP.x), Mathf.RoundToInt(roadPP.y), Mathf.RoundToInt(roadPP.z));
                                     //
                                     Vector3 road1PP = otherTargetOJ.GetComponent<GameplayItem>().specialInputPoint.transform.position;
-                                    roadEditEnd1Pos = new Vector3Int((int)road1PP.x, (int)road1PP.y, (int)road1PP.z);
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(road1PP.x), Mathf.RoundToInt(road1PP.y), Mathf.RoundToInt(road1PP.z));
                                 }
                                 else
                                 {
                                     ojt.transform.position = cellPosition;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                                    roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                                 }
                             }
                         }
@@ -429,17 +442,17 @@ public class BasicAction : MonoBehaviour
                                     Vector3 roadPP = otherTargetOJ.GetComponent<GameplayItem>().outputStartPoint.transform.position;
                                     ojt.transform.position = otherTargetOJ.GetComponent<GameplayItem>().outputBtn.transform.position;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)roadPP.x, (int)roadPP.y, (int)roadPP.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(roadPP.x), Mathf.RoundToInt(roadPP.y), Mathf.RoundToInt(roadPP.z));
                                     //
                                     Vector3 road1PP = otherTargetOJ.GetComponent<GameplayItem>().outputPoint.transform.position;
-                                    roadEditEnd1Pos = new Vector3Int((int)road1PP.x, (int)road1PP.y, (int)road1PP.z);
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(road1PP.x), Mathf.RoundToInt(road1PP.y), Mathf.RoundToInt(road1PP.z));
                                 }
                                 else
                                 {
                                     ojt.transform.position = cellPosition;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                                    roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                                 }
                             }
                             else if(specialItemLink == true)
@@ -449,17 +462,17 @@ public class BasicAction : MonoBehaviour
                                     Vector3 roadPP = otherTargetOJ.GetComponent<GameplayItem>().specialOutputStartPoint.transform.position;
                                     ojt.transform.position = otherTargetOJ.GetComponent<GameplayItem>().specialOutputBtn.transform.position;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)roadPP.x, (int)roadPP.y, (int)roadPP.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(roadPP.x), Mathf.RoundToInt(roadPP.y), Mathf.RoundToInt(roadPP.z));
                                     //
                                     Vector3 road1PP = otherTargetOJ.GetComponent<GameplayItem>().specialOutputPoint.transform.position;
-                                    roadEditEnd1Pos = new Vector3Int((int)road1PP.x, (int)road1PP.y, (int)road1PP.z);
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(road1PP.x), Mathf.RoundToInt(road1PP.y), Mathf.RoundToInt(road1PP.z));
                                 }
                                 else
                                 {
                                     ojt.transform.position = cellPosition;
                                     //
-                                    roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                                    roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                                 }
                             } 
                         }
@@ -468,25 +481,28 @@ public class BasicAction : MonoBehaviour
                     {
                         ojt.transform.position = cellPosition;
                         //
-                        roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                        roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                        roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                        roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                     }
                 }
                 else
                 {
                     ojt.transform.position = cellPosition;
                     //
-                    roadEditEndPos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
-                    roadEditEnd1Pos = new Vector3Int((int)ojt.transform.position.x, (int)ojt.transform.position.y, (int)ojt.transform.position.z);
+                    roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
+                    roadEditEnd1Pos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
                 }
                 
             }
 
             //寻路算法
             RoadSetLogic();
+
+            
+            
         }
 
-        // 释放鼠标左键（一般拖拽）
+        // 释放鼠标左键（一般拖拽 && 放置）
         if (Input.GetMouseButtonUp(0) && mosIsDragging && ojt != null)
         {
             if (ojt != null)
@@ -500,8 +516,8 @@ public class BasicAction : MonoBehaviour
             //mousePosition.z = 0;
             if (dragPosState == 0)
             {
-                //重新放置
-                if(dragMapValid == true)
+                //重新放置（普通）
+                if(dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == true)
                 {
                     //非法坐标调整
                     //前占位坐标移除
@@ -514,84 +530,12 @@ public class BasicAction : MonoBehaviour
                     targetOJ.GetComponent<GameplayItem>().OccupiedAreaListUpdate();
 
                     //重建路网
-                    //1.确定联络物
-                    List<GameObject> preOutputList = new List<GameObject>();
-                    List<GameObject> preInputList = new List<GameObject>();
-                    List<GameObject> preSpecialOutputList = new List<GameObject>();
-                    List<GameObject> preSpecialInputList = new List<GameObject>();
+                    AutoRoadRecreateForItem(targetOJ);
 
-                    preOutputList.AddRange(targetOJ.GetComponent<GameplayItem>().outputLinkItemList);
-                    preInputList.AddRange(targetOJ.GetComponent<GameplayItem>().inputLinkItemList);
-                    preSpecialOutputList.AddRange(targetOJ.GetComponent<GameplayItem>().specialOutputLinkItemList);
-                    preSpecialInputList.AddRange(targetOJ.GetComponent<GameplayItem>().specialInputLinkItemList);
-
-                    //2.清洗原路网
-                    if(preOutputList.Count > 0)
-                    {
-                        for(int i = 0; i < preOutputList.Count; i++)
-                        {
-                            GameObject tt = preOutputList[i];
-                            LinkObjectDataClear(targetOJ, tt, true, false);
-                        }
-                    }
-                    if (preInputList.Count > 0)
-                    {
-                        for (int i = 0; i < preInputList.Count; i++)
-                        {
-                            GameObject tt = preInputList[i];
-                            LinkObjectDataClear(targetOJ, tt, false, false);
-                        }
-                    }
-                    if (preSpecialOutputList.Count > 0)
-                    {
-                        for (int i = 0; i < preSpecialOutputList.Count; i++)
-                        {
-                            GameObject tt = preSpecialOutputList[i];
-                            LinkObjectDataClear(targetOJ, tt, true, true);
-                        }
-                    }
-                    if (preSpecialInputList.Count > 0)
-                    {
-                        for (int i = 0; i < preSpecialInputList.Count; i++)
-                        {
-                            GameObject tt = preSpecialInputList[i];
-                            LinkObjectDataClear(targetOJ, tt, false, true);
-                        }
-                    }
-
-                    //3.路网重建
-                    if (preOutputList.Count > 0)
-                    {
-                        for (int i = 0; i < preOutputList.Count; i++)
-                        {
-                            GameObject tt = preOutputList[i];
-                            AutoRoadRecreate(targetOJ, tt, true, false);
-                        }
-                    }
-                    if (preInputList.Count > 0)
-                    {
-                        for (int i = 0; i < preInputList.Count; i++)
-                        {
-                            GameObject tt = preInputList[i];
-                            AutoRoadRecreate(targetOJ, tt, false, false);
-                        }
-                    }
-                    if (preSpecialOutputList.Count > 0)
-                    {
-                        for (int i = 0; i < preSpecialOutputList.Count; i++)
-                        {
-                            GameObject tt = preSpecialOutputList[i];
-                            AutoRoadRecreate(targetOJ, tt, true, true);
-                        }
-                    }
-                    if (preSpecialInputList.Count > 0)
-                    {
-                        for (int i = 0; i < preSpecialInputList.Count; i++)
-                        {
-                            GameObject tt = preSpecialInputList[i];
-                            AutoRoadRecreate(targetOJ, tt, false, true);
-                        }
-                    }
+                }
+                //dark patterns
+                else if (dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == false)
+                {
 
                 }
             }
@@ -797,7 +741,6 @@ public class BasicAction : MonoBehaviour
 
             Item101StartCheck();  //判定是否形成闭环
         }
-
 
         //菜单拖拽取消或结束
         if (designPenel.designItemBtnState == true && designPenel.designItemDragState == false && ojt != null && mosIsDragging == false && roadEditMode == false)
@@ -1037,7 +980,7 @@ public class BasicAction : MonoBehaviour
         }
     }
 
-    //清理道路连接数据，并清楚道路
+    //清理道路连接数据，并清除道路
     void LinkObjectDataClear(GameObject aa, GameObject bb, bool direction, bool isSpecial)
     {
         bool canClear = false;
@@ -1225,7 +1168,7 @@ public class BasicAction : MonoBehaviour
         oj.GetComponent<GameplayItem>().IllegalMapAdd();
     }
 
-    //自动道路重建
+    //自动道路重建（单路）
     void AutoRoadRecreate(GameObject item1, GameObject item2, bool direction, bool isSpecial)
     {
         //主体 item
@@ -1252,31 +1195,31 @@ public class BasicAction : MonoBehaviour
         {
             GameObject start0PP = outout.GetComponent<GameplayItem>().specialOutputPoint.gameObject;
             GameObject startPP = outout.GetComponent<GameplayItem>().specialOutputStartPoint.gameObject;
-            start0Pos = new Vector3Int((int)start0PP.transform.position.x, (int)start0PP.transform.position.y, (int)start0PP.transform.position.z);
-            startPos = new Vector3Int((int)startPP.transform.position.x, (int)startPP.transform.position.y, (int)startPP.transform.position.z);
+            start0Pos = new Vector3Int(Mathf.RoundToInt(start0PP.transform.position.x), Mathf.RoundToInt(start0PP.transform.position.y), Mathf.RoundToInt(start0PP.transform.position.z));
+            startPos = new Vector3Int(Mathf.RoundToInt(startPP.transform.position.x), Mathf.RoundToInt(startPP.transform.position.y), Mathf.RoundToInt(startPP.transform.position.z));
         }
         else if (isSpecial == false)
         {
             GameObject start0PP = outout.GetComponent<GameplayItem>().outputPoint.gameObject;
             GameObject startPP = outout.GetComponent<GameplayItem>().outputStartPoint.gameObject;
-            start0Pos = new Vector3Int((int)start0PP.transform.position.x, (int)start0PP.transform.position.y, (int)start0PP.transform.position.z);
-            startPos = new Vector3Int((int)startPP.transform.position.x, (int)startPP.transform.position.y, (int)startPP.transform.position.z);
+            start0Pos = new Vector3Int(Mathf.RoundToInt(start0PP.transform.position.x), Mathf.RoundToInt(start0PP.transform.position.y), Mathf.RoundToInt(start0PP.transform.position.z));
+            startPos = new Vector3Int(Mathf.RoundToInt(startPP.transform.position.x), Mathf.RoundToInt(startPP.transform.position.y), Mathf.RoundToInt(startPP.transform.position.z));
         }
 
         //结束点
         if (isSpecial == true)
         {
             Vector3 roadPPP = inin.GetComponent<GameplayItem>().specialInputStartPoint.transform.position;
-            endPos = new Vector3Int((int)roadPPP.x, (int)roadPPP.y, (int)roadPPP.z);
+            endPos = new Vector3Int(Mathf.RoundToInt(roadPPP.x), Mathf.RoundToInt(roadPPP.y), Mathf.RoundToInt(roadPPP.z));
             Vector3 road1PPP = inin.GetComponent<GameplayItem>().specialInputPoint.transform.position;
-            end1Pos = new Vector3Int((int)road1PPP.x, (int)road1PPP.y, (int)road1PPP.z);
+            end1Pos = new Vector3Int(Mathf.RoundToInt(road1PPP.x), Mathf.RoundToInt(road1PPP.y), Mathf.RoundToInt(road1PPP.z));
         }
         else if (isSpecial == false)
         {
             Vector3 roadPPP = inin.GetComponent<GameplayItem>().inputStartPoint.transform.position;
-            endPos = new Vector3Int((int)roadPPP.x, (int)roadPPP.y, (int)roadPPP.z);
+            endPos = new Vector3Int(Mathf.RoundToInt(roadPPP.x), Mathf.RoundToInt(roadPPP.y), Mathf.RoundToInt(roadPPP.z));
             Vector3 road1PPP = inin.GetComponent<GameplayItem>().inputPoint.transform.position;
-            end1Pos = new Vector3Int((int)road1PPP.x, (int)road1PPP.y, (int)road1PPP.z);
+            end1Pos = new Vector3Int(Mathf.RoundToInt(road1PPP.x), Mathf.RoundToInt(road1PPP.y), Mathf.RoundToInt(road1PPP.z));
         }
 
         //自动路径
@@ -1369,7 +1312,93 @@ public class BasicAction : MonoBehaviour
             }
         }
     }
+    //自动道路重建（item发起）
+    public void AutoRoadRecreateForItem(GameObject myItem)
+    {
+        //重建路网
+        //1.确定联络物
+        List<GameObject> preOutputList = new List<GameObject>();
+        List<GameObject> preInputList = new List<GameObject>();
+        List<GameObject> preSpecialOutputList = new List<GameObject>();
+        List<GameObject> preSpecialInputList = new List<GameObject>();
 
+        preOutputList.AddRange(myItem.GetComponent<GameplayItem>().outputLinkItemList);
+        preInputList.AddRange(myItem.GetComponent<GameplayItem>().inputLinkItemList);
+        preSpecialOutputList.AddRange(myItem.GetComponent<GameplayItem>().specialOutputLinkItemList);
+        preSpecialInputList.AddRange(myItem.GetComponent<GameplayItem>().specialInputLinkItemList);
+
+        //2.清洗原路网
+        if (preOutputList.Count > 0)
+        {
+            for (int i = 0; i < preOutputList.Count; i++)
+            {
+                GameObject tt = preOutputList[i];
+                LinkObjectDataClear(myItem, tt, true, false);
+            }
+        }
+        if (preInputList.Count > 0)
+        {
+            for (int i = 0; i < preInputList.Count; i++)
+            {
+                GameObject tt = preInputList[i];
+                LinkObjectDataClear(myItem, tt, false, false);
+            }
+        }
+        if (preSpecialOutputList.Count > 0)
+        {
+            for (int i = 0; i < preSpecialOutputList.Count; i++)
+            {
+                GameObject tt = preSpecialOutputList[i];
+                LinkObjectDataClear(myItem, tt, true, true);
+            }
+        }
+        if (preSpecialInputList.Count > 0)
+        {
+            for (int i = 0; i < preSpecialInputList.Count; i++)
+            {
+                GameObject tt = preSpecialInputList[i];
+                LinkObjectDataClear(myItem, tt, false, true);
+            }
+        }
+
+        //3.路网重建
+        if (preOutputList.Count > 0)
+        {
+            for (int i = 0; i < preOutputList.Count; i++)
+            {
+                GameObject tt = preOutputList[i];
+                AutoRoadRecreate(myItem, tt, true, false);
+            }
+        }
+        if (preInputList.Count > 0)
+        {
+            for (int i = 0; i < preInputList.Count; i++)
+            {
+                GameObject tt = preInputList[i];
+                AutoRoadRecreate(myItem, tt, false, false);
+            }
+        }
+        if (preSpecialOutputList.Count > 0)
+        {
+            for (int i = 0; i < preSpecialOutputList.Count; i++)
+            {
+                GameObject tt = preSpecialOutputList[i];
+                AutoRoadRecreate(myItem, tt, true, true);
+            }
+        }
+        if (preSpecialInputList.Count > 0)
+        {
+            for (int i = 0; i < preSpecialInputList.Count; i++)
+            {
+                GameObject tt = preSpecialInputList[i];
+                AutoRoadRecreate(myItem, tt, false, true);
+            }
+        }
+    }
+
+
+
+    //循环构建成功检测
     void Item101StartCheck()
     {
         if(gameplayMapping.mainGameplayItemList.Count > 0 && startItemObject == null)

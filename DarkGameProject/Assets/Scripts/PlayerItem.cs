@@ -159,7 +159,7 @@ public class PlayerItem : MonoBehaviour
 
             if (moveOrder == pathList.Count)
             {
-                nextPoint = new Vector3Int((int)nextObject.transform.position.x, (int)nextObject.transform.position.y, (int)nextObject.transform.position.z);
+                nextPoint = new Vector3Int(Mathf.RoundToInt(nextObject.transform.position.x), Mathf.RoundToInt(nextObject.transform.position.y), Mathf.RoundToInt(nextObject.transform.position.z));
             }
             else if (moveOrder < pathList.Count)
             {
