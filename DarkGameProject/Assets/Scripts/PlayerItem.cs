@@ -135,7 +135,11 @@ public class PlayerItem : MonoBehaviour
         }
 
         //exp
-        ExpAddLogic();
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        {
+            ExpAddLogic();
+        }
+        
     }
 
     public void PlayerDetailSet(GameObject startG)

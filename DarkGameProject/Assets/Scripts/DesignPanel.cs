@@ -73,7 +73,8 @@ public class DesignPanel : MonoBehaviour
 
         GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
         GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
-        moneyShow = topContent.transform.Find("MoneyShow").gameObject;
+        GameObject moneyContent = topContent.transform.Find("MoneyContent").gameObject;
+        moneyShow = moneyContent.transform.Find("MoneyShow").gameObject;
         GameObject levelContent = topContent.transform.Find("LevelContent").gameObject;
         playerLvText = levelContent.transform.Find("LevelNum").gameObject;
         playerExpText = levelContent.transform.Find("ExpNum").gameObject;
@@ -199,6 +200,15 @@ public class DesignPanel : MonoBehaviour
                 anime.OnComplete(() => designItemBtnAnime = false);
                 //继续游戏
                 gameMode.gameProcessPause = false;
+
+                //消除new
+                for (int i = 0; i < gameMode.gameItemList.Count; i++)
+                {
+                    if (gameMode.gameItemList[i].GetComponent<GameplayItemUIItem>().newItemShow == true)
+                    {
+                        gameMode.gameItemList[i].GetComponent<GameplayItemUIItem>().newItemShow = false;
+                    }
+                }
             }
         }
     }
@@ -226,18 +236,41 @@ public class DesignPanel : MonoBehaviour
 
     void UIUpdate()
     {
-        moneyShow.GetComponent<Text>().text = "Income: " + gameMode.companyMoney.ToString();
+        //钱
+        if(gameMode.companyMoney < 1000)
+        {
+            moneyShow.GetComponent<Text>().text = gameMode.companyMoney.ToString();
+        }
+        else if(gameMode.companyMoney >= 1000 && gameMode.companyMoney < 1000000)
+        {
+            float mmm = gameMode.companyMoney / 1000f;
+            moneyShow.GetComponent<Text>().text = mmm.ToString("0.00") + " K";
+        }
+        else if (gameMode.companyMoney >= 1000000 && gameMode.companyMoney < 1000000000)
+        {
+            float mmm = gameMode.companyMoney / 1000000f;
+            moneyShow.GetComponent<Text>().text = mmm.ToString("0.00") + " M";
+        }
+        else if (gameMode.companyMoney >= 1000000000)
+        {
+            float mmm = gameMode.companyMoney / 1000000000f;
+            moneyShow.GetComponent<Text>().text = mmm.ToString("0.00") + " B";
+        }
+
 
         //等级
         playerLvText.GetComponent<Text>().text = gameMode.playerLevel.ToString();
         playerExpText.GetComponent<Text>().text = gameMode.playerExp.ToString() + " / " + gameMode.levelUpExp.ToString();
         playerExpBar.GetComponent<Image>().fillAmount = ((float)gameMode.playerExp / (float)gameMode.levelUpExp);
-        //升级
+
+        //升级检测
         if((float)gameMode.playerExp / (float)gameMode.levelUpExp >= 1f)
         {
             gameMode.playerLevel++;
             gameMode.playerExp = 0;
             gameMode.levelUpExp = (int)(gameMode.basicLevelUpExp * (1 + (gameMode.playerLevel * gameMode.levelUpExpIncreaseValue / 10f)));
+
+            GameItemUnlock();
         }
     }
 
@@ -283,6 +316,7 @@ public class DesignPanel : MonoBehaviour
     **/
     void ScenePanelSwitch(int no)
     {
+        //切换
         if(scenePanelAnime == false && sceneNo != no)
         {
             if(no == 1 || no == 3)
@@ -323,7 +357,23 @@ public class DesignPanel : MonoBehaviour
                 scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0,0,0));
             }
         }
+        //界面缩回
+        else if (scenePanelAnime == false && sceneNo == no)
+        {
+            scenePanelAnime = true;
 
+            sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
+            sceneContentBg.GetComponent<Image>().DOFade(0f, 0.3f);
+
+            scenePanelTweener = companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
+            playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+
+            sceneNo = 2;
+
+            scenePanelTweener.OnComplete(() => scenePanelAnime = false);
+            scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0, 0, 0));
+
+        }
     }
 
 
@@ -376,6 +426,9 @@ public class DesignPanel : MonoBehaviour
     //item解锁
     public void GameItemUnlock()
     {
-
+        for(int i = 0; i < gameMode.gameItemList.Count; i++)
+        {
+            gameMode.gameItemList[i].GetComponent<GameplayItemUIItem>().UnlockListen();
+        }
     }
 }

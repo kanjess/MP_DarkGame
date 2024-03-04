@@ -28,6 +28,9 @@ public class GameMode : MonoBehaviour
     public int levelUpExp = 1000;
     public float levelUpExpIncreaseValue = 0.5f;
 
+    //升级解锁
+    public List<GameObject> gameItemList;
+
 
     private void Awake()
     {
@@ -36,6 +39,8 @@ public class GameMode : MonoBehaviour
         playerCreateInterval = 1f;
 
         playerItemLayer = GameObject.Find("PlayerObject").gameObject;
+
+        gameItemList = new List<GameObject>();
     }
 
     // Start is called before the first frame update

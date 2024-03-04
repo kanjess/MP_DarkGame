@@ -235,7 +235,7 @@ public class BasicAction : MonoBehaviour
                             roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         //
-                        ojt.transform.Find("InputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                        ojt.transform.Find("SuccessItem").gameObject.transform.Find("InputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
                     }
                     else if (hit.collider.gameObject.name == "InputBtn" || hit.collider.gameObject.name == "SpecialInputBtn")
                     {
@@ -257,7 +257,7 @@ public class BasicAction : MonoBehaviour
                             roadEditStartPos = new Vector3Int(Mathf.RoundToInt(startP.transform.position.x), Mathf.RoundToInt(startP.transform.position.y), Mathf.RoundToInt(startP.transform.position.z));
                         }
                         //
-                        ojt.transform.Find("OutputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                        ojt.transform.Find("SuccessItem").gameObject.transform.Find("OutputItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
                     }
 
                     gameplayItemAction = true;
@@ -670,6 +670,7 @@ public class BasicAction : MonoBehaviour
                 }
                 else
                 {
+                    otherTarget = false;
                     ojt.transform.position = cellPosition;
                     //
                     roadEditEndPos = new Vector3Int(Mathf.RoundToInt(ojt.transform.position.x), Mathf.RoundToInt(ojt.transform.position.y), Mathf.RoundToInt(ojt.transform.position.z));
@@ -681,7 +682,17 @@ public class BasicAction : MonoBehaviour
             //寻路算法
             RoadSetLogic();
 
-            
+            //路线标识符
+            if(otherTarget == true && (validPath || roadEditStartPos == roadEditEndPos))
+            {
+                ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
+                ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
             
         }
 
@@ -1510,7 +1521,7 @@ public class BasicAction : MonoBehaviour
         InsGameplayItemSet(999);
         GameObject oj = Instantiate(gameplayItem) as GameObject;
         oj.transform.SetParent(gameplayObjectLayer.transform);
-        oj.transform.position = new Vector3(-8, 0, 0);
+        oj.transform.position = new Vector3(0, 0, 0);
         //
         oj.GetComponent<GameplayItem>().SetItemID(999);
         oj.GetComponent<GameplayItem>().SetValid(true);

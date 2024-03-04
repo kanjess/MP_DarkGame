@@ -653,6 +653,7 @@ MonoBehaviour:
   specialOutputBtn: {fileID: 0}
   rotationBtn: {fileID: 2742033844694149650}
   moveBtn: {fileID: 1144530506727386184}
+  itemOccupiedAreaList0: []
   itemOccupiedAreaList: []
   outputLinkItemList: []
   specialOutputLinkItemList: []
@@ -666,8 +667,10 @@ MonoBehaviour:
   inputCount: 1
   specialOutputCount: 0
   specialInputCount: 0
+  temItemPosValidList: 
   temItemPosValid: 0
   temPreObject: {fileID: 0}
+  temItemPosList: []
   specialOutputLinkTargetList: 
   specialInputLinkTargetList: 
   canDark: 0
@@ -1063,7 +1066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5758937921697686702}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7720843351979994361}
@@ -1093,7 +1096,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5955324999080159573}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6206129548072006696}
@@ -1290,7 +1293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6288688161151963778}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.35, y: 0, z: 0}
+  m_LocalPosition: {x: 1.35, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5353697317844649196}
