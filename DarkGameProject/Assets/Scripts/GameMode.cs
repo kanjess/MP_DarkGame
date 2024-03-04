@@ -21,6 +21,13 @@ public class GameMode : MonoBehaviour
 
     public float companyMoney = 0f;
 
+    //升级相关
+    public int playerLevel = 1;
+    public int playerExp = 0;
+    public int basicLevelUpExp = 1000;
+    public int levelUpExp = 1000;
+    public float levelUpExpIncreaseValue = 0.5f;
+
 
     private void Awake()
     {

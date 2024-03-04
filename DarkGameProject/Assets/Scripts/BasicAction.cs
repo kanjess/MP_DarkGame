@@ -697,6 +697,7 @@ public class BasicAction : MonoBehaviour
                 Destroy(uijt);
             }
             //mousePosition.z = 0;
+            //放置
             if (dragPosState == 0)
             {
                 //重新放置（普通）
@@ -802,6 +803,7 @@ public class BasicAction : MonoBehaviour
                     }
                 }
             }
+            //回收
             else if(dragPosState == 1)
             {
                 //判定是否回收
@@ -885,13 +887,23 @@ public class BasicAction : MonoBehaviour
                                         GameObject gi = sock.transform.GetChild(aa).gameObject;
                                         if (gi.name.Contains("GameplayItem_"))
                                         {
+                                            int iidd = gi.GetComponent<GameplayItem>().itemID;
+                                            //ui数量变更
+                                            designPenel.GameItemNumChange(iidd, true, true);
+
                                             Destroy(gi);
                                         }
                                     }
                                 }
                             }
                         }
+
                         //本体销毁
+                        int iiddd = targetOJ.GetComponent<GameplayItem>().itemID;
+                        bool isdarkkk = !targetOJ.GetComponent<GameplayItem>().isMain;
+                        //ui数量变更
+                        designPenel.GameItemNumChange(iiddd, isdarkkk, true);
+
                         Destroy(targetOJ);
                     }
                 }
@@ -1135,6 +1147,9 @@ public class BasicAction : MonoBehaviour
                     TemGameplayItemClear();
                     //
                     gameplayItemAction = false;
+
+                    //ui数量变更
+                    designPenel.GameItemNumChange(id, false, false);
                 }
                 else if(isdark == true && darkHasLink == true)
                 {
@@ -1158,6 +1173,9 @@ public class BasicAction : MonoBehaviour
                     TemGameplayItemClear();
                     //
                     gameplayItemAction = false;
+
+                    //ui数量变更
+                    designPenel.GameItemNumChange(id, true, false);
                 }
                 
             }

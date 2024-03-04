@@ -38,6 +38,14 @@ public class DesignPanel : MonoBehaviour
     private bool scenePanelAnime = false;
     private Tweener scenePanelTweener;
 
+    //等级界面
+    private GameObject playerLvText;
+    private GameObject playerExpText;
+    private GameObject playerExpBar;
+
+    //item列表
+    private GameObject gameItemContent;
+    private GameObject darkItemContent;
 
     private void Awake()
     {
@@ -52,12 +60,24 @@ public class DesignPanel : MonoBehaviour
         designPanelPosCheckPoint = designPanel.transform.Find("PosCheckPoint").gameObject;
         itemRotationBtn = designPanel.transform.Find("ItemRotationBtn").gameObject;
 
+        GameObject designPanelScrollView = designPanelContent.transform.Find("ScrollView").gameObject;
+        GameObject designPanelViewport = designPanelScrollView.transform.Find("Viewport").gameObject;
+        GameObject designPanelViewContent = designPanelViewport.transform.Find("ViewContent").gameObject;
+        GameObject designPanelViewContentGameContent = designPanelViewContent.transform.Find("GameItemContent").gameObject;
+        gameItemContent = designPanelViewContentGameContent.transform.Find("ItemContent").gameObject;
+        GameObject designPanelViewContentDarkContent = designPanelViewContent.transform.Find("DarkItemContent").gameObject;
+        darkItemContent = designPanelViewContentDarkContent.transform.Find("ItemContent").gameObject;
+
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
 
         GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
         GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
         moneyShow = topContent.transform.Find("MoneyShow").gameObject;
+        GameObject levelContent = topContent.transform.Find("LevelContent").gameObject;
+        playerLvText = levelContent.transform.Find("LevelNum").gameObject;
+        playerExpText = levelContent.transform.Find("ExpNum").gameObject;
+        playerExpBar = levelContent.transform.Find("ExpBar").gameObject;
 
         sceneContent = mainSceneUI.transform.Find("SceneContent").gameObject;
         sceneContentBg = sceneContent.transform.Find("Bg").gameObject;
@@ -67,12 +87,14 @@ public class DesignPanel : MonoBehaviour
         companyPanel = sceneContent.transform.Find("CompanyPanel").gameObject;
         playerPanel = sceneContent.transform.Find("PlayerPanel").gameObject;
 
+
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameItemIn();
+        //GameItemIn();
         sceneContentBg.transform.localScale = new Vector3(0, 0, 0);
 
         designItemBtn.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
@@ -148,6 +170,7 @@ public class DesignPanel : MonoBehaviour
             designItemBtnAnime = true;
             if (designItemBtnState == false)
             {
+                //打开界面
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x + 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x - 450f, tt);
                 designItemBtnState = true;
@@ -160,6 +183,7 @@ public class DesignPanel : MonoBehaviour
             }
             else
             {
+                //关闭界面
                 Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x - 450f, tt);
                 designPanel.transform.DOMoveX(designPanel.transform.position.x + 450f, tt);
                 designItemBtnState = false;
@@ -198,11 +222,23 @@ public class DesignPanel : MonoBehaviour
         oj3.transform.SetParent(designPanelContent.transform);
         oj3.transform.localPosition = new Vector3(0, -300f, 0);
         oj3.GetComponent<GameplayItemUIItem>().SetItemID(401);
-    }
+    } //临时
 
     void UIUpdate()
     {
         moneyShow.GetComponent<Text>().text = "Income: " + gameMode.companyMoney.ToString();
+
+        //等级
+        playerLvText.GetComponent<Text>().text = gameMode.playerLevel.ToString();
+        playerExpText.GetComponent<Text>().text = gameMode.playerExp.ToString() + " / " + gameMode.levelUpExp.ToString();
+        playerExpBar.GetComponent<Image>().fillAmount = ((float)gameMode.playerExp / (float)gameMode.levelUpExp);
+        //升级
+        if((float)gameMode.playerExp / (float)gameMode.levelUpExp >= 1f)
+        {
+            gameMode.playerLevel++;
+            gameMode.playerExp = 0;
+            gameMode.levelUpExp = (int)(gameMode.basicLevelUpExp * (1 + (gameMode.playerLevel * gameMode.levelUpExpIncreaseValue / 10f)));
+        }
     }
 
     /**
@@ -290,4 +326,56 @@ public class DesignPanel : MonoBehaviour
 
     }
 
+
+    //item次数变更
+    public void GameItemNumChange(int itemid, bool isDark, bool isAdd)
+    {
+        if(isDark == false)
+        {
+            for (int i = 0; i < gameItemContent.transform.childCount; i++)
+            {
+                GameObject uiItem = gameItemContent.transform.GetChild(i).gameObject;
+                if (uiItem.GetComponent<GameplayItemUIItem>().itemID == itemid)
+                {
+                    if (isAdd == false)
+                    {
+                        uiItem.GetComponent<GameplayItemUIItem>().itemNum -= 1;
+                    }
+                    else
+                    {
+                        uiItem.GetComponent<GameplayItemUIItem>().itemNum += 1;
+                    }
+
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < darkItemContent.transform.childCount; i++)
+            {
+                GameObject uiItem = darkItemContent.transform.GetChild(i).gameObject;
+                if (uiItem.GetComponent<GameplayItemUIItem>().itemID == itemid)
+                {
+                    if (isAdd == false)
+                    {
+                        uiItem.GetComponent<GameplayItemUIItem>().itemNum -= 1;
+                    }
+                    else
+                    {
+                        uiItem.GetComponent<GameplayItemUIItem>().itemNum += 1;
+                    }
+
+                    break;
+                }
+            }
+        }
+        
+    }
+
+    //item解锁
+    public void GameItemUnlock()
+    {
+
+    }
 }

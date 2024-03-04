@@ -44,6 +44,10 @@ public class PlayerItem : MonoBehaviour
     //基础模块
     private bool gameplayAction = false;
 
+    //exp
+    private float expCheckInterval;
+    private float expCheckTiming = 0f;
+    private int expAdd = 0;
 
 
     private void Awake()
@@ -53,6 +57,9 @@ public class PlayerItem : MonoBehaviour
         moveSpeed = 3f;  //像素/s
         basicMoneyCheckInterval = 1f;
         basicLivingInterval = 5f;
+        expCheckInterval = 5f;
+        expCheckTiming = expCheckInterval;
+        expAdd = 10;
 
         pathList = new List<Vector3Int>();
 
@@ -127,6 +134,8 @@ public class PlayerItem : MonoBehaviour
             liveTime += Time.deltaTime;
         }
 
+        //exp
+        ExpAddLogic();
     }
 
     public void PlayerDetailSet(GameObject startG)
@@ -289,6 +298,17 @@ public class PlayerItem : MonoBehaviour
     void DestroySelf()
     {
         Destroy(this.gameObject);
+    }
+
+    //exp
+    void ExpAddLogic()
+    {
+        expCheckTiming += Time.deltaTime;
+        if(expCheckTiming >= expCheckInterval)
+        {
+            gameMode.playerExp += expAdd;
+            expCheckTiming = 0f;
+        }
     }
 
 }

@@ -29,17 +29,14 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(BasicAction.gameplayItemRotationMode == false)
-        {
-            startPosition = transform.position; // 记录开始拖拽时的位置
-            designPenel.designItemDragState = true;
-            basicAction.targetPanelItem = this.gameObject;
-            //临时指示物
-            basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false, this.gameObject.GetComponentInParent<GameplayItemUIItem>().isDark);
-            //禁用地图拖拽
-            BasicAction.gameplayItemAction = true;
-        }
-        
+        startPosition = transform.position; // 记录开始拖拽时的位置
+        designPenel.designItemDragState = true;
+        basicAction.targetPanelItem = this.gameObject;
+        //临时指示物
+        basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false, this.gameObject.GetComponentInParent<GameplayItemUIItem>().isDark);
+        //禁用地图拖拽
+        BasicAction.gameplayItemAction = true;
+
     }
 
     public void OnDrag(PointerEventData eventData)
