@@ -10,6 +10,7 @@ public class GameplayItemUIItem : MonoBehaviour
     private GameObject itemText;
 
     public int itemID;
+    public bool isDark = false;
 
 
     private void Awake()
@@ -22,6 +23,14 @@ public class GameplayItemUIItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(itemID > 400 && itemID <= 499)
+        {
+            isDark = true;
+        }
+        else
+        {
+            isDark = false;
+        }
         
     }
 

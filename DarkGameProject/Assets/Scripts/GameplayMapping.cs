@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class GameplayMapping : MonoBehaviour
 {
     public GameObject pathItem;
-    private GameObject roadLayer;
+    private GameObject pathLayer;
 
     public Tilemap basicTilemap; // 引用你的Tilemap组件
     public Tilemap illegalTilemap; // 引用你的Tilemap组件
@@ -21,11 +21,6 @@ public class GameplayMapping : MonoBehaviour
 
     //路点列表
     public List<Vector3Int> roadPointList;
-    public List<Vector3Int> roadPointItemList;
-    public List<MappingNode> roadPointDetailList;
-
-    //路径列表
-    public List<List<Vector3Int>> pathList;
 
 
     private void Awake()
@@ -33,7 +28,7 @@ public class GameplayMapping : MonoBehaviour
         basicTilemap = GameObject.Find("Tilemap").gameObject.GetComponent<Tilemap>();
         illegalTilemap = GameObject.Find("IllegalTile").gameObject.GetComponent<Tilemap>();
         gameplayObjectLayer = GameObject.Find("GameplayObject").gameObject;
-        roadLayer = GameObject.Find("RoadObject").gameObject;
+        pathLayer = GameObject.Find("RoadObject").gameObject;
 
         if (mainGameplayItemList == null)
         {
@@ -43,14 +38,7 @@ public class GameplayMapping : MonoBehaviour
         {
             roadPointList = new List<Vector3Int>();
         }
-        if(roadPointDetailList == null)
-        {
-            roadPointDetailList = new List<MappingNode>();
-        }
-        if(roadPointItemList == null)
-        {
-            roadPointItemList = new List<Vector3Int>();
-        }
+
     }
 
     // Start is called before the first frame update
@@ -144,7 +132,7 @@ public class GameplayMapping : MonoBehaviour
         MappingNode startNode = new MappingNode(start, true);
         MappingNode targetNode = new MappingNode(target, true);
 
-        int maxIterations = 2000; // 最大迭代次数
+        int maxIterations = 1500; // 最大迭代次数
         int iterations = 0;
 
         openSet.Add(startNode);
@@ -154,7 +142,8 @@ public class GameplayMapping : MonoBehaviour
             iterations++;
             if (iterations > maxIterations)
             {
-                Debug.Log("寻路失败：超出最大迭代次数");
+                //Debug.Log("寻路失败：超出最大迭代次数");
+                Debug.Log("Pathfinding failed: Exceeded the maximum number of iterations");
                 return new List<Vector3Int>(); // 返回一个空路径
             }
 
@@ -234,7 +223,6 @@ public class GameplayMapping : MonoBehaviour
         return neighbours;
     }
 
-
     // 重建路径
     List<Vector3Int> RetracePath(MappingNode startNode, MappingNode endNode)
     {
@@ -258,6 +246,23 @@ public class GameplayMapping : MonoBehaviour
         int distY = Mathf.Abs(nodeA.position.y - nodeB.position.y);
 
         return distX + distY; // 因为只允许上下左右移动，所以使用曼哈顿距离
+    }
+
+    //地图路网坐标获取
+    public void AllMapRoadListNew()
+    {
+        roadPointList = new List<Vector3Int>();
+
+        for (int i = 0; i < pathLayer.transform.childCount; i++)
+        {
+            GameObject pItem = pathLayer.transform.GetChild(i).gameObject;
+            Vector3Int pPos = new Vector3Int(Mathf.RoundToInt(pItem.transform.position.x), Mathf.RoundToInt(pItem.transform.position.y), Mathf.RoundToInt(pItem.transform.position.z));
+            if(roadPointList.Contains(pPos) == false)
+            {
+                roadPointList.Add(pPos);
+            }
+            
+        }
     }
 
 

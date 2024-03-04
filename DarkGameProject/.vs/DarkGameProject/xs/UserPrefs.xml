@@ -1,15 +1,16 @@
 ﻿<Properties StartupConfiguration="{2D2C1AE1-78A9-E2FD-1C31-955B22CCF8E7}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameplayItemUIItemDrag.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameplayItemUIItem.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="175" Column="60" />
-      <File FileName="Assets/Scripts/BasicAction.cs" Line="502" Column="14" />
-      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="200" Column="57" />
-      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="5" Column="36" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" Line="412" Column="65" />
-      <File FileName="Assets/Scripts/MainPathItem.cs" Line="190" Column="14" />
-      <File FileName="Assets/Scripts/GameMode.cs" Line="58" Column="14" />
-      <File FileName="Assets/Scripts/CameraControl.cs" Line="26" Column="7" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="153" Column="14" />
+      <File FileName="Assets/Scripts/BasicAction.cs" Line="1022" Column="1" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="10" Column="24" />
+      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="72" Column="113" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="69" Column="1" />
+      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="158" Column="89" />
+      <File FileName="Assets/Scripts/MainPathItem.cs" />
+      <File FileName="Assets/Scripts/GameMode.cs" />
+      <File FileName="Assets/Scripts/CameraControl.cs" />
+      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
@@ -19,5 +20,5 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-Editor-firstpass PreferredExecutionTarget="22406e76-8464-42bd-9f3c-38a02d574a38" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-Editor-firstpass PreferredExecutionTarget="d5657420-065b-4b72-9f5d-a6e08c0fd7aa" />
 </Properties>

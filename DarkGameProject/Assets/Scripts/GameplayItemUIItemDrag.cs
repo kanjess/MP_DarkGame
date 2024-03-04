@@ -29,13 +29,17 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        startPosition = transform.position; // 记录开始拖拽时的位置
-        designPenel.designItemDragState = true;
-        basicAction.targetPanelItem = this.gameObject;
-        //临时指示物
-        basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false);
-        //禁用地图拖拽
-        BasicAction.gameplayItemAction = true;
+        if(BasicAction.gameplayItemRotationMode == false)
+        {
+            startPosition = transform.position; // 记录开始拖拽时的位置
+            designPenel.designItemDragState = true;
+            basicAction.targetPanelItem = this.gameObject;
+            //临时指示物
+            basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false, this.gameObject.GetComponentInParent<GameplayItemUIItem>().isDark);
+            //禁用地图拖拽
+            BasicAction.gameplayItemAction = true;
+        }
+        
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -65,7 +69,7 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
             if(basicAction.dragMapValid == true)
             {
                 // 在场景中生成2D物体
-                basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, true);
+                basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, true, this.gameObject.GetComponentInParent<GameplayItemUIItem>().isDark);
                 
             }
             else
@@ -80,6 +84,8 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         this.gameObject.transform.localScale = new Vector3(1, 1, 1);
         //
         BasicAction.gameplayItemAction = false;
+        //
+        this.gameObject.transform.localPosition = new Vector3(0, 0, 0);
     }
 
     public void CancelDrag()

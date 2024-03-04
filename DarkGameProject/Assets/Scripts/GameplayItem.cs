@@ -12,6 +12,7 @@ public class GameplayItem : MonoBehaviour
     public bool canPutBack = true;
 
     public bool canRotate = true;
+
     private int rotationDirection = 0;
     private bool rotationAnime = false;
 
@@ -43,6 +44,7 @@ public class GameplayItem : MonoBehaviour
     private BasicAction basicAction;
     private GameplayMapping gameplayMapping;
 
+    public List<Vector3Int> itemOccupiedAreaList0;
     public List<Vector3Int> itemOccupiedAreaList;
 
     public List<GameObject> outputLinkItemList; //我连接了多少个他
@@ -68,6 +70,12 @@ public class GameplayItem : MonoBehaviour
     public int specialOutputCount = 0;
     public int specialInputCount = 0;
 
+    //占位合法性
+    public List<bool> temItemPosValidList;
+    public bool temItemPosValid;
+    public GameObject temPreObject;
+    public List<Vector3Int> temItemPosList;
+
     //约定目标
     public List<int> specialOutputLinkTargetList;
     public List<int> specialInputLinkTargetList;
@@ -75,9 +83,12 @@ public class GameplayItem : MonoBehaviour
     private GameMode gameMode;
 
     //黑暗模式
-    public GameObject darkItemContent;
-    public GameObject darkSocketPoint;
+    public bool canDark = false;
+    public List<int> canDarkList;
+    public GameObject darkSocketContent;
     public GameObject darkPlugPoint;
+    public GameObject linkDarkSocketPoint;
+    private bool darkMove = true;
 
 
     private void Awake()
@@ -86,6 +97,7 @@ public class GameplayItem : MonoBehaviour
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
 
+        itemOccupiedAreaList0 = new List<Vector3Int>();
         itemOccupiedAreaList = new List<Vector3Int>();
 
         outputLinkItemList = new List<GameObject>();
@@ -109,6 +121,10 @@ public class GameplayItem : MonoBehaviour
         specialOutputLinkTargetList = new List<int>();
         specialInputLinkTargetList = new List<int>();
 
+        temItemPosValidList = new List<bool>();
+        canDarkList = new List<int>();
+        darkMove = true;
+
         //初始赋值
         if (itemID == 101)
         {
@@ -122,6 +138,8 @@ public class GameplayItem : MonoBehaviour
         {
             outputCount = 1;
             inputCount = 1;
+            //加入dark
+            canDarkList.Add(401);
         }
         else if (itemID == 999)
         {
@@ -174,7 +192,7 @@ public class GameplayItem : MonoBehaviour
             }
 
         }
-        else
+        else if (isValidItem == true)
         {
             if (inputBtn != null)
             {
@@ -237,6 +255,13 @@ public class GameplayItem : MonoBehaviour
             {
                 rotationBtn.transform.localScale = new Vector3(0, 0, 0);
             }
+
+            //角度调整
+            if(stablePic != null)
+            {
+                stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            
         }
 
         OccupiedAreaListUpdate();
@@ -414,6 +439,332 @@ public class GameplayItem : MonoBehaviour
             moveBtn.transform.localScale = new Vector3(1, 1, 1);
         }
 
+        //占位图片刷新
+        if(isValidItem == false && isMain == true)
+        {
+            temItemPosValidList = new List<bool>();
+            temItemPosList = new List<Vector3Int>();
+            //占位显示
+            for (int i = 0; i < occupiedArea.transform.childCount; i++)
+            {
+                bool isV = false;
+                GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+                if (temItemPosList.Contains(blockP) == false)
+                {
+                    temItemPosList.Add(blockP);
+                }
+
+                if (gameplayMapping.mapIllegalList.Contains(blockP))
+                {
+                    //若目标格子为禁止格，看是否是复制体的占位格
+                    if(temPreObject != null)
+                    {
+                        if (temPreObject.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                        {
+                            isV = true;
+                        }
+                        else
+                        {
+                            isV = false;
+                        }
+                    }
+                    else
+                    {
+                        isV = false;
+                    }
+                }
+                else
+                {
+                    isV = true;
+                }
+
+                //颜色
+
+                if(isV == true)
+                {
+                    blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                }
+                else if (isV == false)
+                {
+                    blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                }
+
+                temItemPosValidList.Add(isV);
+            }
+
+            if (temItemPosValidList.Contains(false))
+            {
+                temItemPosValid = false;
+            }
+            else
+            {
+                temItemPosValid = true;
+            }
+        }
+        else if (isValidItem == false && isMain == false)
+        {
+            temItemPosValidList = new List<bool>();
+            temItemPosList = new List<Vector3Int>();
+
+            if (this.gameObject.transform.parent.gameObject.name == "DarkSocketPoint")
+            {
+                //此为拖拽复制体
+                temPreObject = this.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().temPreObject;
+                darkMove = false;
+            }
+
+            //占位显示
+            if(temPreObject == null)
+            {
+                //新建
+                if (basicAction.darkHasLink == false)
+                {
+                    //没连上，则全红
+                    for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                    {
+                        bool isV = false;
+                        GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                        Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+
+                        //全红
+                        isV = false;
+
+                        //颜色
+                        if (isV == true)
+                        {
+                            blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                        }
+                        else if (isV == false)
+                        {
+                            blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                        }
+
+                        temItemPosValidList.Add(isV);
+                    }
+                }
+                else if(basicAction.darkHasLink == true)
+                {
+                    //连上，则检测
+                    for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                    {
+                        bool isV = false;
+                        GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                        Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+
+                        if (gameplayMapping.mapIllegalList.Contains(blockP))
+                        {
+                            //若目标格子为禁止格，看是否是连接母体的占位格 || 复制体的占位格
+                            if (temPreObject != null)
+                            {
+                                //已创建dark的拖动，看是否复制体的占位格
+                                if (temPreObject.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                                {
+                                    isV = true;
+                                }
+                                else
+                                {
+                                    isV = false;
+                                }
+                            }
+                            else if (temPreObject == null)
+                            {
+                                //新建，看是否是连接母体的占位格
+                                if (basicAction.otherTargetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                                {
+                                    isV = true;
+                                }
+                                else
+                                {
+                                    isV = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isV = true;
+                        }
+
+                        //颜色
+                        if (isV == true)
+                        {
+                            blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                        }
+                        else if (isV == false)
+                        {
+                            blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                        }
+
+                        temItemPosValidList.Add(isV);
+                    }
+                }
+                
+            }
+            else if(temPreObject != null)
+            {
+                if(darkMove == false)
+                {
+                    //被动挪动（复制母体）
+                    //老
+                    temItemPosValidList = new List<bool>();
+                    //占位显示
+                    for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                    {
+                        bool isV = false;
+                        GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                        Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+
+                        if (gameplayMapping.mapIllegalList.Contains(blockP))
+                        {
+                            //若目标格子为禁止格，看是否是复制体的占位格
+                            if (temPreObject != null)
+                            {
+                                if (temPreObject.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                                {
+                                    isV = true;
+                                }
+                                else
+                                {
+                                    isV = false;
+                                }
+                            }
+                            else
+                            {
+                                isV = false;
+                            }
+                        }
+                        else
+                        {
+                            isV = true;
+                        }
+
+                        //颜色
+                        if (this.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().temItemPosList.Contains(blockP))
+                        {
+                            //无色
+                            blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+                        }
+                        else
+                        {
+                            if (isV == true)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                            }
+                            else if (isV == false)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                            }
+                        }
+
+                        temItemPosValidList.Add(isV);
+                    }
+
+                    if (temItemPosValidList.Contains(false))
+                    {
+                        temItemPosValid = false;
+                    }
+                    else
+                    {
+                        temItemPosValid = true;
+                    }
+                }
+                else if (darkMove == true)
+                {
+                    //主动挪动（复制dark）
+                    if (basicAction.darkHasLink == false)
+                    {
+                        //没连上，则全红
+                        for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                        {
+                            bool isV = false;
+                            GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                            Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+
+                            //全红
+                            isV = false;
+
+                            //颜色
+                            if (isV == true)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                            }
+                            else if (isV == false)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                            }
+
+                            temItemPosValidList.Add(isV);
+                        }
+                    }
+                    else if (basicAction.darkHasLink == true)
+                    {
+                        //连上，则检测
+                        for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                        {
+                            bool isV = false;
+                            GameObject blockC = occupiedArea.transform.GetChild(i).gameObject;
+                            Vector3Int blockP = new Vector3Int(Mathf.RoundToInt(blockC.transform.position.x), Mathf.RoundToInt(blockC.transform.position.y), Mathf.RoundToInt(blockC.transform.position.z));
+
+                            if (gameplayMapping.mapIllegalList.Contains(blockP))
+                            {
+                                //若目标格子为禁止格，看是否是连接母体的占位格 || 复制体的占位格
+                                if (temPreObject != null)
+                                {
+                                    //已创建dark的拖动，看是否复制体的占位格
+                                    if (temPreObject.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                                    {
+                                        isV = true;
+                                    }
+                                    else
+                                    {
+                                        isV = false;
+                                    }
+                                }
+                                else if (temPreObject == null)
+                                {
+                                    //新建，看是否是连接母体的占位格
+                                    if (basicAction.otherTargetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(blockP))
+                                    {
+                                        isV = true;
+                                    }
+                                    else
+                                    {
+                                        isV = false;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                isV = true;
+                            }
+
+                            //颜色
+                            if (isV == true)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(0f, 128f / 255, 0f, 100f / 255);
+                            }
+                            else if (isV == false)
+                            {
+                                blockC.GetComponent<SpriteRenderer>().color = new Color(255f / 255, 0f, 0f, 100f / 255);
+                            }
+
+                            temItemPosValidList.Add(isV);
+                        }
+                    }
+                }
+                
+            }
+
+            if (temItemPosValidList.Contains(false))
+            {
+                temItemPosValid = false;
+            }
+            else
+            {
+                temItemPosValid = true;
+            }
+        }
+
     }
 
     public void SetItemID(int id)
@@ -425,7 +776,7 @@ public class GameplayItem : MonoBehaviour
         isValidItem = vv;
     }
 
-    //方向调整
+    //方向调整（旋转）
     public void DirectionSet()
     {
         if(rotationAnime == false)
@@ -469,6 +820,12 @@ public class GameplayItem : MonoBehaviour
 
             //旋转占位检测
             occupiedArea.transform.localEulerAngles = new Vector3(0,0,z);
+            //dark
+            if(canDark == true)
+            {
+                darkSocketContent.transform.localEulerAngles = new Vector3(0, 0, z);
+            }
+            //检测
             for(int i = 0; i < occupiedArea.transform.childCount; i++)
             {
                 int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
@@ -484,11 +841,48 @@ public class GameplayItem : MonoBehaviour
                     break;
                 }
             }
+            //dark
+            if (canDark == true)
+            {
+                for(int i = 0; i < darkSocketContent.transform.childCount; i++)
+                {
+                    GameObject sock = darkSocketContent.transform.GetChild(i).gameObject;
+                    if(sock.transform.childCount > 1)
+                    {
+                        for(int aa = 0; aa < sock.transform.childCount; aa++)
+                        {
+                            GameObject gi = sock.transform.GetChild(aa).gameObject;
+                            if (gi.name.Contains("GameplayItem_"))
+                            {
+                                for (int bb = 0; bb < gi.GetComponent<GameplayItem>().occupiedArea.transform.childCount; bb++)
+                                {
+                                    int xx = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.x);
+                                    int yy = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.y);
+                                    int zz = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.z);
+                                    if (gameplayMapping.mapIllegalList.Contains(new Vector3Int(xx, yy, zz)) && itemOccupiedAreaList.Contains(new Vector3Int(xx, yy, zz)) == false)
+                                    {
+                                        //旋转失败
+                                        Debug.Log("Rotate Failer");
+                                        noBlock = false;
+                                        rotationDirection--;
+                                        rotationAnime = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             //归位
             occupiedArea.transform.localEulerAngles = new Vector3(0, 0, 0);
+            if (canDark == true)
+            {
+                darkSocketContent.transform.localEulerAngles = new Vector3(0, 0, 0);
+            }
 
             //可以旋转
-            if(noBlock == true)
+            if (noBlock == true)
             {
                 Tweener anime = this.gameObject.transform.DOLocalRotate(new Vector3(0, 0, z), 0.3f);
                 rotationBtn.transform.DOLocalRotate(new Vector3(0, 0, rz), 0.3f);
@@ -514,6 +908,7 @@ public class GameplayItem : MonoBehaviour
             int yy = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.y);
             int zz = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.z);
             Vector3Int pp = new Vector3Int(xx,yy,zz);
+            //Debug.Log(pp);
             if (gameplayMapping.mapIllegalList.Contains(pp) == false)
             {
                 gameplayMapping.mapIllegalList.Add(pp);
@@ -540,6 +935,9 @@ public class GameplayItem : MonoBehaviour
     //占位更新
     public void OccupiedAreaListUpdate()
     {
+        itemOccupiedAreaList0 = new List<Vector3Int>();
+        itemOccupiedAreaList = new List<Vector3Int>();
+
         for (int i = 0; i < occupiedArea.transform.childCount; i++)
         {
             int xx = Mathf.RoundToInt(occupiedArea.transform.GetChild(i).gameObject.transform.position.x);
@@ -550,7 +948,45 @@ public class GameplayItem : MonoBehaviour
             {
                 itemOccupiedAreaList.Add(pp);
             }
+            //
+            if (itemOccupiedAreaList0.Contains(pp) == false)
+            {
+                itemOccupiedAreaList0.Add(pp);
+            }
         }
+
+        //dark添加
+        if(canDark == true)
+        {
+            for (int i = 0; i < darkSocketContent.transform.childCount; i++)
+            {
+                GameObject sock = darkSocketContent.transform.GetChild(i).gameObject;
+                if (sock.transform.childCount > 1)
+                {
+                    for (int aa = 0; aa < sock.transform.childCount; aa++)
+                    {
+                        GameObject gi = sock.transform.GetChild(aa).gameObject;
+                        if (gi.name.Contains("GameplayItem_"))
+                        {
+                            for (int bb = 0; bb < gi.GetComponent<GameplayItem>().occupiedArea.transform.childCount; bb++)
+                            {
+                                int xx = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.x);
+                                int yy = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.y);
+                                int zz = Mathf.RoundToInt(gi.GetComponent<GameplayItem>().occupiedArea.transform.GetChild(bb).gameObject.transform.position.z);
+                                Vector3Int pp = new Vector3Int(xx, yy, zz);
+                                if (itemOccupiedAreaList.Contains(pp) == false)
+                                {
+                                    itemOccupiedAreaList.Add(pp);
+                                    //Debug.Log(pp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
 

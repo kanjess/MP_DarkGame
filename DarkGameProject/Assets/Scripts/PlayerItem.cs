@@ -29,11 +29,9 @@ public class PlayerItem : MonoBehaviour
 
     private float liveTime = 0f;
 
-    public float basicPayRate = 0.25f;  //基础付费率
-    public float basicChurnRate = 0.25f;  //基础流失率
-    public float basicPayAmount = 100f;  //基础付费额
-
-
+    public float basicPayRate;  //基础付费率
+    public float basicChurnRate;  //基础流失率
+    public float basicPayAmount;  //基础付费额
 
     private GameObject moneyIcon;
     private bool moneyAnime = false;
@@ -42,6 +40,10 @@ public class PlayerItem : MonoBehaviour
 
     public float basicLivingInterval;
     private float basicLivingTiming = 0f;
+
+    //基础模块
+    private bool gameplayAction = false;
+
 
 
     private void Awake()
@@ -62,7 +64,11 @@ public class PlayerItem : MonoBehaviour
         playerLosingFace = this.gameObject.transform.Find("PlayerLosingFace").gameObject;
 
         activePlayer = false;
-    }
+
+        basicPayRate = 0.25f;  //基础付费率
+        basicChurnRate = 0.60f;  //基础流失率
+        basicPayAmount = 100f;  //基础付费额
+}
 
     // Start is called before the first frame update
     void Start()
@@ -131,10 +137,18 @@ public class PlayerItem : MonoBehaviour
     //角色移动
     void PlayerItemMove()
     {
-        if(moveState == false && moveAnime == false)
+        //是否有玩法动作
+        if(gameplayAction == true && moveState == false && moveAnime == false)
         {
-            //优先特殊，其次普通
-            if(currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList.Count > 0)
+            //Debug.Log("玩法动作");
+            gameplayAction = false;
+        }
+
+        //触发移动
+        if(moveState == false && moveAnime == false && gameplayAction == false)
+        {
+            //寻找路线（优先特殊，其次普通）
+            if (currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList.Count > 0)
             {
                 nextObject = currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList[0];
                 pathList = currentObject.GetComponent<GameplayItem>().specialOutputPathPosListList[0];
@@ -155,6 +169,7 @@ public class PlayerItem : MonoBehaviour
 
         if(moveState == true && moveAnime == false)
         {
+            //移动
             Vector3Int nextPoint = new Vector3Int(0, 0, 0);
 
             if (moveOrder == pathList.Count)
@@ -178,14 +193,14 @@ public class PlayerItem : MonoBehaviour
 
             if (moveOrder > pathList.Count)
             {
+                //移动完成。
                 currentObject = nextObject;
-
+                gameplayAction = true;
                 moveState = false;
             }
 
         }
     }
-
 
     //角色付费
     void PlayerPaying()
@@ -250,7 +265,7 @@ public class PlayerItem : MonoBehaviour
     //付费-玩法检测（玩法触发）
     void PlayerPayingCheckMethod2()
     {
-        //this.gameObject.GetComponent<BoxCollider2D>().co
+        
     }
 
     //留存-基础监测（伴随时间）

@@ -25,6 +25,7 @@ public class BasicAction : MonoBehaviour
     public GameObject gameplayItemTem;
     private GameObject gameplayObjectLayer;
     private GameObject temGameplayObjectLayer;
+
     //菜单拖动
     private DesignPanel designPenel;
     private GameObject designPenalCheckPoint;
@@ -33,6 +34,7 @@ public class BasicAction : MonoBehaviour
     public GameObject gameplayItemUIItemTem;
     public bool dragMapValid = true;
     //private List<Vector3Int> preItemOcuPosList;
+
     //鼠标拖动
     private Vector3 mosStartPosition;
     private bool mosIsDragging = false;
@@ -40,7 +42,7 @@ public class BasicAction : MonoBehaviour
     private GameObject temTargetOJ;
     private GameObject ojt;
     private GameObject uijt;
-    private GameObject otherTargetOJ;
+    public GameObject otherTargetOJ;
 
     private int dragPosState = 0;
 
@@ -64,6 +66,11 @@ public class BasicAction : MonoBehaviour
     private GameObject roadLayer;
 
     private GameObject startItemObject;
+
+    //dark patterns
+    public bool darkHasLink = false;
+    private GameObject darkLinkPoint;
+    private Vector3Int darkLinkPos;
 
     private void Awake()
     {
@@ -120,6 +127,7 @@ public class BasicAction : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
+                gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
                 mousHitObject.gameObject.GetComponentInParent<GameplayItem>().DirectionSet();
                 gameplayItemAction = true;
             }
@@ -162,13 +170,36 @@ public class BasicAction : MonoBehaviour
                         int temID = hit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().itemID;
                         //InsGameplayItemSet(temID);
                         gameplayItem = targetOJ;
+
+                        //拖动 - 复制原个体
                         temTargetOJ = Instantiate(gameplayItem) as GameObject;
                         temTargetOJ.transform.SetParent(temGameplayObjectLayer.transform);
                         temTargetOJ.transform.position = ojt.transform.position;
                         temTargetOJ.GetComponent<GameplayItem>().SetItemID(temID);
+                        temTargetOJ.GetComponent<GameplayItem>().temPreObject = targetOJ;
                         temTargetOJ.GetComponent<GameplayItem>().SetValid(false);
+                        //复制后携带的dark也要valid=false掉
+                        if(temTargetOJ.GetComponent<GameplayItem>().canDark == true)
+                        {
+                            for(int i = 0; i < temTargetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                            {
+                                GameObject soc = temTargetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject;
+                                if(soc.transform.childCount > 1)
+                                {
+                                    for(int aa = 0; aa < soc.transform.childCount; aa++)
+                                    {
+                                        GameObject gii = soc.transform.GetChild(aa).gameObject;
+                                        if (gii.name.Contains("GameplayItem_"))
+                                        {
+                                            gii.GetComponent<GameplayItem>().SetValid(false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         temTargetOJ.transform.rotation = targetOJ.transform.rotation;
                         temTargetOJ.GetComponent<GameplayItem>().gameplayPic.transform.localRotation = targetOJ.GetComponent<GameplayItem>().gameplayPic.transform.localRotation;
+                        temTargetOJ.GetComponent<GameplayItem>().moveBtn.GetComponent<BoxCollider2D>().enabled = false;
 
                         gameplayItemAction = true;
                     }
@@ -230,6 +261,8 @@ public class BasicAction : MonoBehaviour
                     }
 
                     gameplayItemAction = true;
+
+                    gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
                 }
             }           
         }
@@ -244,9 +277,10 @@ public class BasicAction : MonoBehaviour
             ojt.transform.localScale = new Vector3(1, 1, 1);
 
             gameplayItemAction = true;
+            gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
         }
 
-        // 拖动物体
+        // 拖动物体 (一般拖动 & 菜单拖拽）
         if (ojt != null && roadEditMode == false)
         {
             gameplayItemAction = true;
@@ -296,30 +330,179 @@ public class BasicAction : MonoBehaviour
                     }
                 }
 
-                //放置格是否合法判定
-                //普通检测占位格；dark检测碰撞体
-                if(temTargetOJ.GetComponent<GameplayItem>().isMain == true)
+                //如果是dark，查看鼠标是否点击到目标位置上
+                if (temTargetOJ.GetComponent<GameplayItem>().isMain == false)
                 {
-                    GameObject occupiedArea = temTargetOJ.GetComponent<GameplayItem>().occupiedArea;
-                    dragMapValid = true;
-                    for (int i = 0; i < occupiedArea.transform.childCount; i++)
+                    darkHasLink = false;
+
+                    if (dragPosState == 0)
                     {
-                        GameObject occupiedPoint = occupiedArea.transform.GetChild(i).gameObject;
-                        Vector3Int p1 = new Vector3Int(Mathf.RoundToInt(occupiedPoint.transform.position.x), Mathf.RoundToInt(occupiedPoint.transform.position.y), Mathf.RoundToInt(occupiedPoint.transform.position.z));
-                        if (gameplayMapping.mapIllegalList.Contains(p1))
+                        Vector3 mmPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        RaycastHit2D mmhit = Physics2D.Raycast(mmPosition, Vector2.zero);
+                        dragMapValid = true;
+
+                        //是否dark可连接的检测
+                        if (mmhit.collider != null)
                         {
-                            //虽然包含，但也要看下是否是自己占位的
-                            if (targetOJ != null && targetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Contains(p1) == false)
+                            if (mmhit.collider.gameObject.name == "MoveBtn")
                             {
-                                dragMapValid = false;
-                                break;
+                                if (mmhit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().canDark == true)
+                                {
+                                    if (mmhit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().canDarkList.Contains(temTargetOJ.GetComponent<GameplayItem>().itemID))
+                                    {
+                                        darkHasLink = true;
+                                        //
+                                        otherTargetOJ = mmhit.collider.gameObject.transform.parent.gameObject;
+                                    }
+                                    else
+                                    {
+                                        darkHasLink = false;
+                                    }
+                                }
+                                else
+                                {
+                                    darkHasLink = false;
+                                }
                             }
+                            else if (mmhit.collider.gameObject.name == "DarkSocketPoint")
+                            {
+                                if (mmhit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().canDark == true)
+                                {
+                                    if (mmhit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().canDarkList.Contains(temTargetOJ.GetComponent<GameplayItem>().itemID))
+                                    {
+                                        darkHasLink = true;
+                                        //
+                                        otherTargetOJ = mmhit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+                                    }
+                                    else
+                                    {
+                                        darkHasLink = false;
+                                    }
+                                }
+                                else
+                                {
+                                    darkHasLink = false;
+                                }
+                            }
+
+                            //如果dark链接上了，放置在对应位置
+                            if(darkHasLink == true)
+                            {
+                                darkLinkPoint = mmhit.collider.gameObject;
+                                //如果链接的是连接点
+                                if(mmhit.collider.gameObject.name == "DarkSocketPoint")
+                                {
+                                    darkLinkPoint = mmhit.collider.gameObject;
+                                    //查看连接点下面有没有东西，没有则直接放，有则无效
+                                    int cc = darkLinkPoint.transform.childCount;
+                                    if(cc > 1)
+                                    {
+                                        darkHasLink = false;
+                                    }
+                                }
+                                //如果链接的是本体
+                                else if (mmhit.collider.gameObject.name == "MoveBtn")
+                                {
+                                    //筛选连接点
+                                    GameObject darkSocketC = mmhit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().darkSocketContent;
+                                    int c0 = darkSocketC.transform.childCount;
+
+                                    darkHasLink = false;
+                                    for (int i = 0; i < c0; i++)
+                                    {
+                                        darkLinkPoint = darkSocketC.transform.GetChild(i).gameObject;
+
+                                        int cc = darkLinkPoint.transform.childCount;
+                                        if (cc <= 1)
+                                        {
+                                            darkHasLink = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if(darkHasLink == true)
+                                {
+                                    GameObject tpoint = darkLinkPoint.transform.Find("Point").gameObject;
+                                    //确认朝向并放置临时道具
+                                    Vector3Int p0 = new Vector3Int(Mathf.RoundToInt(darkLinkPoint.transform.position.x), Mathf.RoundToInt(darkLinkPoint.transform.position.y), Mathf.RoundToInt(darkLinkPoint.transform.position.z));
+                                    Vector3Int p1 = new Vector3Int(Mathf.RoundToInt(tpoint.transform.position.x), Mathf.RoundToInt(tpoint.transform.position.y), Mathf.RoundToInt(tpoint.transform.position.z));
+
+                                    if (p1.x > p0.x && p1.y == p0.y)
+                                    {
+                                        //右
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 0);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x < p0.x && p1.y == p0.y)
+                                    {
+                                        //左
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, -180);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x == p0.x && p1.y > p0.y)
+                                    {
+                                        //上
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 90);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x == p0.x && p1.y < p0.y)
+                                    {
+                                        //下
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, -90);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+
+                                    temTargetOJ.transform.position = darkLinkPoint.transform.position;
+                                    GameObject adPoint = temTargetOJ.GetComponent<GameplayItem>().darkPlugPoint;
+                                    Vector3Int adp2 = new Vector3Int(Mathf.RoundToInt(adPoint.transform.position.x), Mathf.RoundToInt(adPoint.transform.position.y), Mathf.RoundToInt(adPoint.transform.position.z));
+                                    if (adp2.x < p0.x && adp2.y == p0.y)
+                                    {
+                                        //右移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x + 1), Mathf.RoundToInt(temTargetOJ.transform.position.y), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x > p0.x && adp2.y == p0.y)
+                                    {
+                                        //左移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x - 1), Mathf.RoundToInt(temTargetOJ.transform.position.y), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x == p0.x && adp2.y < p0.y)
+                                    {
+                                        //上移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x), Mathf.RoundToInt(temTargetOJ.transform.position.y + 1), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x == p0.x && adp2.y > p0.y)
+                                    {
+                                        //下移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x), Mathf.RoundToInt(temTargetOJ.transform.position.y - 1), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ojt.transform.position = cellPosition;
+                            temTargetOJ.transform.position = ojt.transform.position;
+                            //
+                            temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 0);
+                            temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.localEulerAngles = new Vector3(0, 0, 0);
                         }
                     }
                 }
+
+                //放置格是否合法判定
+                //普通检测占位格；dark检测碰撞体
+                if (temTargetOJ.GetComponent<GameplayItem>().isMain == true)
+                {
+                    dragMapValid = temTargetOJ.GetComponent<GameplayItem>().temItemPosValid;
+                }
                 else if (temTargetOJ.GetComponent<GameplayItem>().isMain == false)
                 {
-
+                    dragMapValid = temTargetOJ.GetComponent<GameplayItem>().temItemPosValid;
                 }
             } 
         }
@@ -522,21 +705,101 @@ public class BasicAction : MonoBehaviour
                     //非法坐标调整
                     //前占位坐标移除
                     targetOJ.GetComponent<GameplayItem>().IllegalMapRemove();
+                    //前占位坐标移除（自带dark)
+                    if(targetOJ.GetComponent<GameplayItem>().canDark == true)
+                    {
+                        for(int i = 0; i < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                        {
+                            int childc = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount;
+                            if(childc > 1)
+                            {
+                                //含有已附着的dark patterns
+                                for(int aa = 0; aa < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount; aa++)
+                                {
+                                    GameObject gitem = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.GetChild(aa).gameObject;
+                                    if (gitem.name.Contains("GameplayItem_"))
+                                    {
+                                        gitem.GetComponent<GameplayItem>().IllegalMapRemove();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     //新坐标加入
                     targetOJ.transform.position = previousCellPosition;
                     targetOJ.GetComponent<GameplayItem>().IllegalMapAdd();
+                    //新坐标加入（自带dark)
+                    if (targetOJ.GetComponent<GameplayItem>().canDark == true)
+                    {
+                        for (int i = 0; i < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                        {
+                            int childc = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount;
+                            if (childc > 1)
+                            {
+                                //含有已附着的dark patterns
+                                for (int aa = 0; aa < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount; aa++)
+                                {
+                                    GameObject gitem = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.GetChild(aa).gameObject;
+                                    if (gitem.name.Contains("GameplayItem_"))
+                                    {
+                                        gitem.GetComponent<GameplayItem>().IllegalMapAdd();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     //刷新占位坐标
                     targetOJ.GetComponent<GameplayItem>().itemOccupiedAreaList.Clear();
                     targetOJ.GetComponent<GameplayItem>().OccupiedAreaListUpdate();
+                    //刷新占位坐标（自带dark)
+                    if (targetOJ.GetComponent<GameplayItem>().canDark == true)
+                    {
+                        for (int i = 0; i < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                        {
+                            int childc = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount;
+                            if (childc > 1)
+                            {
+                                //含有已附着的dark patterns
+                                for (int aa = 0; aa < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.childCount; aa++)
+                                {
+                                    GameObject gitem = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject.transform.GetChild(aa).gameObject;
+                                    if (gitem.name.Contains("GameplayItem_"))
+                                    {
+                                        gitem.GetComponent<GameplayItem>().itemOccupiedAreaList.Clear();
+                                        gitem.GetComponent<GameplayItem>().OccupiedAreaListUpdate();
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     //重建路网
                     AutoRoadRecreateForItem(targetOJ);
 
                 }
-                //dark patterns
-                else if (dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == false)
+                //dark patterns 重新放置
+                else if (dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == false && darkHasLink == true)
                 {
+                    //是否变位置？
+                    if (darkLinkPoint == targetOJ.GetComponent<GameplayItem>().linkDarkSocketPoint)
+                    {
+                        //位置没变，则无效
+                        //
+                    }
+                    //销毁后重建
+                    else
+                    {
+                        //前占位坐标移除
+                        targetOJ.GetComponent<GameplayItem>().IllegalMapRemove();
+                        int newid = targetOJ.GetComponent<GameplayItem>().itemID;
+                        //
+                        Destroy(targetOJ);
 
+                        //重建
+                        InsNewGameplayItem(newid, true, true);
+                    }
                 }
             }
             else if(dragPosState == 1)
@@ -547,12 +810,34 @@ public class BasicAction : MonoBehaviour
                     //回收
                     if (targetOJ != null)
                     {
+                        //玩法列表清除
                         if (gameplayMapping.mainGameplayItemList.Contains(targetOJ))
                         {
                             gameplayMapping.mainGameplayItemList.Remove(targetOJ);
                         }
+
                         //前占位坐标移除
                         targetOJ.GetComponent<GameplayItem>().IllegalMapRemove();
+                        //连带dark一起移除
+                        if(targetOJ.GetComponent<GameplayItem>().canDark == true)
+                        {
+                            for (int i = 0; i < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                            {
+                                GameObject sock = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject;
+                                if (sock.transform.childCount > 1)
+                                {
+                                    for (int aa = 0; aa < sock.transform.childCount; aa++)
+                                    {
+                                        GameObject gi = sock.transform.GetChild(aa).gameObject;
+                                        if (gi.name.Contains("GameplayItem_"))
+                                        {
+                                            gi.GetComponent<GameplayItem>().IllegalMapRemove();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         //道路摧毁
                         if(targetOJ.GetComponent<GameplayItem>().outputLinkItemList.Count > 0)
                         {
@@ -587,6 +872,26 @@ public class BasicAction : MonoBehaviour
                             }
                         }
 
+                        //dark先销毁
+                        if (targetOJ.GetComponent<GameplayItem>().canDark == true)
+                        {
+                            for (int i = 0; i < targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; i++)
+                            {
+                                GameObject sock = targetOJ.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(i).gameObject;
+                                if (sock.transform.childCount > 1)
+                                {
+                                    for (int aa = 0; aa < sock.transform.childCount; aa++)
+                                    {
+                                        GameObject gi = sock.transform.GetChild(aa).gameObject;
+                                        if (gi.name.Contains("GameplayItem_"))
+                                        {
+                                            Destroy(gi);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //本体销毁
                         Destroy(targetOJ);
                     }
                 }
@@ -799,31 +1104,62 @@ public class BasicAction : MonoBehaviour
     }
 
     //实例化玩法
-    public void InsNewGameplayItem(int id, bool vv)
+    public void InsNewGameplayItem(int id, bool vv, bool isdark)
     {
         if(vv == true)
         {
             if (dragPosState == 0)
             {
-                //创建
-                InsGameplayItemSet(id);
-                GameObject oj = Instantiate(gameplayItem) as GameObject;
-                oj.transform.SetParent(gameplayObjectLayer.transform);
-                oj.transform.position = previousCellPosition;
-                //
-                oj.GetComponent<GameplayItem>().SetItemID(id);
-                oj.GetComponent<GameplayItem>().SetValid(true);
-                //主玩法列表
-                if(oj.GetComponent<GameplayItem>().isMain == true)
+                if(isdark == false)
                 {
-                    gameplayMapping.mainGameplayItemList.Add(oj);
+                    //创建
+                    InsGameplayItemSet(id);
+                    GameObject oj = Instantiate(gameplayItem) as GameObject;
+                    oj.transform.SetParent(gameplayObjectLayer.transform);
+                    oj.transform.position = previousCellPosition;
+                    oj.transform.eulerAngles = temTargetOJ.transform.eulerAngles;
+                    //
+                    oj.GetComponent<GameplayItem>().SetItemID(id);
+                    oj.GetComponent<GameplayItem>().SetValid(true);
+
+                    //主玩法列表
+                    if (oj.GetComponent<GameplayItem>().isMain == true)
+                    {
+                        gameplayMapping.mainGameplayItemList.Add(oj);
+                    }
+
+                    //非法通行-新坐标加入
+                    oj.GetComponent<GameplayItem>().IllegalMapAdd();
+
+                    //清理临时指示物
+                    TemGameplayItemClear();
+                    //
+                    gameplayItemAction = false;
                 }
-                //非法通行-新坐标加入
-                oj.GetComponent<GameplayItem>().IllegalMapAdd();
-                //清理临时指示物
-                TemGameplayItemClear();
-                //
-                gameplayItemAction = false;
+                else if(isdark == true && darkHasLink == true)
+                {
+                    //创建
+                    InsGameplayItemSet(id);
+                    GameObject oj = Instantiate(gameplayItem) as GameObject;
+                    oj.transform.SetParent(darkLinkPoint.transform);
+                    oj.GetComponent<GameplayItem>().linkDarkSocketPoint = darkLinkPoint;
+                    oj.transform.position = darkLinkPos;
+                    oj.transform.eulerAngles = temTargetOJ.transform.eulerAngles;
+                    //
+                    oj.GetComponent<GameplayItem>().SetItemID(id);
+                    oj.GetComponent<GameplayItem>().SetValid(true);
+
+                    //非法通行-新坐标加入
+                    oj.GetComponent<GameplayItem>().IllegalMapAdd();
+                    //母gameplayItem占位坐标更新
+                    otherTargetOJ.GetComponent<GameplayItem>().OccupiedAreaListUpdate();
+
+                    //清理临时指示物
+                    TemGameplayItemClear();
+                    //
+                    gameplayItemAction = false;
+                }
+                
             }
             else if (dragPosState == 1)
             {
@@ -836,6 +1172,7 @@ public class BasicAction : MonoBehaviour
             temTargetOJ.transform.SetParent(temGameplayObjectLayer.transform);
             temTargetOJ.GetComponent<GameplayItem>().SetItemID(id);
             temTargetOJ.GetComponent<GameplayItem>().SetValid(false);
+            temTargetOJ.GetComponent<GameplayItem>().moveBtn.GetComponent<BoxCollider2D>().enabled = false;
         }
         
     }
@@ -1395,7 +1732,6 @@ public class BasicAction : MonoBehaviour
             }
         }
     }
-
 
 
     //循环构建成功检测
