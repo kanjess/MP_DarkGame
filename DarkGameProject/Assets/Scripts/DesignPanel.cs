@@ -47,6 +47,13 @@ public class DesignPanel : MonoBehaviour
     private GameObject gameItemContent;
     private GameObject darkItemContent;
 
+    //报表
+    public GameObject pcrPointItem;
+    private GameObject pcrPanel;
+    private GameObject pcrChartContent;
+    private GameObject pcrItemContent;
+    private int pcrDataNum = 0;
+
     private void Awake()
     {
         sceneNo = 2;
@@ -88,6 +95,11 @@ public class DesignPanel : MonoBehaviour
         companyPanel = sceneContent.transform.Find("CompanyPanel").gameObject;
         playerPanel = sceneContent.transform.Find("PlayerPanel").gameObject;
 
+        pcrPanel = companyPanel.transform.Find("AveragePurchaseRatePanel").gameObject;
+        pcrChartContent = pcrPanel.transform.Find("ChartContent").gameObject;
+        GameObject pcrScrollView = pcrChartContent.transform.Find("ScrollView").gameObject;
+        GameObject pcrViewport = pcrScrollView.transform.Find("Viewport").gameObject;
+        pcrItemContent = pcrViewport.transform.Find("PointContent").gameObject;
 
 
     }
@@ -330,6 +342,9 @@ public class DesignPanel : MonoBehaviour
                 {
                     scenePanelTweener = companyPanel.transform.DOLocalMoveY(0f, 0.5f);
                     playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+
+                    //统计报表更新
+                    PurchaseRateChart();
                 }
                 else if (no == 3)
                 {
@@ -340,6 +355,9 @@ public class DesignPanel : MonoBehaviour
                 sceneNo = no;
 
                 scenePanelTweener.OnComplete(() => scenePanelAnime = false);
+
+                //游戏暂停
+                gameMode.gameProcessPause = true;
             }
             else if(no == 2)
             {
@@ -355,6 +373,9 @@ public class DesignPanel : MonoBehaviour
 
                 scenePanelTweener.OnComplete(() => scenePanelAnime = false);
                 scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0,0,0));
+
+                //游戏恢复
+                gameMode.gameProcessPause = false;
             }
         }
         //界面缩回
@@ -373,6 +394,8 @@ public class DesignPanel : MonoBehaviour
             scenePanelTweener.OnComplete(() => scenePanelAnime = false);
             scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0, 0, 0));
 
+            //游戏恢复
+            gameMode.gameProcessPause = false;
         }
     }
 
@@ -431,4 +454,44 @@ public class DesignPanel : MonoBehaviour
             gameMode.gameItemList[i].GetComponent<GameplayItemUIItem>().UnlockListen();
         }
     }
+
+    //统计数据报表
+    private void PurchaseRateChart()
+    {
+        if(pcrDataNum >= gameMode.purchaseRateList.Count)
+        {
+            //数据无更新
+        }
+        else if (pcrDataNum < gameMode.purchaseRateList.Count)
+        {
+            //更新
+            int needAddNum = gameMode.purchaseRateList.Count - pcrDataNum;
+
+            for(int i = 0; i < needAddNum; i++)
+            {
+                float rrr = gameMode.purchaseRateList[pcrDataNum + i];
+
+                GameObject pItem = Instantiate(pcrPointItem) as GameObject;
+                pItem.transform.SetParent(pcrItemContent.transform);
+
+                GameObject preItem = pItem;
+                if(pcrDataNum + i > 0)
+                {
+                    preItem = pcrItemContent.transform.GetChild(pcrDataNum + i - 1).gameObject;
+                }
+                else
+                {
+                    preItem = null;
+                }
+
+                pItem.GetComponent<ChartPointItem>().SetDetail(rrr, 1, pcrDataNum + i, companyPanel, pcrPanel, pcrChartContent, preItem);
+            }
+
+            pcrDataNum = gameMode.purchaseRateList.Count;
+
+        }
+    }
+
+
+
 }

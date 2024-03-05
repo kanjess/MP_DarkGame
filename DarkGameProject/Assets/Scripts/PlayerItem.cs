@@ -55,11 +55,11 @@ public class PlayerItem : MonoBehaviour
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
 
         moveSpeed = 3f;  //像素/s
-        basicMoneyCheckInterval = 1f;
-        basicLivingInterval = 5f;
-        expCheckInterval = 5f;
+        basicMoneyCheckInterval = 0.5f;  //基础付费 检测间隔
+        basicLivingInterval = 5f;  //基础留存 检测间隔
+        expCheckInterval = 5f;  //exp 检测间隔
         expCheckTiming = expCheckInterval;
-        expAdd = 10;
+        expAdd = 10;   //exp
 
         pathList = new List<Vector3Int>();
 
@@ -72,9 +72,9 @@ public class PlayerItem : MonoBehaviour
 
         activePlayer = false;
 
-        basicPayRate = 0.25f;  //基础付费率
+        basicPayRate = 0.15f;  //基础付费率
         basicChurnRate = 0.60f;  //基础流失率
-        basicPayAmount = 100f;  //基础付费额
+        basicPayAmount = 10f;  //基础付费额
 }
 
     // Start is called before the first frame update
@@ -215,7 +215,7 @@ public class PlayerItem : MonoBehaviour
         }
     }
 
-    //角色付费
+    //角色付费效果
     void PlayerPaying()
     {
         if(moneyAnime == false)
@@ -264,11 +264,14 @@ public class PlayerItem : MonoBehaviour
         basicMoneyCheckTiming += Time.deltaTime;
         if(basicMoneyCheckTiming >= basicMoneyCheckInterval)
         {
+            gameMode.purchaseRateA += 1;
+
             //概率
             float rate = Random.Range(0f, 1f);
             if(rate <= basicPayRate)
             {
                 PlayerPaying();
+                gameMode.purchaseRateS += 1;
             }
 
             basicMoneyCheckTiming = 0f;

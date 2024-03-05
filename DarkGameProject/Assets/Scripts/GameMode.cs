@@ -31,6 +31,14 @@ public class GameMode : MonoBehaviour
     //升级解锁
     public List<GameObject> gameItemList;
 
+    //数据统计
+    private float statisticsInterval;
+    private float statisticsTiming = 0f;
+    //付费率统计
+    public float purchaseRateA = 0f;
+    public float purchaseRateS = 0f;
+    public List<float> purchaseRateList;
+
 
     private void Awake()
     {
@@ -41,6 +49,10 @@ public class GameMode : MonoBehaviour
         playerItemLayer = GameObject.Find("PlayerObject").gameObject;
 
         gameItemList = new List<GameObject>();
+
+        //统计
+        statisticsInterval = 15f;  //统计间隔
+        purchaseRateList = new List<float>();
     }
 
     // Start is called before the first frame update
@@ -55,6 +67,8 @@ public class GameMode : MonoBehaviour
         if(gameDynamicProcess == true && gameProcessPause == false)
         {
             GameDynamicProcessPlay();
+
+            StatisticsCalculating();
         }
     }
 
@@ -75,4 +89,29 @@ public class GameMode : MonoBehaviour
             }    
         }
     }
+
+    void StatisticsCalculating()
+    {
+        statisticsTiming += Time.deltaTime;
+
+        if(statisticsTiming >= statisticsInterval)
+        {
+            statisticsTiming = 0f;
+
+            //统计结果计算
+            //付费率
+            float pRate = 0f;
+            if (purchaseRateA != 0)
+            {
+                pRate = purchaseRateS / purchaseRateA;
+            }
+            purchaseRateList.Add(pRate);
+            purchaseRateA = 0f;
+            purchaseRateS = 0f;
+
+            //Debug.Log(pRate);
+               
+        }
+    }
+
 }
