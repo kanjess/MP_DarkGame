@@ -27,12 +27,14 @@ public class ChartPointItem : MonoBehaviour
         pointImage = pointContent.transform.Find("PointImage").gameObject;
         lineImage = pointContent.transform.Find("LineImage").gameObject;
         pointText = this.gameObject.transform.Find("PointText").gameObject;
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        UISet();
+        this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        //UISet();
     }
 
     // Update is called once per frame
@@ -50,17 +52,20 @@ public class ChartPointItem : MonoBehaviour
         chartObject = pp1;
         chartContent = pp2;
         preChartItem = pci;
+
+        Invoke("UISet", 0.04f);
     }
 
     void UISet()
     {
         //文字
-        pointText.GetComponent<Text>().text = order.ToString();
+        pointText.GetComponent<Text>().text = (order + 1).ToString();
 
         //圆点位置
         float per = showNum / maxNum;
         float posY = per * chartContent.GetComponent<RectTransform>().sizeDelta.y;
-        float posYC = posY * chartObject.transform.localScale.x * panelObject.transform.localScale.x; //坐标修正
+        //float offsetV = chartObject.transform.localScale.x * panelObject.transform.localScale.x;
+        float posYC = posY; //坐标修正
 
         pointContent.transform.localPosition = new Vector3(0, posYC, 0);
 
@@ -79,8 +84,9 @@ public class ChartPointItem : MonoBehaviour
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             lineImage.transform.localEulerAngles = new Vector3(0, 0, angle);
 
-            float distance = Vector2.Distance(preChartItem.transform.position, this.gameObject.transform.position);
-            lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(distance, 7f);
+            float distance = Vector2.Distance(preChartItem.GetComponent<ChartPointItem>().pointImage.transform.position, pointImage.transform.position);
+            float offsetV = chartObject.transform.localScale.x * panelObject.transform.localScale.x;
+            lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(distance / offsetV, 7f);
             
         }
     }

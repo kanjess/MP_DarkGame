@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameplayItemUIItem : MonoBehaviour
 {
-    private GameObject gameplayItemBtn;
+    public GameObject gameplayItemBtn;
     private GameMode gameMode;
 
     private GameObject itemNumContent;
@@ -23,9 +23,17 @@ public class GameplayItemUIItem : MonoBehaviour
     private DesignPanel designPanel;
 
     public int itemID;
+    public int itemLevel = 1;
     public bool isDark = false;
     public string unlockLevelListString;
     private List<int> unlockLevelList;
+
+    public GameObject levelUpBtn;
+    private GameObject itemNameItem;
+    public string itemName = "";
+    public GameObject levelContent;
+    public GameObject levelNum;
+    public int levelPrice = 1;
 
     private void Awake()
     {
@@ -38,6 +46,11 @@ public class GameplayItemUIItem : MonoBehaviour
         newItemContent = this.gameObject.transform.Find("NewItemContent").gameObject;
         unlockContent = this.gameObject.transform.Find("UnlockContent").gameObject;
         unlockText = unlockContent.transform.Find("UnlockText").gameObject;
+        levelUpBtn = this.gameObject.transform.Find("LevelButton").gameObject;
+        itemNameItem = levelUpBtn.transform.Find("ItemName").gameObject;
+        itemName = itemNameItem.GetComponent<Text>().text;
+        levelContent = this.gameObject.transform.Find("LevelContent").gameObject;
+        levelNum = levelContent.transform.Find("ItemNum").gameObject;
 
         designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
 
@@ -65,6 +78,11 @@ public class GameplayItemUIItem : MonoBehaviour
     {
         gameMode.gameItemList.Add(this.gameObject);
 
+        levelUpBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            designPanel.DesignItemLevelPanel(this.gameObject);
+        });
+
         UnlockListen();
 
 
@@ -77,11 +95,16 @@ public class GameplayItemUIItem : MonoBehaviour
         {
             //界面为打开时
             itemNumText.GetComponent<Text>().text = itemNum.ToString();
+            levelNum.GetComponent<Text>().text = itemLevel.ToString();
 
-            if(hasUnlock == true)
+            if (hasUnlock == true)
             {
                 unlockContent.transform.localScale = new Vector3(0, 0, 0);
                 itemNumContent.transform.localScale = new Vector3(1, 1, 1);
+                levelContent.transform.localScale = new Vector3(1, 1, 1);
+                levelUpBtn.GetComponent<Button>().interactable = true;
+                levelUpBtn.GetComponent<Image>().color = new Color(115 / 255f, 255 / 255f, 60 / 255f, 255 / 255f);
+                itemNameItem.transform.localPosition = new Vector3(8f, 0, 0);
 
                 if (itemNum <= 0 && hasUnlock == true)
                 {
@@ -100,6 +123,10 @@ public class GameplayItemUIItem : MonoBehaviour
                 unlockText.GetComponent<Text>().text = "Level " + unlockLevelList[0];
                 gameplayItemBtn.transform.localScale = new Vector3(0, 0, 0);
                 itemNumContent.transform.localScale = new Vector3(0, 0, 0);
+                levelContent.transform.localScale = new Vector3(0, 0, 0);
+                levelUpBtn.GetComponent<Button>().interactable = false;
+                levelUpBtn.GetComponent<Image>().color = new Color(115 / 255f, 255 / 255f, 60 / 255f, 0 / 255f);
+                itemNameItem.transform.localPosition = new Vector3(-8, 0, 0);
             }
 
             if(newItemShow == false)

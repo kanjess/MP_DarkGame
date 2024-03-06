@@ -1,22 +1,22 @@
-﻿<Properties StartupConfiguration="{2D2C1AE1-78A9-E2FD-1C31-955B22CCF8E7}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ChartPointItem.cs">
+﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DesignPanel.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="76" Column="41" />
-      <File FileName="Assets/Scripts/BasicAction.cs" Line="1524" Column="46" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" Line="275" Column="44" />
-      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="53" Column="40" />
-      <File FileName="Assets/Scripts/GameplayMapping.cs" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="300" Column="39" />
+      <File FileName="Assets/Scripts/BasicAction.cs" Line="226" Column="81" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="71" Column="38" />
+      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="25" Column="18" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="278" Column="10" />
+      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="243" Column="20" />
       <File FileName="Assets/Scripts/MainPathItem.cs" />
-      <File FileName="Assets/Scripts/GameMode.cs" Line="112" Column="15" />
+      <File FileName="Assets/Scripts/GameMode.cs" Line="23" Column="33" />
       <File FileName="Assets/Scripts/CameraControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="131" Column="1" />
-      <File FileName="Assets/Scripts/ChartPointItem.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="36" Column="31" />
+      <File FileName="Assets/Scripts/ChartPointItem.cs" Line="84" Column="81" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="b9e6076c-8c3e-415b-bb7d-9aa83918e698" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="a0985421-76bc-46aa-93f7-072efc08397e" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

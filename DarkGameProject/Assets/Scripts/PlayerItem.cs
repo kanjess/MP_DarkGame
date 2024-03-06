@@ -31,7 +31,7 @@ public class PlayerItem : MonoBehaviour
 
     public float basicPayRate;  //基础付费率
     public float basicChurnRate;  //基础流失率
-    public float basicPayAmount;  //基础付费额
+    public int basicPayAmount;  //基础付费额
 
     private GameObject moneyIcon;
     private bool moneyAnime = false;
@@ -74,7 +74,7 @@ public class PlayerItem : MonoBehaviour
 
         basicPayRate = 0.15f;  //基础付费率
         basicChurnRate = 0.60f;  //基础流失率
-        basicPayAmount = 10f;  //基础付费额
+        basicPayAmount = 10;  //基础付费额
 }
 
     // Start is called before the first frame update
@@ -216,7 +216,7 @@ public class PlayerItem : MonoBehaviour
     }
 
     //角色付费效果
-    void PlayerPaying()
+    void PlayerPaying(int pay)
     {
         if(moneyAnime == false)
         {
@@ -235,7 +235,10 @@ public class PlayerItem : MonoBehaviour
             s.OnComplete(() => moneyIcon.transform.localPosition = new Vector3(0, 0, 0));
             s.OnKill(() => moneyAnime = false);
 
-            gameMode.companyMoney += basicPayAmount;
+            gameMode.companyMoney += pay;
+            //
+            gameMode.cumulativeRevenue += pay;
+            gameMode.revenuePerTime += pay;
         }
         
     }
@@ -270,7 +273,7 @@ public class PlayerItem : MonoBehaviour
             float rate = Random.Range(0f, 1f);
             if(rate <= basicPayRate)
             {
-                PlayerPaying();
+                PlayerPaying(basicPayAmount);
                 gameMode.purchaseRateS += 1;
             }
 
@@ -290,11 +293,14 @@ public class PlayerItem : MonoBehaviour
         basicLivingTiming += Time.deltaTime;
         if (basicLivingTiming >= basicLivingInterval)
         {
+            gameMode.retentionRateA += 1;
+
             //概率
             float rate = Random.Range(0f, 1f);
             if (rate <= basicChurnRate)
             {
                 PlayerLosing();
+                gameMode.retentionRateS += 1;
             }
 
             basicLivingTiming = 0f;

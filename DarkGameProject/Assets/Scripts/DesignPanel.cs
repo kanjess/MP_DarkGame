@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using UnityEngine.Tilemaps;
+using System.Linq;
 
 public class DesignPanel : MonoBehaviour
 {
@@ -48,11 +48,44 @@ public class DesignPanel : MonoBehaviour
     private GameObject darkItemContent;
 
     //报表
+    private GameObject CumulativeRevenueNumText;
+    private GameObject AverageRetentionNumText;
+    private GameObject AveragePayingNumText;
+    private GameObject AverageRevenuePerPlayerNumText;
+
     public GameObject pcrPointItem;
     private GameObject pcrPanel;
     private GameObject pcrChartContent;
     private GameObject pcrItemContent;
     private int pcrDataNum = 0;
+
+    public GameObject arptPointItem;
+    private GameObject arptPanel;
+    private GameObject arptChartContent;
+    private GameObject arptItemContent;
+    private int arptDataNum = 0;
+    private GameObject arptYText1;
+    private GameObject arptYText2;
+    private GameObject arptYText3;
+    private GameObject arptYText4;
+    private GameObject arptYText5;
+
+    //升级panel
+    public bool designItemPanelOpen = false;
+    private GameObject designItemLevelPanelTarget;
+    private GameObject designItemLevelPanelContent;
+    private GameObject designItemLevelPanelBg;
+    private GameObject designItemLevelPanel;
+    private GameObject designItemLevelNum;
+    private GameObject designItemLevelItemName;
+    private GameObject designItemLevelPanelItemShow;
+    private GameObject designItemLevelPanelCloseBtn;
+    private GameObject designItemLevelPanelItemDesc;
+    private GameObject designItemLevelPanelEffectContent;
+    private GameObject designItemLevelPanelLevelUpBtn;
+    private GameObject designItemLevelPanelLevelUpCost;
+    private GameObject designItemLevelPanelLevelUpAllMoney;
+
 
     private void Awake()
     {
@@ -95,13 +128,57 @@ public class DesignPanel : MonoBehaviour
         companyPanel = sceneContent.transform.Find("CompanyPanel").gameObject;
         playerPanel = sceneContent.transform.Find("PlayerPanel").gameObject;
 
-        pcrPanel = companyPanel.transform.Find("AveragePurchaseRatePanel").gameObject;
+        GameObject companyPanelScrollView = companyPanel.transform.Find("ScrollView").gameObject;
+        GameObject companyPanelViewport = companyPanelScrollView.transform.Find("Viewport").gameObject;
+        GameObject companyPanelChartContent = companyPanelViewport.transform.Find("ChartContent").gameObject;
+        GameObject companyPanelChartListContent = companyPanelChartContent.transform.Find("ChartListContent").gameObject;
+
+        GameObject companyPanelBasicInfoBanner = companyPanelChartContent.transform.Find("BasicInfoBanner").gameObject;
+        GameObject companyPanelCumulativeRevenueContent = companyPanelBasicInfoBanner.transform.Find("CumulativeRevenueContent").gameObject;
+        CumulativeRevenueNumText = companyPanelCumulativeRevenueContent.transform.Find("NumText").gameObject;
+        GameObject companyPanelAverageRetentionContent = companyPanelBasicInfoBanner.transform.Find("AverageRetentionContent").gameObject;
+        AverageRetentionNumText = companyPanelAverageRetentionContent.transform.Find("NumText").gameObject;
+        GameObject companyPanelAveragePayingContent = companyPanelBasicInfoBanner.transform.Find("AveragePayingContent").gameObject;
+        AveragePayingNumText = companyPanelAveragePayingContent.transform.Find("NumText").gameObject;
+        GameObject companyPanelAverageRevenuePerPlayerContent = companyPanelBasicInfoBanner.transform.Find("AverageRevenuePerPlayerContent").gameObject;
+        AverageRevenuePerPlayerNumText = companyPanelAverageRevenuePerPlayerContent.transform.Find("NumText").gameObject;
+
+        pcrPanel = companyPanelChartListContent.transform.Find("AveragePurchaseRatePanel").gameObject;
         pcrChartContent = pcrPanel.transform.Find("ChartContent").gameObject;
         GameObject pcrScrollView = pcrChartContent.transform.Find("ScrollView").gameObject;
         GameObject pcrViewport = pcrScrollView.transform.Find("Viewport").gameObject;
         pcrItemContent = pcrViewport.transform.Find("PointContent").gameObject;
 
+        arptPanel = companyPanelChartListContent.transform.Find("AverageRevenuePanel").gameObject;
+        arptChartContent = arptPanel.transform.Find("ChartContent").gameObject;
+        GameObject arptScrollView = arptChartContent.transform.Find("ScrollView").gameObject;
+        GameObject arptViewport = arptScrollView.transform.Find("Viewport").gameObject;
+        arptItemContent = arptViewport.transform.Find("PointContent").gameObject;
+        GameObject arptLine1 = arptChartContent.transform.Find("Line_1").gameObject;
+        arptYText1 = arptLine1.transform.Find("Text").gameObject;
+        GameObject arptLine2 = arptChartContent.transform.Find("Line_2").gameObject;
+        arptYText2 = arptLine2.transform.Find("Text").gameObject;
+        GameObject arptLine3 = arptChartContent.transform.Find("Line_3").gameObject;
+        arptYText3 = arptLine3.transform.Find("Text").gameObject;
+        GameObject arptLine4 = arptChartContent.transform.Find("Line_4").gameObject;
+        arptYText4 = arptLine4.transform.Find("Text").gameObject;
+        GameObject arptLine5 = arptChartContent.transform.Find("Line_5").gameObject;
+        arptYText5 = arptLine5.transform.Find("Text").gameObject;
 
+        designItemLevelPanelContent = mainSceneUI.transform.Find("DesignItemLevelPanel").gameObject;
+        designItemLevelPanelBg = designItemLevelPanelContent.transform.Find("Bg").gameObject;
+        designItemLevelPanel = designItemLevelPanelContent.transform.Find("LevelPanel").gameObject;
+        GameObject designItemLevelPanelLevelContent = designItemLevelPanel.transform.Find("LevelContent").gameObject;
+        designItemLevelNum = designItemLevelPanelLevelContent.transform.Find("LevelNum").gameObject;
+        designItemLevelItemName = designItemLevelPanel.transform.Find("ItemName").gameObject;
+        designItemLevelPanelItemShow = designItemLevelPanel.transform.Find("ItemShow").gameObject;
+        designItemLevelPanelCloseBtn = designItemLevelPanel.transform.Find("CloseBtn").gameObject;
+        designItemLevelPanelItemDesc = designItemLevelPanel.transform.Find("ItemDesc").gameObject;
+        designItemLevelPanelEffectContent = designItemLevelPanel.transform.Find("ItemEffect").gameObject;
+        designItemLevelPanelLevelUpBtn = designItemLevelPanel.transform.Find("LevelUpBtn").gameObject;
+        GameObject designItemLevelPanelLevelUpCostContent = designItemLevelPanelLevelUpBtn.transform.Find("CostContent").gameObject;
+        designItemLevelPanelLevelUpCost = designItemLevelPanelLevelUpCostContent.transform.Find("MoneyCost").gameObject;
+        designItemLevelPanelLevelUpAllMoney = designItemLevelPanelLevelUpCostContent.transform.Find("AllMoney").gameObject;
     }
 
     // Start is called before the first frame update
@@ -138,7 +215,25 @@ public class DesignPanel : MonoBehaviour
             ScenePanelSwitch(3);
         });
 
+        designItemLevelPanelCloseBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            if(designItemPanelOpen == true)
+            {
+                DesignItemLevelPanel(null);
+            }
+        });
+        //item升级
+        designItemLevelPanelLevelUpBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            if(gameMode.companyMoney >= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice)
+            {
+                gameMode.companyMoney -= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice;
+                designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel++;
 
+                //新价格
+                designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice *= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel;
+            }
+        });
     }
 
     // Update is called once per frame
@@ -173,6 +268,14 @@ public class DesignPanel : MonoBehaviour
 
         UIUpdate();
 
+        //升级界面
+        if(designItemPanelOpen == true)
+        {
+            designItemLevelNum.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel.ToString();
+            designItemLevelItemName.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemName;
+            designItemLevelPanelLevelUpCost.GetComponent<Text>().text = numberText(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice);
+            designItemLevelPanelLevelUpAllMoney.GetComponent<Text>().text = numberText(gameMode.companyMoney);
+        }
     }
 
     void DesignPanelAnime()
@@ -333,6 +436,9 @@ public class DesignPanel : MonoBehaviour
         {
             if(no == 1 || no == 3)
             {
+                //游戏暂停
+                gameMode.gameProcessPause = true;
+
                 scenePanelAnime = true;
 
                 sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
@@ -340,11 +446,12 @@ public class DesignPanel : MonoBehaviour
 
                 if(no == 1)
                 {
+                    //报表
+                    BasicInfoShow();
+
                     scenePanelTweener = companyPanel.transform.DOLocalMoveY(0f, 0.5f);
                     playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
-
-                    //统计报表更新
-                    PurchaseRateChart();
+                    
                 }
                 else if (no == 3)
                 {
@@ -355,9 +462,7 @@ public class DesignPanel : MonoBehaviour
                 sceneNo = no;
 
                 scenePanelTweener.OnComplete(() => scenePanelAnime = false);
-
-                //游戏暂停
-                gameMode.gameProcessPause = true;
+                
             }
             else if(no == 2)
             {
@@ -398,6 +503,44 @@ public class DesignPanel : MonoBehaviour
             gameMode.gameProcessPause = false;
         }
     }
+
+    public void DesignItemLevelPanel(GameObject gItem)
+    {
+        if(designItemPanelOpen == false)
+        {
+            if(designItemLevelPanelItemShow.transform.childCount > 0)
+            {
+                for(int i = 0; i < designItemLevelPanelItemShow.transform.childCount; i++)
+                {
+                    Destroy(designItemLevelPanelItemShow.transform.GetChild(i).gameObject);
+                }
+            }
+            designItemLevelPanelTarget = gItem;
+            GameObject pic = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().gameplayItemBtn;
+            GameObject ppp = Instantiate(pic) as GameObject;
+            ppp.transform.SetParent(designItemLevelPanelItemShow.transform);
+            ppp.transform.localPosition = new Vector3(0, 0, 0);
+            ppp.transform.localScale = new Vector3(1, 1, 1);
+
+            designItemLevelPanel.transform.localScale = new Vector3(0, 0, 0);
+
+            designItemPanelOpen = true;
+
+            designItemLevelPanelBg.transform.localScale = new Vector3(1, 1, 1);
+            designItemLevelPanelBg.GetComponent<Image>().DOFade(0.8f, 0.3f);
+
+            designItemLevelPanel.transform.DOScale(new Vector3(1,1,1), 0.3f);
+        }
+        else
+        {
+            Tweener anime = designItemLevelPanel.transform.DOScale(new Vector3(0, 0, 0), 0.3f);
+            designItemLevelPanelBg.GetComponent<Image>().DOFade(0f, 0.3f);
+
+            anime.OnComplete(() => designItemLevelPanelBg.transform.localScale = new Vector3(0, 0, 0));
+            anime.OnKill(() => designItemPanelOpen = false);
+        }
+    }
+
 
 
     //item次数变更
@@ -456,7 +599,15 @@ public class DesignPanel : MonoBehaviour
     }
 
     //统计数据报表
-    private void PurchaseRateChart()
+    public void BasicInfoShow()
+    {
+        CumulativeRevenueNumText.GetComponent<Text>().text = numberText(gameMode.cumulativeRevenue);
+        AverageRetentionNumText.GetComponent<Text>().text = (gameMode.averageRetention * 100f).ToString("0.00") + "%";
+        AveragePayingNumText.GetComponent<Text>().text = (gameMode.averagePeymentConversion * 100f).ToString("0.00") + "%";
+        AverageRevenuePerPlayerNumText.GetComponent<Text>().text = gameMode.averageRevenuePerPlayer.ToString("0.00");
+}
+
+    public void PurchaseRateChart()
     {
         if(pcrDataNum >= gameMode.purchaseRateList.Count)
         {
@@ -485,13 +636,154 @@ public class DesignPanel : MonoBehaviour
                 }
 
                 pItem.GetComponent<ChartPointItem>().SetDetail(rrr, 1, pcrDataNum + i, companyPanel, pcrPanel, pcrChartContent, preItem);
+
+                if(pcrItemContent.transform.childCount >= 45)
+                {
+                    //删减
+                    //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
+                }
             }
 
             pcrDataNum = gameMode.purchaseRateList.Count;
 
+            Invoke("PurchaseRateChartPosReset", 0.1f);
         }
     }
+    private void PurchaseRateChartPosReset()
+    {
+        float ss = pcrItemContent.GetComponent<RectTransform>().sizeDelta.x;
+        pcrItemContent.transform.DOLocalMoveX(-ss, 0f);
+    }
 
+    public void AverageRevenueChart()
+    {
+        if (arptDataNum >= gameMode.revenuePerTimeList.Count)
+        {
+            //数据无更新
+        }
+        else if (arptDataNum < gameMode.revenuePerTimeList.Count)
+        {
+            //更新
+            //标线更新
+            int arptMax = gameMode.revenuePerTimeList.Max();
+            int arptMin = gameMode.revenuePerTimeList.Min();
+            int rrrmax = 1;
+            float rrrmaxf = 1f;
+            if (arptMax / arptMin <= 2)
+            {
+                rrrmaxf = arptMax * 2f;
+            }
+            else if (arptMax / arptMin > 2 && arptMax / arptMin <= 3)
+            {
+                rrrmaxf = arptMax * 1.8f;
+            }
+            else if (arptMax / arptMin > 3 && arptMax / arptMin <= 4)
+            {
+                rrrmaxf = arptMax * 1.6f;
+            }
+            else if (arptMax / arptMin > 4 && arptMax / arptMin <= 5)
+            {
+                rrrmaxf = arptMax * 1.4f;
+            }
+            else if (arptMax / arptMin > 5)
+            {
+                rrrmaxf = arptMax * 1.2f;
+            }
+            if (rrrmaxf < 1000)
+            {
+                rrrmax = Mathf.CeilToInt(rrrmaxf / 100) * 100;
+            }
+            else if (rrrmaxf >= 1000 && rrrmaxf < 1000000)
+            {
+                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000) * 1000;
+            }
+            else if (rrrmaxf >= 1000000 && rrrmaxf < 1000000000)
+            {
+                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000) * 1000000;
+            }
+            else if (rrrmaxf >= 1000000000)
+            {
+                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000000) * 1000000000;
+            }
+            float rrrInter = rrrmax / 5f;
+            int rrrLine1 = Mathf.RoundToInt(1 * rrrInter);
+            int rrrLine2 = Mathf.RoundToInt(2 * rrrInter);
+            int rrrLine3 = Mathf.RoundToInt(3 * rrrInter);
+            int rrrLine4 = Mathf.RoundToInt(4 * rrrInter);
+            arptYText1.GetComponent<Text>().text = numberText(rrrLine1);
+            arptYText2.GetComponent<Text>().text = numberText(rrrLine2);
+            arptYText3.GetComponent<Text>().text = numberText(rrrLine3);
+            arptYText4.GetComponent<Text>().text = numberText(rrrLine4);
+            arptYText5.GetComponent<Text>().text = numberText(rrrmax);
 
+            //内容更新
+            for (int i = 0; i < gameMode.revenuePerTimeList.Count; i++)
+            {
+                int rrr = gameMode.revenuePerTimeList[i];
+
+                GameObject preItem = null;
+                if (i == 0)
+                {
+                    preItem = null;
+                }
+                else
+                {
+                    preItem = arptItemContent.transform.GetChild(i - 1).gameObject;
+                }
+
+                if (i < arptDataNum)
+                {
+                    //刷新
+                    arptItemContent.transform.GetChild(i).gameObject.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, arptPanel, arptChartContent, preItem);
+                }
+                else if (i >= arptDataNum)
+                {
+                    //新增
+                    GameObject pItem = Instantiate(arptPointItem) as GameObject;
+                    pItem.transform.SetParent(arptItemContent.transform);
+
+                    pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, arptDataNum + i, companyPanel, arptPanel, arptChartContent, preItem);
+                }
+
+                if (pcrItemContent.transform.childCount >= 45)
+                {
+                    //删减
+                    //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
+                }
+            }
+
+            arptDataNum = gameMode.revenuePerTimeList.Count;
+
+            Invoke("RevenuePerTimeChartPosReset", 0.1f);
+        }
+    }
+    private void RevenuePerTimeChartPosReset()
+    {
+        float ss = arptItemContent.GetComponent<RectTransform>().sizeDelta.x;
+        arptItemContent.transform.DOLocalMoveX(-ss, 0f);
+    }
+
+    public string numberText(int num)
+    {
+        string ttt = "";
+        if(num < 1000)
+        {
+            ttt = num.ToString();
+        }
+        else if(num >= 1000 & num < 1000000)
+        {
+            ttt = ((float)num / 1000f).ToString("0.00") + "K";
+        }
+        else if (num >= 1000000 & num < 1000000000)
+        {
+            ttt = ((float)num / 1000000f).ToString("0.00") + "M";
+        }
+        else if (num >= 1000000000)
+        {
+            ttt = ((float)num / 1000000000f).ToString("0.00") + "B";
+        }
+
+        return ttt;
+    }
 
 }
