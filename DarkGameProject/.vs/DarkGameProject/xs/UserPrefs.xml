@@ -1,22 +1,19 @@
 ﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DesignPanel.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="300" Column="39" />
-      <File FileName="Assets/Scripts/BasicAction.cs" Line="226" Column="81" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" Line="71" Column="38" />
-      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="25" Column="18" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="278" Column="10" />
-      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="243" Column="20" />
-      <File FileName="Assets/Scripts/MainPathItem.cs" />
-      <File FileName="Assets/Scripts/GameMode.cs" Line="23" Column="33" />
-      <File FileName="Assets/Scripts/CameraControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="36" Column="31" />
-      <File FileName="Assets/Scripts/ChartPointItem.cs" Line="84" Column="81" />
+      <File FileName="Assets/Scripts/BasicAction.cs" Line="1248" Column="23" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="97" Column="25" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="86" Column="11" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="1230" Column="106" />
+      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="20" Column="49" />
+      <File FileName="Assets/Scripts/GameMode.cs" Line="264" Column="39" />
+      <File FileName="Assets/Scripts/GameplayEffect.cs" Line="222" Column="10" />
+      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="18" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="a0985421-76bc-46aa-93f7-072efc08397e" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="bfc840c4-d390-425b-8935-7bdc63441920" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

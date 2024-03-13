@@ -81,6 +81,7 @@ public class GameplayItem : MonoBehaviour
     public List<int> specialInputLinkTargetList;
 
     private GameMode gameMode;
+    private GameplayEffect gameplayEffect;
 
     //黑暗模式
     public bool canDark = false;
@@ -88,7 +89,19 @@ public class GameplayItem : MonoBehaviour
     public GameObject darkSocketContent;
     public GameObject darkPlugPoint;
     public GameObject linkDarkSocketPoint;
-    private bool darkMove = true;
+    private bool darkMove = true;   //拥有dark patterns拖拽中，检测是否复制体的检测标签
+    public bool hasPath = true;    //本dark patterns是否包含路径
+    public GameObject darkRoadContent;  //黑暗模式的具体路径
+    public int darkRoadEventNum;
+
+    //关于统计
+    public int inToOutBlockNum;
+
+    //效果
+    public bool isGlobalEffect;
+    public bool isTriggerEffect;
+    public int triggerEventType;  //0数值事件，1付费事件
+
 
 
     private void Awake()
@@ -96,6 +109,7 @@ public class GameplayItem : MonoBehaviour
         basicAction = GameObject.Find("Main Camera").gameObject.GetComponent<BasicAction>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
+        gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
 
         itemOccupiedAreaList0 = new List<Vector3Int>();
         itemOccupiedAreaList = new List<Vector3Int>();
@@ -133,13 +147,30 @@ public class GameplayItem : MonoBehaviour
             //
             specialInputLinkTargetList.Add(999);
             specialInputCount = 1;
+            //加入dark
+            canDarkList.Add(421);  //dark列表
         }
-        else if(itemID == 102)
+        else if(itemID == 102)  //pve
         {
             outputCount = 1;
             inputCount = 1;
             //加入dark
-            canDarkList.Add(401);
+            canDarkList.Add(401);  //dark列表
+            canDarkList.Add(402);
+        }
+        else if (itemID == 103)  //pvp
+        {
+            outputCount = 1;
+            inputCount = 1;
+            //加入dark
+            canDarkList.Add(411);  //dark列表
+        }
+        else if (itemID == 104)   //运营
+        {
+            outputCount = 1;
+            inputCount = 1;
+            //加入dark
+            canDarkList.Add(431);  //dark列表
         }
         else if (itemID == 999)
         {
@@ -149,7 +180,7 @@ public class GameplayItem : MonoBehaviour
             specialOutputLinkTargetList.Add(101);
             specialOutputCount = 1;
         }
-        else if (itemID == 401)
+        else if (itemID > 400 && itemID < 499)
         {
             outputCount = 0;
             inputCount = 0;
@@ -993,7 +1024,9 @@ public class GameplayItem : MonoBehaviour
     //101特殊逻辑，gamemode打开监听
     public void GameProcessStart()
     {
-        if(itemID == 101)
+        gameMode.gameDynamicProcess = false;
+
+        if (itemID == 101)
         {
             GameObject item999 = GameObject.Find("GameplayItem_999(Clone)").gameObject;
             //上游连接了999
@@ -1002,7 +1035,7 @@ public class GameplayItem : MonoBehaviour
                 //下游连接了一圈包含自己
                 if(outputLinkItemList.Count > 0)
                 {
-                    gameMode.gameDynamicProcess = false;
+                    
                     List<GameObject> checkL = new List<GameObject>();
                     checkL.AddRange(outputLinkItemList);
 
@@ -1049,6 +1082,210 @@ public class GameplayItem : MonoBehaviour
 
     }
 
+    //主路数量计算
+    public void MainRoadDistanceCal()
+    {
+        int roadCount = gameplayMapping.roadPointList.Count;
 
+        int gItemCount = 0;
+        for(int i = 0; i < gameplayMapping.mainGameplayItemList.Count; i++)
+        {
+            gItemCount += gameplayMapping.mainGameplayItemList[i].GetComponent<GameplayItem>().inToOutBlockNum;
+        }
+
+        int roudCRemove = GameObject.Find("GameplayItem_999(Clone)").gameObject.GetComponent<GameplayItem>().specialOutputPathPosListList[0].Count;
+
+        gameMode.mainRoadDistance = (roadCount + gItemCount - roudCRemove) * 100;
+    }
+
+
+    //玩法触发
+    public void GameplayEventLogic(GameObject playerItem)
+    {
+        //为玩家填充玩法事件
+        if(isMain == true)
+        {
+            if(canDark == true)
+            {
+                //填充黑暗事件
+                for(int i = 0; i < darkSocketContent.transform.childCount; i++)
+                {
+                    GameObject soc = darkSocketContent.transform.GetChild(i).gameObject;
+
+                    if(soc.transform.childCount > 1)  //有dark patterns
+                    {
+                        for (int aa = 0; aa < soc.transform.childCount; aa++)
+                        {
+                            GameObject dItem = soc.transform.GetChild(aa).gameObject;
+                            if (dItem.name.Contains("GameplayItem_"))
+                            {
+                                if(dItem.GetComponent<GameplayItem>().hasPath == true)  //有路径可触发
+                                {
+                                    if(dItem.GetComponent<GameplayItem>().darkRoadContent != null)
+                                    {
+                                        int eventNum = dItem.GetComponent<GameplayItem>().darkRoadEventNum;
+                                        //判断距离远近
+                                        float dis0 = Vector2.Distance(playerItem.transform.position, dItem.GetComponent<GameplayItem>().darkRoadContent.transform.GetChild(0).gameObject.transform.position);
+                                        float dis1 = Vector2.Distance(playerItem.transform.position, dItem.GetComponent<GameplayItem>().darkRoadContent.transform.GetChild(dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1).gameObject.transform.position);
+                                        bool checkOrder = true;
+                                        if(dis0 > dis1)
+                                        {
+                                            checkOrder = false;
+                                        }
+
+                                        for (int bb = 0; bb < dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount; bb++)
+                                        {
+                                            int or = bb;
+
+                                            if(checkOrder == false)
+                                            {
+                                                or = dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1 - bb;
+                                            }
+
+                                            GameObject pathPosItem = dItem.GetComponent<GameplayItem>().darkRoadContent.transform.GetChild(or).gameObject;
+                                            Vector3Int pItemP = new Vector3Int(Mathf.RoundToInt(pathPosItem.transform.position.x), Mathf.RoundToInt(pathPosItem.transform.position.y), Mathf.RoundToInt(pathPosItem.transform.position.z));
+
+                                            //填充事件
+                                            playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(dItem);
+                                            playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(pItemP);
+
+                                            bool isEvent = false;
+                                            if(pathPosItem.name == "ActionPoint" && eventNum > 0)
+                                            {
+                                                isEvent = true;
+                                                eventNum--;
+                                            }
+                                            playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(isEvent);
+
+                                            //是否具有进入检测
+                                            if(bb == 0)
+                                            {
+                                                if(pathPosItem.name == "PaymentCheckPoint")
+                                                {
+                                                    bool canIn = false;
+                                                    //检测是否进入
+                                                    float ra = Random.Range(0f, 1f);
+                                                    if(ra <= playerItem.GetComponent<PlayerItem>().basicPayRate)
+                                                    {
+                                                        canIn = true;
+                                                    }
+
+                                                    if(canIn == false)
+                                                    {
+                                                        //不能进，直接跳到最后一点
+                                                        bb = dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1 - 1;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //最后是主玩法事件填充
+                playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+                playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(new Vector3Int(0,0,0));  //最后一个坐标要忽略
+                playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(true);
+
+            }
+            else
+            {
+                //直接填充主玩法事件（如果有）
+                playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+                playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(new Vector3Int(0, 0, 0));  //若只有一个坐标要忽略
+                playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(true);
+            }
+        }
+    }
+    //触发玩法事件
+    public void GameplayEvent(GameObject playerItem)
+    {
+        playerItem.GetComponent<PlayerItem>().moveAnime = false;
+        //
+        //Debug.Log(isTriggerEffect + " Event! + " + itemID);
+
+        if(isTriggerEffect == true)  //具有触发效果
+        { 
+            if(triggerEventType == 0) //数值类触发
+            {
+                float retentionE = gameplayEffect.GameItemEffect(itemID, "retention");
+                float socialBoundE = gameplayEffect.GameItemEffect(itemID, "socialBound");
+                float payingRateE = gameplayEffect.GameItemEffect(itemID, "payingRate");
+                float payingAmountE = gameplayEffect.GameItemEffect(itemID, "payingAmount");
+                float moodE = gameplayEffect.GameItemEffect(itemID, "mood");
+
+                if (retentionE != 0f)
+                {
+                    List<float> effectL = new List<float>();
+                    effectL.Add(itemID);
+                    effectL.Add(retentionE);
+
+                    playerItem.GetComponent<PlayerItem>().triggerRetentionEffectList.Add(effectL);
+                }
+
+                if (socialBoundE != 0f)
+                {
+                    List<float> effectL = new List<float>();
+                    effectL.Add(itemID);
+                    effectL.Add(socialBoundE);
+
+                    playerItem.GetComponent<PlayerItem>().triggerSocialBoundEffectList.Add(effectL);
+                }
+
+                if (payingRateE != 0f)
+                {
+                    List<float> effectL = new List<float>();
+                    effectL.Add(itemID);
+                    effectL.Add(payingRateE);
+
+                    playerItem.GetComponent<PlayerItem>().triggerPayingRateEffectList.Add(effectL);
+                }
+
+                if (payingAmountE != 0f)
+                {
+                    List<float> effectL = new List<float>();
+                    effectL.Add(itemID);
+                    effectL.Add(payingAmountE);
+
+                    playerItem.GetComponent<PlayerItem>().triggerPayingAmountEffectList.Add(effectL);
+                }
+
+                if (moodE != 0f)
+                {
+                    //List<float> effectL = new List<float>();
+                    //effectL.Add(itemID);
+                    //effectL.Add(moodE);
+
+                    PlayerMoodDecrease(playerItem, moodE);
+                }
+
+                //Debug.Log("添加trigger数值, 来源" + itemID);
+            }
+            else if (triggerEventType == 1) //付费类事件
+            {
+                float payingRateE = gameplayEffect.GameItemEffect(itemID, "payingRate");
+                float payingAmountE = gameplayEffect.GameItemEffect(itemID, "payingAmount");
+
+                PlayerInstantPayment(playerItem, itemID, payingRateE, payingAmountE);
+
+                //Debug.Log("付费事件触发, 来源" + itemID);
+            }
+        }
+    }
+
+    //具体玩法事件
+    //减少心情值
+    public void PlayerMoodDecrease(GameObject playerItem, float nnn)
+    {
+        playerItem.GetComponent<PlayerItem>().satisfactionIndex += nnn;
+    }
+    //立即触发一个付费检测
+    public void PlayerInstantPayment(GameObject playerItem, int itemID, float payR, float payM)  //临时付费额，临时付费率
+    {
+        playerItem.GetComponent<PlayerItem>().PlayerPayingCheckMethod2(itemID, payR, payM);
+    }
 
 }

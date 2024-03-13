@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ChartPointItem : MonoBehaviour
 {
+    public bool pointType = true;
+
     public float showNum = 0f;
     public float maxNum = 0f;
     public int order = 0;
@@ -17,8 +19,8 @@ public class ChartPointItem : MonoBehaviour
     public GameObject preChartItem;
 
     private GameObject pointContent;
-    private GameObject pointImage;
-    private GameObject lineImage;
+    public GameObject pointImage;
+    public GameObject lineImage;
     private GameObject pointText;
 
     private void Awake()
@@ -67,7 +69,17 @@ public class ChartPointItem : MonoBehaviour
         //float offsetV = chartObject.transform.localScale.x * panelObject.transform.localScale.x;
         float posYC = posY; //坐标修正
 
-        pointContent.transform.localPosition = new Vector3(0, posYC, 0);
+        if(pointType == true)
+        {
+            pointContent.transform.localPosition = new Vector3(0, posYC, 0);
+        }
+        else
+        {
+            pointContent.transform.localPosition = new Vector3(0, 0, 0);
+            pointImage.transform.localPosition = new Vector3(0, 0, 0);
+            pointImage.GetComponent<RectTransform>().sizeDelta = new Vector2(41, posYC);
+        }
+        
 
         Invoke("LineSet", 0.01f);
         

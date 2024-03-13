@@ -653,6 +653,7 @@ MonoBehaviour:
   specialOutputBtn: {fileID: 0}
   rotationBtn: {fileID: 998459529405736623}
   moveBtn: {fileID: 5641725782951827165}
+  itemOccupiedAreaList0: []
   itemOccupiedAreaList: []
   outputLinkItemList: []
   specialOutputLinkItemList: []
@@ -666,8 +667,10 @@ MonoBehaviour:
   inputCount: 1
   specialOutputCount: 0
   specialInputCount: 0
+  temItemPosValidList: 
   temItemPosValid: 0
   temPreObject: {fileID: 0}
+  temItemPosList: []
   specialOutputLinkTargetList: 
   specialInputLinkTargetList: 
   canDark: 1
@@ -675,6 +678,12 @@ MonoBehaviour:
   darkSocketContent: {fileID: 7398769773100664049}
   darkPlugPoint: {fileID: 0}
   linkDarkSocketPoint: {fileID: 0}
+  hasPath: 1
+  darkRoadContent: {fileID: 0}
+  darkRoadEventNum: 0
+  inToOutBlockNum: 3
+  isGlobalEffect: 1
+  isTriggerEffect: 0
 --- !u!1 &3961448870717849090
 GameObject:
   m_ObjectHideFlags: 0

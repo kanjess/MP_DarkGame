@@ -55,14 +55,16 @@ public class CameraControl : MonoBehaviour
                 Vector3 difference = dragOrigin - Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Camera.main.transform.position = ClampCamera(Camera.main.transform.position + difference);
             }
+
+            // 滑轮缩放
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            Camera.main.orthographicSize -= scroll * zoomSensitivity;
+            Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
+            // 在调整大小后，可能需要重新调整相机位置以保持在边界内
+            Camera.main.transform.position = ClampCamera(Camera.main.transform.position);
         }
         
-        // 滑轮缩放
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Camera.main.orthographicSize -= scroll * zoomSensitivity;
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
-        // 在调整大小后，可能需要重新调整相机位置以保持在边界内
-        Camera.main.transform.position = ClampCamera(Camera.main.transform.position);
+        
 
 
 

@@ -15,12 +15,20 @@ public class BasicAction : MonoBehaviour
 
     private GameObject gameplayItem;
 
+    //InsGameplayItemSet(); 修改配对
     public GameObject gpItem_101;
     public GameObject gpItem_102;
+    public GameObject gpItem_103;
+    public GameObject gpItem_104;
     public GameObject gpItem_999;
     public GameObject gpItem_401;
+    public GameObject gpItem_402;
+    public GameObject gpItem_411;
+    public GameObject gpItem_421;
+    public GameObject gpItem_431;
 
     private GameplayMapping gameplayMapping;
+    private GameMode gameMode;
 
     public GameObject gameplayItemTem;
     private GameObject gameplayObjectLayer;
@@ -89,6 +97,7 @@ public class BasicAction : MonoBehaviour
         designPenalCheckPoint = designPenel.designPanelPosCheckPoint;
 
         gameplayMapping = this.gameObject.GetComponent<GameplayMapping>();
+        gameMode = this.gameObject.GetComponent<GameMode>();
 
         temRoadObjectLayer = GameObject.Find("TemRoadObject").gameObject;
         roadLayer = GameObject.Find("RoadObject").gameObject;
@@ -168,7 +177,7 @@ public class BasicAction : MonoBehaviour
                         }
                         //创建临时实体（创建本体）
                         int temID = hit.collider.gameObject.transform.parent.gameObject.GetComponent<GameplayItem>().itemID;
-                        //InsGameplayItemSet(temID);
+                        
                         gameplayItem = targetOJ;
 
                         //拖动 - 复制原个体
@@ -827,6 +836,9 @@ public class BasicAction : MonoBehaviour
                         if (gameplayMapping.mainGameplayItemList.Contains(targetOJ))
                         {
                             gameplayMapping.mainGameplayItemList.Remove(targetOJ);
+                        }else if (gameplayMapping.darkGameplayItemList.Contains(targetOJ))
+                        {
+                            gameplayMapping.darkGameplayItemList.Remove(targetOJ);
                         }
 
                         //前占位坐标移除
@@ -901,6 +913,12 @@ public class BasicAction : MonoBehaviour
                                             int iidd = gi.GetComponent<GameplayItem>().itemID;
                                             //ui数量变更
                                             designPenel.GameItemNumChange(iidd, true, true);
+
+                                            //黑暗玩法列表清除
+                                            if (gameplayMapping.darkGameplayItemList.Contains(gi))
+                                            {
+                                                gameplayMapping.darkGameplayItemList.Remove(gi);
+                                            }
 
                                             Destroy(gi);
                                         }
@@ -1145,7 +1163,7 @@ public class BasicAction : MonoBehaviour
                     oj.GetComponent<GameplayItem>().SetItemID(id);
                     oj.GetComponent<GameplayItem>().SetValid(true);
 
-                    //主玩法列表
+                    //主/dark玩法列表 - 添加
                     if (oj.GetComponent<GameplayItem>().isMain == true)
                     {
                         gameplayMapping.mainGameplayItemList.Add(oj);
@@ -1174,6 +1192,12 @@ public class BasicAction : MonoBehaviour
                     //
                     oj.GetComponent<GameplayItem>().SetItemID(id);
                     oj.GetComponent<GameplayItem>().SetValid(true);
+
+                    //主/dark玩法列表 - 添加
+                    if (oj.GetComponent<GameplayItem>().isMain == false)
+                    {
+                        gameplayMapping.darkGameplayItemList.Add(oj);
+                    }
 
                     //非法通行-新坐标加入
                     oj.GetComponent<GameplayItem>().IllegalMapAdd();
@@ -1218,6 +1242,7 @@ public class BasicAction : MonoBehaviour
         }
     }
 
+    //ID物体配对！！！！！！！！
     public void InsGameplayItemSet(int id)
     {
         if (id == 101)
@@ -1228,6 +1253,14 @@ public class BasicAction : MonoBehaviour
         {
             gameplayItem = gpItem_102;
         }
+        else if (id == 103)
+        {
+            gameplayItem = gpItem_103;
+        }
+        else if (id == 104)
+        {
+            gameplayItem = gpItem_104;
+        }
         else if (id == 999)
         {
             gameplayItem = gpItem_999;
@@ -1235,6 +1268,26 @@ public class BasicAction : MonoBehaviour
         else if (id == 401)
         {
             gameplayItem = gpItem_401;
+        }
+        else if (id == 402)
+        {
+            gameplayItem = gpItem_402;
+        }
+        else if (id == 411)
+        {
+            gameplayItem = gpItem_411;
+        }
+        else if (id == 421)
+        {
+            gameplayItem = gpItem_421;
+        }
+        else if (id == 431)
+        {
+            gameplayItem = gpItem_431;
+        }
+        else
+        {
+            Debug.LogError("No Item!");
         }
     }
 
@@ -1762,7 +1815,6 @@ public class BasicAction : MonoBehaviour
         }
     }
 
-
     //循环构建成功检测
     void Item101StartCheck()
     {
@@ -1782,6 +1834,10 @@ public class BasicAction : MonoBehaviour
         if(startItemObject != null)
         {
             startItemObject.GetComponent<GameplayItem>().GameProcessStart();
+        }
+        else
+        {
+            gameMode.gameDynamicProcess = false;
         }
 
     }

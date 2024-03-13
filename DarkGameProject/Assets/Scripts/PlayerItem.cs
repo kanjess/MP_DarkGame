@@ -15,23 +15,53 @@ public class PlayerItem : MonoBehaviour
 
     private GameMode gameMode;
 
+    public int batchOrder;  //诞生批次，用以计算lifetime
+
     private float moveSpeed;
     private bool moveState = false;
-    private bool moveAnime = false;
+    public bool moveAnime = false;
     private int moveOrder = 0;
 
     public GameObject currentObject;
+    public GameObject currentDarkObject;
     public GameObject nextObject;
+    private GameplayMapping gameplayMapping;
+
+    //玩法事件相关
+    public List<GameObject> gameplayActionObjectList;
+    public List<Vector3Int> gameplayActionPosList;
+    public List<bool> gameplayActionEventList;
 
     private List<Vector3Int> pathList;
 
     private Tweener movingAnime;
 
     private float liveTime = 0f;
+    private List<float> circleLifeTimeList;
+
+    public int circleNum = 0;  //圈数
+    private bool circleAdd = false;
+
+    private bool basicDataCheck = true;
 
     public float basicPayRate;  //基础付费率
-    public float basicChurnRate;  //基础流失率
+    public float basicChurnRate;  //基础留存率
     public int basicPayAmount;  //基础付费额
+    public float itemChurnRate;  //item留存率
+
+    public float finalChurnRate = 0f; //终留存率
+
+    public float satisfactionIndex;  //满意度（心情值）
+    public float socialBound = 0;  //社交绑带
+    public float accountBound = 0;   //账户绑带
+
+    private float basicChurnDampingValue;  //（基础+黑暗）留存衰减
+    private float socialDampingValue;  //社交绑带衰减
+    private float accountChurnDampingValue;  //账户绑带衰减
+
+    private float basicChurnReset;
+    private float socialChurnReset;
+    private float accountChurnReset;
 
     private GameObject moneyIcon;
     private bool moneyAnime = false;
@@ -43,25 +73,36 @@ public class PlayerItem : MonoBehaviour
 
     //基础模块
     private bool gameplayAction = false;
+    private float playerInbornMood;
 
     //exp
     private float expCheckInterval;
     private float expCheckTiming = 0f;
     private int expAdd = 0;
 
+    //在场效果
+    public List<List<float>> triggerRetentionEffectList;  //trigger留存效果
+    public List<List<float>> triggerSocialBoundEffectList;  //trigger留存效果
+    public List<List<float>> triggerPayingRateEffectList;  //trigger付费率效果
+    public List<List<float>> triggerPayingAmountEffectList;  //trigger付费额效果
+
 
     private void Awake()
     {
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
+        gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
 
         moveSpeed = 3f;  //像素/s
-        basicMoneyCheckInterval = 0.5f;  //基础付费 检测间隔
-        basicLivingInterval = 5f;  //基础留存 检测间隔
-        expCheckInterval = 5f;  //exp 检测间隔
-        expCheckTiming = expCheckInterval;
-        expAdd = 10;   //exp
+     
+        expAdd = 10 * 2;   //exp  10
 
         pathList = new List<Vector3Int>();
+        circleLifeTimeList = new List<float>();
+
+        triggerRetentionEffectList = new List<List<float>>();
+        triggerSocialBoundEffectList = new List<List<float>>();
+        triggerPayingRateEffectList = new List<List<float>>();
+        triggerPayingAmountEffectList = new List<List<float>>();
 
         GameObject playerFeedbackContent = this.gameObject.transform.Find("PlayerFeedbackContent").gameObject;
         GameObject moneyContent = playerFeedbackContent.transform.Find("MoneyContent").gameObject;
@@ -72,9 +113,19 @@ public class PlayerItem : MonoBehaviour
 
         activePlayer = false;
 
-        basicPayRate = 0.15f;  //基础付费率
-        basicChurnRate = 0.60f;  //基础流失率
-        basicPayAmount = 10;  //基础付费额
+        satisfactionIndex = 70;
+
+        basicPayRate = 0.20f;  //基础付费率
+        basicChurnRate = 0.33f;  //基础留存率 33
+        basicPayAmount = 1;  //基础付费额
+
+        basicChurnDampingValue = 3f;
+        socialDampingValue = 1.6f;
+        accountChurnDampingValue = 1.5f;
+
+        playerInbornMood = 80f;
+        satisfactionIndex = playerInbornMood;
+
 }
 
     // Start is called before the first frame update
@@ -82,21 +133,75 @@ public class PlayerItem : MonoBehaviour
     {
         moneyIcon.GetComponent<SpriteRenderer>().DOFade(0f, 0f);
 
+        expCheckTiming = expCheckInterval;
 
+        //诞生后填充到记录中
+        gameMode.userObjectPerTimeListList[batchOrder].Add(this.gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //首次激活（首次经过101时激活）
-        if(currentObject.gameObject.name == "GameplayItem_101(Clone)" && firstTimeToActive == false)
+        if(gameMode.gameDynamicProcess == false)
         {
-            firstTimeToActive = true;
-            activePlayer = true;
+            Destroy(this.gameObject);
+        }
+
+        //时间刷新
+        //更新统计时间
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        {
+            gameMode.statisticsInterval = (gameMode.mainRoadDistance / moveSpeed) / 100f;
+            int inter = gameplayMapping.mainGameplayItemList.Count - 1;
+            expCheckInterval = gameMode.statisticsInterval / (inter * 4);  //exp 检测间隔
+            basicLivingInterval = gameMode.statisticsInterval / (inter * 1);  //基础留存 检测间隔
+            basicMoneyCheckInterval = gameMode.statisticsInterval / (inter * 2);  //基础付费 检测间隔
+
+            //首次激活（首次经过101时激活）
+            if (currentObject.gameObject.name == "GameplayItem_101(Clone)")
+            {
+                if (firstTimeToActive == false)
+                {
+                    firstTimeToActive = true;
+                    activePlayer = true;
+                }
+                else if (firstTimeToActive == true)
+                {
+                    if (circleAdd == false)
+                    {
+                        circleAdd = true;
+                        circleNum++;
+
+                        circleLifeTimeList.Add(liveTime);
+                    }
+                }
+            }
+            else
+            {
+                if (circleAdd == true)
+                {
+                    circleAdd = false;
+                }
+            }
+
+            PlayerMoodLogic();
+
+        }
+
+        //累积生存时间
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        {
+            liveTime += Time.deltaTime;
+        }
+
+        //exp
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        {
+            ExpAddLogic();
         }
 
         //行为检测：移动 付费 留存
-        if(gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
         {
             if(movingAnime != null)
             {
@@ -109,7 +214,7 @@ public class PlayerItem : MonoBehaviour
             //移动
             PlayerItemMove();
 
-            if (activePlayer == true)
+            if (activePlayer == true && basicDataCheck == true)
             {
                 //基础付费
                 PlayerPayingCheckMethod1();
@@ -128,17 +233,7 @@ public class PlayerItem : MonoBehaviour
             }
         }
 
-        //累积生存时间
-        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
-        {
-            liveTime += Time.deltaTime;
-        }
-
-        //exp
-        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
-        {
-            ExpAddLogic();
-        }
+        
         
     }
 
@@ -147,76 +242,143 @@ public class PlayerItem : MonoBehaviour
         currentObject = startG;
     }
 
-    //角色移动
+    //角色移动 && 玩法逻辑触发
     void PlayerItemMove()
     {
         //是否有玩法动作
-        if(gameplayAction == true && moveState == false && moveAnime == false)
+        if(gameplayAction == true)
         {
-            //Debug.Log("玩法动作");
-            gameplayAction = false;
-        }
+            //开始对应玩法的动作
+            basicDataCheck = false;  //暂停基础检测
 
-        //触发移动
-        if(moveState == false && moveAnime == false && gameplayAction == false)
-        {
-            //寻找路线（优先特殊，其次普通）
-            if (currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList.Count > 0)
+            if(moveState == false && moveAnime == false)
             {
-                nextObject = currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList[0];
-                pathList = currentObject.GetComponent<GameplayItem>().specialOutputPathPosListList[0];
-            }
-            else if(currentObject.GetComponent<GameplayItem>().outputLinkItemList.Count > 0)
-            {
-                nextObject = currentObject.GetComponent<GameplayItem>().outputLinkItemList[0];
-                pathList = currentObject.GetComponent<GameplayItem>().outputPathPosListList[0];
-            }
-            //
-            if(nextObject != null && nextObject != currentObject)
-            {
+                gameplayActionObjectList = new List<GameObject>();
+                gameplayActionPosList = new List<Vector3Int>();
+                gameplayActionEventList = new List<bool>();
+
+                currentObject.GetComponent<GameplayItem>().GameplayEventLogic(this.gameObject);
+
                 moveState = true;
                 moveAnime = false;
                 moveOrder = 0;
             }
+
+            if(moveState == true && moveAnime == false)
+            {
+                //移动
+                Vector3Int nextPoint = new Vector3Int(0, 0, 0);
+                bool eventDone = false;
+
+                if(gameplayActionPosList.Count == 1)
+                {
+                    eventDone = true;  //直接进入最终事件
+                }
+                else if(gameplayActionPosList.Count > 1)
+                {
+                    if (moveOrder == gameplayActionPosList.Count - 1)
+                    {
+                        eventDone = true;  
+                    }
+                    else if (moveOrder < gameplayActionPosList.Count - 1)
+                    {
+                        nextPoint = gameplayActionPosList[moveOrder];
+                    }
+                }
+
+                if(eventDone == false)
+                {
+                    float distance = System.Math.Abs(Vector3.Distance(nextPoint, this.gameObject.transform.position));
+                    float duration = distance / moveSpeed;
+
+                    moveAnime = true;
+                    moveOrder++;
+
+                    movingAnime = this.gameObject.transform.DOLocalMove(nextPoint, duration).SetEase(Ease.Linear);
+
+                    //移动后事件
+                    if (gameplayActionEventList[moveOrder - 1] == true)
+                    {
+                        movingAnime.OnComplete(() => gameplayActionObjectList[moveOrder - 1].GetComponent<GameplayItem>().GameplayEvent(this.gameObject));
+                    }
+
+                    movingAnime.OnKill(() => moveAnime = false);
+                }
+                else if (eventDone == true)
+                {
+                    //最后事件
+                    gameplayActionObjectList[gameplayActionObjectList.Count - 1].GetComponent<GameplayItem>().GameplayEvent(this.gameObject);
+
+                    //全部搞完
+                    gameplayAction = false;
+                    basicDataCheck = true;
+                    moveState = false;
+                }
+            }      
         }
 
-        if(moveState == true && moveAnime == false)
+        //触发移动
+        if(gameplayAction == false)
         {
-            //移动
-            Vector3Int nextPoint = new Vector3Int(0, 0, 0);
-
-            if (moveOrder == pathList.Count)
+            if (moveState == false && moveAnime == false)
             {
-                nextPoint = new Vector3Int(Mathf.RoundToInt(nextObject.transform.position.x), Mathf.RoundToInt(nextObject.transform.position.y), Mathf.RoundToInt(nextObject.transform.position.z));
-            }
-            else if (moveOrder < pathList.Count)
-            {
-                nextPoint = pathList[moveOrder];
-            }
-
-            float distance = System.Math.Abs(Vector3.Distance(nextPoint, this.gameObject.transform.position));
-            float duration = distance / moveSpeed;
-
-            moveAnime = true;
-            moveOrder++;
-
-            movingAnime = this.gameObject.transform.DOLocalMove(nextPoint, duration).SetEase(Ease.Linear);
-            movingAnime.OnComplete(() => moveAnime = false);
-            movingAnime.OnKill(() => movingAnime = null);
-
-            if (moveOrder > pathList.Count)
-            {
-                //移动完成。
-                currentObject = nextObject;
-                gameplayAction = true;
-                moveState = false;
+                //寻找路线（优先特殊，其次普通）
+                if (currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList.Count > 0)
+                {
+                    nextObject = currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList[0];
+                    pathList = currentObject.GetComponent<GameplayItem>().specialOutputPathPosListList[0];
+                }
+                else if (currentObject.GetComponent<GameplayItem>().outputLinkItemList.Count > 0)
+                {
+                    nextObject = currentObject.GetComponent<GameplayItem>().outputLinkItemList[0];
+                    pathList = currentObject.GetComponent<GameplayItem>().outputPathPosListList[0];
+                }
+                //
+                if (nextObject != null && nextObject != currentObject)
+                {
+                    moveState = true;
+                    moveAnime = false;
+                    moveOrder = 0;
+                }
             }
 
-        }
+            if (moveState == true && moveAnime == false)
+            {
+                //移动
+                Vector3Int nextPoint = new Vector3Int(0, 0, 0);
+
+                if (moveOrder == pathList.Count)
+                {
+                    nextPoint = new Vector3Int(Mathf.RoundToInt(nextObject.transform.position.x), Mathf.RoundToInt(nextObject.transform.position.y), Mathf.RoundToInt(nextObject.transform.position.z));
+                }
+                else if (moveOrder < pathList.Count)
+                {
+                    nextPoint = pathList[moveOrder];
+                }
+
+                float distance = System.Math.Abs(Vector3.Distance(nextPoint, this.gameObject.transform.position));
+                float duration = distance / moveSpeed;
+
+                moveAnime = true;
+                moveOrder++;
+
+                movingAnime = this.gameObject.transform.DOLocalMove(nextPoint, duration).SetEase(Ease.Linear);
+                movingAnime.OnComplete(() => moveAnime = false);
+                movingAnime.OnKill(() => movingAnime = null);
+
+                if (moveOrder > pathList.Count)
+                {
+                    //移动完成。
+                    currentObject = nextObject;
+                    gameplayAction = true;
+                    moveState = false;
+                }
+            }
+        }   
     }
 
     //角色付费效果
-    void PlayerPaying(int pay)
+    void PlayerPaying(float pay)
     {
         if(moneyAnime == false)
         {
@@ -243,17 +405,40 @@ public class PlayerItem : MonoBehaviour
         
     }
 
-    //角色流失
+    //角色流失效果
     void PlayerLosing()
     {
         activePlayer = false;
         playerFaceContent.transform.localScale = new Vector3(0, 0, 0);
         playerLosingFace.transform.localScale = new Vector3(1, 1, 1);
 
+        gameMode.losingUsersPerTime += 1;
+
         Sequence ss = DOTween.Sequence();
         //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());
         ss.Insert(1f, playerLosingFace.transform.DOScale(new Vector3(0,0,0), 0.6f));
         ss.Insert(1.4f, playerLosingFace.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
+
+        //lifetime添加
+        int circleN = circleNum - 1; //圈数
+        float halfCircle = 0f;
+        if(circleLifeTimeList.Count == 1)  //1圈都没跑完
+        {
+            halfCircle = (liveTime - circleLifeTimeList[0]) / gameMode.statisticsInterval;
+            if(halfCircle >= 1)
+            {
+                halfCircle = 0.9f;
+            }
+        }
+        else   //大于1圈
+        {
+            float avCircleT = (circleLifeTimeList[circleLifeTimeList.Count - 1] - circleLifeTimeList[0]) / circleN;
+            halfCircle = (liveTime - circleLifeTimeList[circleLifeTimeList.Count - 1]) / avCircleT;
+        }
+        float wholeLifetime = circleN + halfCircle;
+        gameMode.userLifePerTimeListList[batchOrder].Add(wholeLifetime);
+        //本体列表销毁
+        gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
 
         ss.OnComplete(() => movingAnime.Kill());
         ss.OnKill(() => DestroySelf());
@@ -269,11 +454,104 @@ public class PlayerItem : MonoBehaviour
         {
             gameMode.purchaseRateA += 1;
 
+            //拉取全局和触发效果中的item效果, 计算payingRate和payingAmount
+            //全局效果
+            float itemPayingRate = 0f;
+            if (gameMode.globalPayingRateEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalPayingRateEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalPayingRateEffectList[i];
+                    itemPayingRate += idEffect[1];
+                }
+            }
+            float itemPayingAmount = 0f;
+            if (gameMode.globalPayingAmountEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
+                    itemPayingAmount += idEffect[1];
+                }
+            }
+            //trigger
+            if (triggerPayingRateEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerPayingRateEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerPayingRateEffectList[i];
+                    itemPayingRate += idEffect[1];
+                }
+            }
+            if (triggerPayingAmountEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerPayingAmountEffectList[i];
+                    itemPayingAmount += idEffect[1];
+                }
+            }
+
+            float finalPayingRate = basicPayRate + itemPayingRate;
+            float finalPayingAmount = basicPayAmount + itemPayingAmount;
+
+            //统计贡献
+            //全局
+            if (gameMode.globalPayingRateEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalPayingRateEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalPayingRateEffectList[i];
+                    float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfRevenue.Add(newIDEffect);
+                }
+            }
+            if (gameMode.globalPayingAmountEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
+                    float effectReset = (idEffect[1]);
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfRevenue.Add(newIDEffect);
+                }
+            }
+            //trigger
+            if (triggerPayingRateEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerPayingRateEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerPayingRateEffectList[i];
+                    float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfRevenue.Add(newIDEffect);
+                }
+            }
+            if (triggerPayingAmountEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerPayingAmountEffectList[i];
+                    float effectReset = (idEffect[1]);
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfRevenue.Add(newIDEffect);
+                }
+            }
+
             //概率
             float rate = Random.Range(0f, 1f);
-            if(rate <= basicPayRate)
+            if(rate <= finalPayingRate)
             {
-                PlayerPaying(basicPayAmount);
+                PlayerPaying(finalPayingAmount);
                 gameMode.purchaseRateS += 1;
             }
 
@@ -282,9 +560,129 @@ public class PlayerItem : MonoBehaviour
 
     }
     //付费-玩法检测（玩法触发）
-    void PlayerPayingCheckMethod2()
+    public void PlayerPayingCheckMethod2(int itemID, float payR, float payM)
     {
-        
+        gameMode.purchaseRateA += 1;
+
+        //拉取全局和触发效果中的item效果, 计算payingRate和payingAmount
+        //全局效果
+        float itemPayingRate = 0f;
+        if (gameMode.globalPayingRateEffectList.Count != 0)
+        {
+            for (int i = 0; i < gameMode.globalPayingRateEffectList.Count; i++)
+            {
+                List<float> idEffect = gameMode.globalPayingRateEffectList[i];
+                itemPayingRate += idEffect[1];
+            }
+        }
+        float itemPayingAmount = 0f;
+        if (gameMode.globalPayingAmountEffectList.Count != 0)
+        {
+            for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
+            {
+                List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
+                itemPayingAmount += idEffect[1];
+            }
+        }
+        //trigger
+        if (triggerPayingRateEffectList.Count != 0)
+        {
+            for (int i = 0; i < triggerPayingRateEffectList.Count; i++)
+            {
+                List<float> idEffect = triggerPayingRateEffectList[i];
+                itemPayingRate += idEffect[1];
+            }
+        }
+        if (triggerPayingAmountEffectList.Count != 0)
+        {
+            for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
+            {
+                List<float> idEffect = triggerPayingAmountEffectList[i];
+                itemPayingAmount += idEffect[1];
+            }
+        }
+
+        //添加触发者的属性
+        float finalPayingRate = basicPayRate + itemPayingRate + payR;
+        float finalPayingAmount = basicPayAmount + itemPayingAmount + payM;
+
+        //统计贡献
+        //全局
+        if (gameMode.globalPayingRateEffectList.Count != 0)
+        {
+            for (int i = 0; i < gameMode.globalPayingRateEffectList.Count; i++)
+            {
+                List<float> idEffect = gameMode.globalPayingRateEffectList[i];
+                float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                List<float> newIDEffect = new List<float>();
+                newIDEffect.Add(idEffect[0]);
+                newIDEffect.Add(effectReset);
+                gameMode.contributionOfRevenue.Add(newIDEffect);
+            }
+        }
+        if (gameMode.globalPayingAmountEffectList.Count != 0)
+        {
+            for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
+            {
+                List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
+                float effectReset = (idEffect[1]);
+                List<float> newIDEffect = new List<float>();
+                newIDEffect.Add(idEffect[0]);
+                newIDEffect.Add(effectReset);
+                gameMode.contributionOfRevenue.Add(newIDEffect);
+            }
+        }
+        //trigger
+        if (triggerPayingRateEffectList.Count != 0)
+        {
+            for (int i = 0; i < triggerPayingRateEffectList.Count; i++)
+            {
+                List<float> idEffect = triggerPayingRateEffectList[i];
+                float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                List<float> newIDEffect = new List<float>();
+                newIDEffect.Add(idEffect[0]);
+                newIDEffect.Add(effectReset);
+                gameMode.contributionOfRevenue.Add(newIDEffect);
+            }
+        }
+        if (triggerPayingAmountEffectList.Count != 0)
+        {
+            for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
+            {
+                List<float> idEffect = triggerPayingAmountEffectList[i];
+                float effectReset = (idEffect[1]);
+                List<float> newIDEffect = new List<float>();
+                newIDEffect.Add(idEffect[0]);
+                newIDEffect.Add(effectReset);
+                gameMode.contributionOfRevenue.Add(newIDEffect);
+            }
+        }
+        //触发者的贡献
+        if(payR > 0)
+        {
+            float effectReset = (payR / finalPayingRate) * finalPayingAmount;
+            List<float> newIDEffect = new List<float>();
+            newIDEffect.Add(itemID);
+            newIDEffect.Add(effectReset);
+            gameMode.contributionOfRevenue.Add(newIDEffect);
+        }
+        if(payM > 0)
+        {
+            float effectReset = payM;
+            List<float> newIDEffect = new List<float>();
+            newIDEffect.Add(itemID);
+            newIDEffect.Add(effectReset);
+            gameMode.contributionOfRevenue.Add(newIDEffect);
+        }
+
+        //概率
+        float rate = Random.Range(0f, 1f);
+        if (rate <= finalPayingRate)
+        {
+            PlayerPaying(finalPayingAmount);
+            gameMode.purchaseRateS += 1;
+        }
+
     }
 
     //留存-基础监测（伴随时间）
@@ -295,9 +693,107 @@ public class PlayerItem : MonoBehaviour
         {
             gameMode.retentionRateA += 1;
 
+            //拉取全局和触发效果中的item效果, 计算itemChurnRate
+            
+            itemChurnRate = 0f;
+            //global留存效果
+            if (gameMode.globalRetentionEffectList.Count != 0)
+            {
+                for(int i = 0; i < gameMode.globalRetentionEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalRetentionEffectList[i];
+                    itemChurnRate += idEffect[1];
+                }
+            }
+
+            socialBound = 0f;
+            //global留存效果
+            if (gameMode.globalSocialBoundEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalSocialBoundEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalSocialBoundEffectList[i];
+                    socialBound += idEffect[1];
+                }
+            }
+
+            //trigger留存效果
+            if (triggerRetentionEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerRetentionEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerRetentionEffectList[i];
+                    itemChurnRate += idEffect[1];
+                }
+            }
+
+            //trigger留存效果
+            if (triggerSocialBoundEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerSocialBoundEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerSocialBoundEffectList[i];
+                    socialBound += idEffect[1];
+                }
+            }
+
+            ChurnRateReset();  //刷新最终留存率
+
+            //统计贡献
+            //全局
+            if (gameMode.globalRetentionEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalRetentionEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalRetentionEffectList[i];
+                    float effectReset = (idEffect[1] / (itemChurnRate + basicChurnRate)) * basicChurnReset;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfLivetime.Add(newIDEffect);
+                }
+            }
+            if (gameMode.globalSocialBoundEffectList.Count != 0)
+            {
+                for (int i = 0; i < gameMode.globalSocialBoundEffectList.Count; i++)
+                {
+                    List<float> idEffect = gameMode.globalSocialBoundEffectList[i];
+                    float effectReset = (idEffect[1] / socialBound) * socialChurnReset;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfLivetime.Add(newIDEffect);
+                }
+            }
+            //trigger
+            if (triggerRetentionEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerRetentionEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerRetentionEffectList[i];
+                    float effectReset = (idEffect[1] / (itemChurnRate + basicChurnRate)) * basicChurnReset;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfLivetime.Add(newIDEffect);
+                }
+            }
+            if (triggerSocialBoundEffectList.Count != 0)
+            {
+                for (int i = 0; i < triggerSocialBoundEffectList.Count; i++)
+                {
+                    List<float> idEffect = triggerSocialBoundEffectList[i];
+                    float effectReset = (idEffect[1] / (itemChurnRate + basicChurnRate)) * basicChurnReset;
+                    List<float> newIDEffect = new List<float>();
+                    newIDEffect.Add(idEffect[0]);
+                    newIDEffect.Add(effectReset);
+                    gameMode.contributionOfLivetime.Add(newIDEffect);
+                }
+            }
+
             //概率
             float rate = Random.Range(0f, 1f);
-            if (rate <= basicChurnRate)
+            if (rate <= (1 - finalChurnRate))
             {
                 PlayerLosing();
                 gameMode.retentionRateS += 1;
@@ -324,4 +820,46 @@ public class PlayerItem : MonoBehaviour
         }
     }
 
+    void ChurnRateReset()
+    {
+        //留存率重新计数
+        //基础衰减
+        float basicDamping = Mathf.Pow(basicChurnDampingValue, circleNum) / 100f;
+        if(basicDamping > 1f)
+        {
+            basicDamping = 1f;
+        }
+        basicChurnReset = (basicChurnRate + itemChurnRate) * (1 - basicDamping);
+
+        //basicChurnReset = basicChurnReset * (satisfactionIndex / 100f);   //满意度调整
+
+        //社交band
+        float socialDamping = Mathf.Pow(socialDampingValue, circleNum) / 100f;
+        if (socialDamping > 1f)
+        {
+            socialDamping = 1f;
+        }
+        float socialChurn = socialBound;
+        socialChurnReset = socialChurn * (1 - socialDamping);
+
+        //社交band
+        float accountDamping = Mathf.Pow(accountChurnDampingValue, circleNum) / 100f;
+        if (accountDamping > 1f)
+        {
+            accountDamping = 1f;
+        }
+        float accountChurn = accountBound;
+        accountChurnReset = accountChurn * (1 - accountDamping);
+
+        finalChurnRate = basicChurnReset + socialChurnReset + accountChurnReset;
+        if(finalChurnRate > 1)
+        {
+            finalChurnRate = 1f;
+        }
+    }
+
+    void PlayerMoodLogic()
+    {
+        satisfactionIndex = playerInbornMood + gameMode.globalMoodChange;
+    }
 }

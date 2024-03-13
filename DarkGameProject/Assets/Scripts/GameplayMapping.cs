@@ -16,6 +16,8 @@ public class GameplayMapping : MonoBehaviour
 
     //主gameplay列表
     public List<GameObject> mainGameplayItemList;
+    //dark列表
+    public List<GameObject> darkGameplayItemList;
 
     private GameObject gameplayObjectLayer;
 
@@ -38,7 +40,10 @@ public class GameplayMapping : MonoBehaviour
         {
             roadPointList = new List<Vector3Int>();
         }
-
+        if(darkGameplayItemList == null)
+        {
+            darkGameplayItemList = new List<GameObject>();
+        }
     }
 
     // Start is called before the first frame update
@@ -54,7 +59,7 @@ public class GameplayMapping : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log(mainGameplayItemList.Count + " - " + darkGameplayItemList.Count);
     }
 
     void TileMapCheck()

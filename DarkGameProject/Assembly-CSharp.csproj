@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/DesignPanel.cs" />
+    <Compile Include="Assets/Scripts/ChartPointItem.cs" />
     <Compile Include="Assets/Scripts/GameMode.cs" />
     <Compile Include="Assets/Scripts/GameplayMapping.cs" />
     <Compile Include="Assets/Scripts/MappingNode.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Assets/Scripts/GameplayItem.cs" />
     <Compile Include="Assets/Scripts/BasicAction.cs" />
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
-    <Compile Include="Assets/Scripts/ChartPointItem.cs" />
+    <Compile Include="Assets/Scripts/GameplayEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

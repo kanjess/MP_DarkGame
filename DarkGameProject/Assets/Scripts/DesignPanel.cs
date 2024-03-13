@@ -24,6 +24,7 @@ public class DesignPanel : MonoBehaviour
 
     private GameMode gameMode;
     private CameraControl cameraControl;
+    private GameplayMapping gameplayMapping;
 
     private GameObject moneyShow;
 
@@ -52,13 +53,13 @@ public class DesignPanel : MonoBehaviour
     private GameObject AverageRetentionNumText;
     private GameObject AveragePayingNumText;
     private GameObject AverageRevenuePerPlayerNumText;
-
+    //付费率 报表
     public GameObject pcrPointItem;
     private GameObject pcrPanel;
     private GameObject pcrChartContent;
     private GameObject pcrItemContent;
     private int pcrDataNum = 0;
-
+    //付费额 报表
     public GameObject arptPointItem;
     private GameObject arptPanel;
     private GameObject arptChartContent;
@@ -69,6 +70,72 @@ public class DesignPanel : MonoBehaviour
     private GameObject arptYText3;
     private GameObject arptYText4;
     private GameObject arptYText5;
+    //留存率 报表
+    public GameObject rrPointItem;
+    private GameObject rrPanel;
+    private GameObject rrChartContent;
+    private GameObject rrItemContent;
+    private int rrDataNum = 0;
+    //lifetime 报表
+    public GameObject ltPointItem;
+    private GameObject ltPanel;
+    private GameObject ltChartContent;
+    private GameObject ltItemContent;
+    private int ltDataNum = 0;
+    private GameObject ltYText1;
+    private GameObject ltYText2;
+    private GameObject ltYText3;
+    private GameObject ltYText4;
+    private GameObject ltYText5;
+    //lifetime贡献
+    private GameObject ltContributionPanel;
+    private GameObject ltContributionCicle_1;
+    private GameObject ltContributionCicle_2;
+    private GameObject ltContributionCicle_3;
+    private GameObject ltContributionCicle_4;
+    private GameObject ltContributionCicle_5;
+    private GameObject ltContributionCicle_6;
+    private GameObject ltContributionCicle_7;
+    private GameObject ltContributionCicle_8;
+    private GameObject ltContributionCicle_9;
+    private GameObject ltContributionCicle_10;
+    private GameObject ltContributionItemDesc_1;
+    private GameObject ltContributionItemDesc_2;
+    private GameObject ltContributionItemDesc_3;
+    private GameObject ltContributionItemDesc_4;
+    private GameObject ltContributionItemDesc_5;
+    private GameObject ltContributionItemDesc_6;
+    private GameObject ltContributionItemDesc_7;
+    private GameObject ltContributionItemDesc_8;
+    private GameObject ltContributionItemDesc_9;
+    private GameObject ltContributionItemDesc_10;
+    private GameObject ltContributionItemDesc_11;
+    //revenue贡献
+    private GameObject reContributionPanel;
+    private GameObject reContributionCicle_1;
+    private GameObject reContributionCicle_2;
+    private GameObject reContributionCicle_3;
+    private GameObject reContributionCicle_4;
+    private GameObject reContributionCicle_5;
+    private GameObject reContributionCicle_6;
+    private GameObject reContributionCicle_7;
+    private GameObject reContributionCicle_8;
+    private GameObject reContributionCicle_9;
+    private GameObject reContributionCicle_10;
+    private GameObject reContributionItemDesc_1;
+    private GameObject reContributionItemDesc_2;
+    private GameObject reContributionItemDesc_3;
+    private GameObject reContributionItemDesc_4;
+    private GameObject reContributionItemDesc_5;
+    private GameObject reContributionItemDesc_6;
+    private GameObject reContributionItemDesc_7;
+    private GameObject reContributionItemDesc_8;
+    private GameObject reContributionItemDesc_9;
+    private GameObject reContributionItemDesc_10;
+    private GameObject reContributionItemDesc_11;
+
+    private bool companyReportBtnShow = false;
+    private bool playerReportBtnShow = false;
 
     //升级panel
     public bool designItemPanelOpen = false;
@@ -110,6 +177,7 @@ public class DesignPanel : MonoBehaviour
 
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
+        gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
 
         GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
         GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
@@ -164,6 +232,80 @@ public class DesignPanel : MonoBehaviour
         arptYText4 = arptLine4.transform.Find("Text").gameObject;
         GameObject arptLine5 = arptChartContent.transform.Find("Line_5").gameObject;
         arptYText5 = arptLine5.transform.Find("Text").gameObject;
+
+        rrPanel = companyPanelChartListContent.transform.Find("AverageRetentionRatePanel").gameObject;
+        rrChartContent = rrPanel.transform.Find("ChartContent").gameObject;
+        GameObject rrScrollView = rrChartContent.transform.Find("ScrollView").gameObject;
+        GameObject rrViewport = rrScrollView.transform.Find("Viewport").gameObject;
+        rrItemContent = rrViewport.transform.Find("PointContent").gameObject;
+
+        ltPanel = companyPanelChartListContent.transform.Find("AverageLifetimePanel").gameObject;
+        ltChartContent = ltPanel.transform.Find("ChartContent").gameObject;
+        GameObject ltScrollView = ltChartContent.transform.Find("ScrollView").gameObject;
+        GameObject ltViewport = ltScrollView.transform.Find("Viewport").gameObject;
+        ltItemContent = ltViewport.transform.Find("PointContent").gameObject;
+        GameObject ltLine1 = ltChartContent.transform.Find("Line_1").gameObject;
+        ltYText1 = ltLine1.transform.Find("Text").gameObject;
+        GameObject ltLine2 = ltChartContent.transform.Find("Line_2").gameObject;
+        ltYText2 = ltLine2.transform.Find("Text").gameObject;
+        GameObject ltLine3 = ltChartContent.transform.Find("Line_3").gameObject;
+        ltYText3 = ltLine3.transform.Find("Text").gameObject;
+        GameObject ltLine4 = ltChartContent.transform.Find("Line_4").gameObject;
+        ltYText4 = ltLine4.transform.Find("Text").gameObject;
+        GameObject ltLine5 = ltChartContent.transform.Find("Line_5").gameObject;
+        ltYText5 = ltLine5.transform.Find("Text").gameObject;
+
+        ltContributionPanel = companyPanelChartListContent.transform.Find("LifetimeContributionPanel").gameObject;
+        GameObject ltContributionChartContent = ltContributionPanel.transform.Find("ChartContent").gameObject;
+        GameObject ltContributionCirclePointContent = ltContributionChartContent.transform.Find("CirclePointContent").gameObject;
+        ltContributionCicle_1 = ltContributionCirclePointContent.transform.GetChild(0).gameObject;
+        ltContributionCicle_2 = ltContributionCirclePointContent.transform.GetChild(1).gameObject;
+        ltContributionCicle_3 = ltContributionCirclePointContent.transform.GetChild(2).gameObject;
+        ltContributionCicle_4 = ltContributionCirclePointContent.transform.GetChild(3).gameObject;
+        ltContributionCicle_5 = ltContributionCirclePointContent.transform.GetChild(4).gameObject;
+        ltContributionCicle_6 = ltContributionCirclePointContent.transform.GetChild(5).gameObject;
+        ltContributionCicle_7 = ltContributionCirclePointContent.transform.GetChild(6).gameObject;
+        ltContributionCicle_8 = ltContributionCirclePointContent.transform.GetChild(7).gameObject;
+        ltContributionCicle_9 = ltContributionCirclePointContent.transform.GetChild(8).gameObject;
+        ltContributionCicle_10 = ltContributionCirclePointContent.transform.GetChild(9).gameObject;
+        GameObject ltContributionItemDescContent = ltContributionChartContent.transform.Find("DesItemContent").gameObject;
+        ltContributionItemDesc_1 = ltContributionItemDescContent.transform.GetChild(0).gameObject;
+        ltContributionItemDesc_2 = ltContributionItemDescContent.transform.GetChild(1).gameObject;
+        ltContributionItemDesc_3 = ltContributionItemDescContent.transform.GetChild(2).gameObject;
+        ltContributionItemDesc_4 = ltContributionItemDescContent.transform.GetChild(3).gameObject;
+        ltContributionItemDesc_5 = ltContributionItemDescContent.transform.GetChild(4).gameObject;
+        ltContributionItemDesc_6 = ltContributionItemDescContent.transform.GetChild(5).gameObject;
+        ltContributionItemDesc_7 = ltContributionItemDescContent.transform.GetChild(6).gameObject;
+        ltContributionItemDesc_8 = ltContributionItemDescContent.transform.GetChild(7).gameObject;
+        ltContributionItemDesc_9 = ltContributionItemDescContent.transform.GetChild(8).gameObject;
+        ltContributionItemDesc_10 = ltContributionItemDescContent.transform.GetChild(9).gameObject;
+        ltContributionItemDesc_11 = ltContributionItemDescContent.transform.GetChild(10).gameObject;
+
+        reContributionPanel = companyPanelChartListContent.transform.Find("RevenueContributionPanel").gameObject;
+        GameObject reContributionChartContent = reContributionPanel.transform.Find("ChartContent").gameObject;
+        GameObject reContributionCirclePointContent = reContributionChartContent.transform.Find("CirclePointContent").gameObject;
+        reContributionCicle_1 = reContributionCirclePointContent.transform.GetChild(0).gameObject;
+        reContributionCicle_2 = reContributionCirclePointContent.transform.GetChild(1).gameObject;
+        reContributionCicle_3 = reContributionCirclePointContent.transform.GetChild(2).gameObject;
+        reContributionCicle_4 = reContributionCirclePointContent.transform.GetChild(3).gameObject;
+        reContributionCicle_5 = reContributionCirclePointContent.transform.GetChild(4).gameObject;
+        reContributionCicle_6 = reContributionCirclePointContent.transform.GetChild(5).gameObject;
+        reContributionCicle_7 = reContributionCirclePointContent.transform.GetChild(6).gameObject;
+        reContributionCicle_8 = reContributionCirclePointContent.transform.GetChild(7).gameObject;
+        reContributionCicle_9 = reContributionCirclePointContent.transform.GetChild(8).gameObject;
+        reContributionCicle_10 = reContributionCirclePointContent.transform.GetChild(9).gameObject;
+        GameObject reContributionItemDescContent = reContributionChartContent.transform.Find("DesItemContent").gameObject;
+        reContributionItemDesc_1 = reContributionItemDescContent.transform.GetChild(0).gameObject;
+        reContributionItemDesc_2 = reContributionItemDescContent.transform.GetChild(1).gameObject;
+        reContributionItemDesc_3 = reContributionItemDescContent.transform.GetChild(2).gameObject;
+        reContributionItemDesc_4 = reContributionItemDescContent.transform.GetChild(3).gameObject;
+        reContributionItemDesc_5 = reContributionItemDescContent.transform.GetChild(4).gameObject;
+        reContributionItemDesc_6 = reContributionItemDescContent.transform.GetChild(5).gameObject;
+        reContributionItemDesc_7 = reContributionItemDescContent.transform.GetChild(6).gameObject;
+        reContributionItemDesc_8 = reContributionItemDescContent.transform.GetChild(7).gameObject;
+        reContributionItemDesc_9 = reContributionItemDescContent.transform.GetChild(8).gameObject;
+        reContributionItemDesc_10 = reContributionItemDescContent.transform.GetChild(9).gameObject;
+        reContributionItemDesc_11 = reContributionItemDescContent.transform.GetChild(10).gameObject;
 
         designItemLevelPanelContent = mainSceneUI.transform.Find("DesignItemLevelPanel").gameObject;
         designItemLevelPanelBg = designItemLevelPanelContent.transform.Find("Bg").gameObject;
@@ -324,30 +466,20 @@ public class DesignPanel : MonoBehaviour
                         gameMode.gameItemList[i].GetComponent<GameplayItemUIItem>().newItemShow = false;
                     }
                 }
+
+                gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
+
+                //刷新一圈的距离
+                if(gameMode.gameDynamicProcess == true)
+                {
+                    GameObject.Find("GameplayItem_101(Clone)").GetComponent<GameplayItem>().MainRoadDistanceCal();
+                }
+
+                //检测场上item的全局效果并构建效果列表
+                gameMode.ObjectGlobalEffectListCreate();
             }
         }
     }
-
-    void GameItemIn()
-    {
-        //测试ID=101
-        GameObject oj = Instantiate(gameplayItemUIItem) as GameObject;
-        oj.transform.SetParent(designPanelContent.transform);
-        oj.transform.localPosition = new Vector3(0, 0, 0);
-        oj.GetComponent<GameplayItemUIItem>().SetItemID(101);
-
-        //测试ID=102
-        GameObject oj2 = Instantiate(gameplayItemUIItem) as GameObject;
-        oj2.transform.SetParent(designPanelContent.transform);
-        oj2.transform.localPosition = new Vector3(0, -150f, 0);
-        oj2.GetComponent<GameplayItemUIItem>().SetItemID(102);
-
-        //测试ID=401
-        GameObject oj3 = Instantiate(gameplayItemUIItem) as GameObject;
-        oj3.transform.SetParent(designPanelContent.transform);
-        oj3.transform.localPosition = new Vector3(0, -300f, 0);
-        oj3.GetComponent<GameplayItemUIItem>().SetItemID(401);
-    } //临时
 
     void UIUpdate()
     {
@@ -386,49 +518,17 @@ public class DesignPanel : MonoBehaviour
             gameMode.levelUpExp = (int)(gameMode.basicLevelUpExp * (1 + (gameMode.playerLevel * gameMode.levelUpExpIncreaseValue / 10f)));
 
             GameItemUnlock();
+
+            //公司报表界面解锁
+            if(companyReportBtnShow == false && gameMode.playerLevel >= 3 && gameMode.startStatistics == true)
+            {
+                companyReportBtnShow = true;
+
+                ComReportBtnIn();
+            }
         }
     }
 
-    /**
-    void MapSceneSwitch(int sceneN)
-    {
-        if(sceneChangeAnime == false && sceneN != sceneNo)
-        {
-            sceneChangeAnime = true;
-            cameraControl.cameraCanMove = false;
-
-            Tilemap tt = new Tilemap();
-            if(sceneN == 1)
-            {
-                tt = cameraControl.upMap;
-            }
-            else if(sceneN == 2)
-            {
-                tt = cameraControl.normalMap;
-            }
-            else if (sceneN == 3)
-            {
-                tt = cameraControl.downMap;
-            }
-
-            float dis = 30f;
-
-            dis = dis * (sceneN - sceneNo);
-
-            Tweener anime = mainSceneContent.transform.DOMoveY(dis, 0.5f).SetRelative();
-
-            sceneNo = sceneN;
-
-            anime.OnComplete(() => cameraControl.TileSetup(tt));
-            anime.OnKill(() => MapSceneSwitchAnimeEnd());
-        }
-    }
-    void MapSceneSwitchAnimeEnd()
-    {
-        sceneChangeAnime = false;
-        cameraControl.cameraCanMove = true;
-    }
-    **/
     void ScenePanelSwitch(int no)
     {
         //切换
@@ -438,6 +538,8 @@ public class DesignPanel : MonoBehaviour
             {
                 //游戏暂停
                 gameMode.gameProcessPause = true;
+                //地图锁定
+                cameraControl.cameraCanMove = false;
 
                 scenePanelAnime = true;
 
@@ -481,6 +583,7 @@ public class DesignPanel : MonoBehaviour
 
                 //游戏恢复
                 gameMode.gameProcessPause = false;
+                cameraControl.cameraCanMove = true;
             }
         }
         //界面缩回
@@ -540,8 +643,6 @@ public class DesignPanel : MonoBehaviour
             anime.OnKill(() => designItemPanelOpen = false);
         }
     }
-
-
 
     //item次数变更
     public void GameItemNumChange(int itemid, bool isDark, bool isAdd)
@@ -605,8 +706,9 @@ public class DesignPanel : MonoBehaviour
         AverageRetentionNumText.GetComponent<Text>().text = (gameMode.averageRetention * 100f).ToString("0.00") + "%";
         AveragePayingNumText.GetComponent<Text>().text = (gameMode.averagePeymentConversion * 100f).ToString("0.00") + "%";
         AverageRevenuePerPlayerNumText.GetComponent<Text>().text = gameMode.averageRevenuePerPlayer.ToString("0.00");
-}
-
+    }
+    //具体报表
+    //付费率
     public void PurchaseRateChart()
     {
         if(pcrDataNum >= gameMode.purchaseRateList.Count)
@@ -637,7 +739,10 @@ public class DesignPanel : MonoBehaviour
 
                 pItem.GetComponent<ChartPointItem>().SetDetail(rrr, 1, pcrDataNum + i, companyPanel, pcrPanel, pcrChartContent, preItem);
 
-                if(pcrItemContent.transform.childCount >= 45)
+                pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(72f / 255f, 173 / 255f, 0f, 1f);
+                pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(72f / 255f, 173 / 255f, 0f, 1f);
+
+                if (pcrItemContent.transform.childCount >= 45)
                 {
                     //删减
                     //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
@@ -654,121 +759,622 @@ public class DesignPanel : MonoBehaviour
         float ss = pcrItemContent.GetComponent<RectTransform>().sizeDelta.x;
         pcrItemContent.transform.DOLocalMoveX(-ss, 0f);
     }
-
-    public void AverageRevenueChart()
+    //每用户付费额
+    public void AverageRevenuePerUserChart()
     {
-        if (arptDataNum >= gameMode.revenuePerTimeList.Count)
+        if(gameMode.revenuePerUsersList.Count > 0)
         {
-            //数据无更新
+            if (arptDataNum >= gameMode.revenuePerUsersList.Count)
+            {
+                //数据无更新
+            }
+            else if (arptDataNum < gameMode.revenuePerUsersList.Count)
+            {
+                //更新
+                //标线更新
+                float arptMax = (float)gameMode.revenuePerUsersList.Max();
+                float? arptMin = gameMode.revenuePerUsersList.Where(x => x != 0).DefaultIfEmpty().Min();
+                if (arptMin.HasValue == false)
+                {
+                    arptMin = 0;
+                }
+                float rrrmax = 1f;
+                float rrrmaxf = 1f;
+                //Debug.Log(arptMin + " - " + arptMax);
+                if(arptMin == 0f)
+                {
+                    if(arptMax == 0f)
+                    {
+                        arptMax = 100f;
+                        arptMin = 50f;
+                    }
+                    else
+                    {
+                        arptMin = arptMax / 2f;
+
+                        if(arptMin == 0f)
+                        {
+                            arptMin = arptMax;
+                        }
+                    }
+                    
+                }
+
+                if (arptMax / arptMin <= 2f)
+                {
+                    rrrmaxf = arptMax * 3f;
+                }
+                else if (arptMax / arptMin > 2f && arptMax / arptMin <= 3f)
+                {
+                    rrrmaxf = arptMax * 2.5f;
+                }
+                else if (arptMax / arptMin > 3f && arptMax / arptMin <= 4f)
+                {
+                    rrrmaxf = arptMax * 2f;
+                }
+                else if (arptMax / arptMin > 4f && arptMax / arptMin <= 5f)
+                {
+                    rrrmaxf = arptMax * 1.5f;
+                }
+                else if (arptMax / arptMin > 5f)
+                {
+                    rrrmaxf = arptMax * 1.2f;
+                }
+
+                if (rrrmaxf < 1f)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 1 && rrrmaxf < 10)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 10 && rrrmaxf < 100)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 10) * 10;
+                }
+                else if (rrrmaxf >= 100 && rrrmaxf < 1000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 100) * 100;
+                }
+                else if (rrrmaxf >= 1000 && rrrmaxf < 1000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000) * 1000;
+                }
+                else if (rrrmaxf >= 1000000 && rrrmaxf < 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000) * 1000000;
+                }
+                else if (rrrmaxf >= 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000000) * 1000000000;
+                }
+                float rrrInter = rrrmax / 5f;
+                float rrrLine1 = 1 * rrrInter;
+                float rrrLine2 = 2 * rrrInter;
+                float rrrLine3 = 3 * rrrInter;
+                float rrrLine4 = 4 * rrrInter;
+                arptYText1.GetComponent<Text>().text = numberText(rrrLine1);
+                arptYText2.GetComponent<Text>().text = numberText(rrrLine2);
+                arptYText3.GetComponent<Text>().text = numberText(rrrLine3);
+                arptYText4.GetComponent<Text>().text = numberText(rrrLine4);
+                arptYText5.GetComponent<Text>().text = numberText(rrrmax);
+
+                //内容更新
+                for (int i = 0; i < gameMode.revenuePerUsersList.Count; i++)
+                {
+                    float rrr = gameMode.revenuePerUsersList[i];
+
+                    GameObject preItem = null;
+                    if (i == 0)
+                    {
+                        preItem = null;
+                    }
+                    else
+                    {
+                        preItem = arptItemContent.transform.GetChild(i - 1).gameObject;
+                    }
+
+                    if (i < arptDataNum)
+                    {
+                        //刷新
+                        arptItemContent.transform.GetChild(i).gameObject.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, arptPanel, arptChartContent, preItem);
+                    }
+                    else if (i >= arptDataNum)
+                    {
+                        //新增
+                        GameObject pItem = Instantiate(arptPointItem) as GameObject;
+                        pItem.transform.SetParent(arptItemContent.transform);
+
+                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, arptDataNum + i, companyPanel, arptPanel, arptChartContent, preItem);
+
+                        pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(219f / 255f, 0f, 189f / 255f, 1f);
+                        pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(219f / 255f, 0f, 189f / 255f, 1f);
+                    }
+
+                    if (arptItemContent.transform.childCount >= 45)
+                    {
+                        //删减
+                        //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
+                    }
+                }
+
+                arptDataNum = gameMode.revenuePerUsersList.Count;
+
+                Invoke("AverageRevenuePerUserChartPosReset", 0.1f);
+            }
         }
-        else if (arptDataNum < gameMode.revenuePerTimeList.Count)
-        {
-            //更新
-            //标线更新
-            int arptMax = gameMode.revenuePerTimeList.Max();
-            int arptMin = gameMode.revenuePerTimeList.Min();
-            int rrrmax = 1;
-            float rrrmaxf = 1f;
-            if (arptMax / arptMin <= 2)
-            {
-                rrrmaxf = arptMax * 2f;
-            }
-            else if (arptMax / arptMin > 2 && arptMax / arptMin <= 3)
-            {
-                rrrmaxf = arptMax * 1.8f;
-            }
-            else if (arptMax / arptMin > 3 && arptMax / arptMin <= 4)
-            {
-                rrrmaxf = arptMax * 1.6f;
-            }
-            else if (arptMax / arptMin > 4 && arptMax / arptMin <= 5)
-            {
-                rrrmaxf = arptMax * 1.4f;
-            }
-            else if (arptMax / arptMin > 5)
-            {
-                rrrmaxf = arptMax * 1.2f;
-            }
-            if (rrrmaxf < 1000)
-            {
-                rrrmax = Mathf.CeilToInt(rrrmaxf / 100) * 100;
-            }
-            else if (rrrmaxf >= 1000 && rrrmaxf < 1000000)
-            {
-                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000) * 1000;
-            }
-            else if (rrrmaxf >= 1000000 && rrrmaxf < 1000000000)
-            {
-                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000) * 1000000;
-            }
-            else if (rrrmaxf >= 1000000000)
-            {
-                rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000000) * 1000000000;
-            }
-            float rrrInter = rrrmax / 5f;
-            int rrrLine1 = Mathf.RoundToInt(1 * rrrInter);
-            int rrrLine2 = Mathf.RoundToInt(2 * rrrInter);
-            int rrrLine3 = Mathf.RoundToInt(3 * rrrInter);
-            int rrrLine4 = Mathf.RoundToInt(4 * rrrInter);
-            arptYText1.GetComponent<Text>().text = numberText(rrrLine1);
-            arptYText2.GetComponent<Text>().text = numberText(rrrLine2);
-            arptYText3.GetComponent<Text>().text = numberText(rrrLine3);
-            arptYText4.GetComponent<Text>().text = numberText(rrrLine4);
-            arptYText5.GetComponent<Text>().text = numberText(rrrmax);
-
-            //内容更新
-            for (int i = 0; i < gameMode.revenuePerTimeList.Count; i++)
-            {
-                int rrr = gameMode.revenuePerTimeList[i];
-
-                GameObject preItem = null;
-                if (i == 0)
-                {
-                    preItem = null;
-                }
-                else
-                {
-                    preItem = arptItemContent.transform.GetChild(i - 1).gameObject;
-                }
-
-                if (i < arptDataNum)
-                {
-                    //刷新
-                    arptItemContent.transform.GetChild(i).gameObject.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, arptPanel, arptChartContent, preItem);
-                }
-                else if (i >= arptDataNum)
-                {
-                    //新增
-                    GameObject pItem = Instantiate(arptPointItem) as GameObject;
-                    pItem.transform.SetParent(arptItemContent.transform);
-
-                    pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, arptDataNum + i, companyPanel, arptPanel, arptChartContent, preItem);
-                }
-
-                if (pcrItemContent.transform.childCount >= 45)
-                {
-                    //删减
-                    //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
-                }
-            }
-
-            arptDataNum = gameMode.revenuePerTimeList.Count;
-
-            Invoke("RevenuePerTimeChartPosReset", 0.1f);
-        }
+        
     }
-    private void RevenuePerTimeChartPosReset()
+    private void AverageRevenuePerUserChartPosReset()
     {
         float ss = arptItemContent.GetComponent<RectTransform>().sizeDelta.x;
         arptItemContent.transform.DOLocalMoveX(-ss, 0f);
     }
+    //留存率
+    public void RetentionRateChart()
+    {
+        if (rrDataNum >= gameMode.retentionRateList.Count)
+        {
+            //数据无更新
+        }
+        else if (rrDataNum < gameMode.retentionRateList.Count)
+        {
+            //更新
+            int needAddNum = gameMode.retentionRateList.Count - rrDataNum;
 
-    public string numberText(int num)
+            for (int i = 0; i < needAddNum; i++)
+            {
+                float rrr = gameMode.retentionRateList[rrDataNum + i];
+
+                GameObject pItem = Instantiate(rrPointItem) as GameObject;
+                pItem.transform.SetParent(rrItemContent.transform);
+
+                GameObject rrItem = pItem;
+                if (rrDataNum + i > 0)
+                {
+                    rrItem = rrItemContent.transform.GetChild(rrDataNum + i - 1).gameObject;
+                }
+                else
+                {
+                    rrItem = null;
+                }
+
+                pItem.GetComponent<ChartPointItem>().SetDetail(rrr, 1, rrDataNum + i, companyPanel, rrPanel, rrChartContent, rrItem);
+
+                pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(1f, 138f / 255f, 0f, 1f);
+                pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(1f, 138f / 255f, 0f, 1f);
+
+                if (rrItemContent.transform.childCount >= 45)
+                {
+                    //删减
+                    //Destroy(rrItemContent.transform.GetChild(0).gameObject);
+                }
+            }
+
+            rrDataNum = gameMode.retentionRateList.Count;
+
+            Invoke("RetentionRateChartPosReset", 0.1f);
+        }
+    }
+    private void RetentionRateChartPosReset()
+    {
+        float ss = rrItemContent.GetComponent<RectTransform>().sizeDelta.x;
+        rrItemContent.transform.DOLocalMoveX(-ss, 0f);
+    }
+    //时段lifetime
+    public void AverageLifetimeChart()
+    {
+        if (gameMode.userLifetimeList.Count > 0)
+        {
+            if (ltDataNum >= gameMode.userLifetimeList.Count)
+            {
+                //数据无更新
+            }
+            else if (ltDataNum < gameMode.userLifetimeList.Count)
+            {
+                //更新
+                //标线更新
+                float ltMax = (float)gameMode.userLifetimeList.Max();
+                float? ltMin = gameMode.userLifetimeList.Where(x => x != 0).DefaultIfEmpty().Min();
+                if(ltMin.HasValue == false)
+                {
+                    ltMin = 0;
+                }
+                float rrrmax = 1f;
+                float rrrmaxf = 1f;
+                //Debug.Log(arptMin + " - " + arptMax);
+                if (ltMin == 0f)
+                {
+                    if (ltMax == 0f)
+                    {
+                        ltMax = 100f;
+                        ltMin = 50f;
+                    }
+                    else
+                    {
+                        ltMin = ltMax / 2f;
+
+                        if (ltMin == 0f)
+                        {
+                            ltMin = ltMax;
+                        }
+                    }
+
+                }
+
+                if (ltMax / ltMin <= 2f)
+                {
+                    rrrmaxf = ltMax * 3f;
+                }
+                else if (ltMax / ltMin > 2f && ltMax / ltMin <= 3f)
+                {
+                    rrrmaxf = ltMax * 2.5f;
+                }
+                else if (ltMax / ltMin > 3f && ltMax / ltMin <= 4f)
+                {
+                    rrrmaxf = ltMax * 2f;
+                }
+                else if (ltMax / ltMin > 4f && ltMax / ltMin <= 5f)
+                {
+                    rrrmaxf = ltMax * 1.5f;
+                }
+                else if (ltMax / ltMin > 5f)
+                {
+                    rrrmaxf = ltMax * 1.2f;
+                }
+
+                if (rrrmaxf < 1f)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 1 && rrrmaxf < 10)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 10 && rrrmaxf < 100)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 10) * 10;
+                }
+                else if (rrrmaxf >= 100 && rrrmaxf < 1000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 100) * 100;
+                }
+                else if (rrrmaxf >= 1000 && rrrmaxf < 1000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000) * 1000;
+                }
+                else if (rrrmaxf >= 1000000 && rrrmaxf < 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000) * 1000000;
+                }
+                else if (rrrmaxf >= 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000000) * 1000000000;
+                }
+                float rrrInter = rrrmax / 5f;
+                float rrrLine1 = 1 * rrrInter;
+                float rrrLine2 = 2 * rrrInter;
+                float rrrLine3 = 3 * rrrInter;
+                float rrrLine4 = 4 * rrrInter;
+                ltYText1.GetComponent<Text>().text = numberText(rrrLine1);
+                ltYText2.GetComponent<Text>().text = numberText(rrrLine2);
+                ltYText3.GetComponent<Text>().text = numberText(rrrLine3);
+                ltYText4.GetComponent<Text>().text = numberText(rrrLine4);
+                ltYText5.GetComponent<Text>().text = numberText(rrrmax);
+
+                //内容更新
+                for (int i = 0; i < gameMode.userLifetimeList.Count; i++)
+                {
+                    float rrr = gameMode.userLifetimeList[i];
+
+                    GameObject ltItem = null;
+                    if (i == 0)
+                    {
+                        ltItem = null;
+                    }
+                    else
+                    {
+                        ltItem = ltItemContent.transform.GetChild(i - 1).gameObject;
+                    }
+
+                    if (i < ltDataNum)
+                    {
+                        //刷新
+                        ltItemContent.transform.GetChild(i).gameObject.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, ltPanel, ltChartContent, ltItem);
+                    }
+                    else if (i >= ltDataNum)
+                    {
+                        //新增
+                        GameObject pItem = Instantiate(ltPointItem) as GameObject;
+                        pItem.transform.SetParent(ltItemContent.transform);
+
+                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, ltDataNum + i, companyPanel, ltPanel, ltChartContent, ltItem);
+
+                        pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(222f / 255f, 29f / 255f, 32f / 255f, 1f);
+                        pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(222f / 255f, 29f / 255f, 32f / 255f, 1f);
+                    }
+
+                    if (ltItemContent.transform.childCount >= 45)
+                    {
+                        //删减
+                        //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
+                    }
+                }
+
+                ltDataNum = gameMode.userLifetimeList.Count;
+
+                Invoke("AverageLifetimeChartPosReset", 0.1f);
+            }
+        }
+    }
+    private void AverageLifetimeChartPosReset()
+    {
+        float ss = ltItemContent.GetComponent<RectTransform>().sizeDelta.x;
+        ltItemContent.transform.DOLocalMoveX(-ss, 0f);
+    }
+    //lifetime的贡献饼状图
+    public void LifetimePieChart()
+    {
+        if(gameMode.sortedContributionOfLivetime.Count > 0)
+        {
+            float allLifeT = 0f;
+
+            for (int i = 0; i < gameMode.sortedContributionOfLivetime.Count; i++)
+            {
+                float targetLT = gameMode.sortedContributionOfLivetime[i][1];
+                allLifeT += targetLT;
+            }
+
+            //计算比例并排序
+            float top10LT = 0f;
+            for (int i = 0; i < 10; i++)
+            {
+                int itemID = 0;
+                float targetLT = 0f;
+
+                if (i < gameMode.sortedContributionOfLivetime.Count)
+                {
+                    itemID = (int)gameMode.sortedContributionOfLivetime[i][0];
+                    targetLT = gameMode.sortedContributionOfLivetime[i][1];
+                }
+
+                if (itemID != 0)
+                {
+                    top10LT += targetLT;
+                }
+
+                float propotion = targetLT / allLifeT;
+                float preCumulativePropotion = (top10LT - targetLT) / allLifeT;
+
+                GameObject targetCircleItme = ltContributionCicle_1;
+                GameObject targetDescItme = ltContributionItemDesc_1;
+
+                if (i == 0)
+                {
+                    targetCircleItme = ltContributionCicle_1;
+                    targetDescItme = ltContributionItemDesc_1;
+                }
+                else if (i == 1)
+                {
+                    targetCircleItme = ltContributionCicle_2;
+                    targetDescItme = ltContributionItemDesc_2;
+                }
+                else if (i == 2)
+                {
+                    targetCircleItme = ltContributionCicle_3;
+                    targetDescItme = ltContributionItemDesc_3;
+                }
+                else if (i == 3)
+                {
+                    targetCircleItme = ltContributionCicle_4;
+                    targetDescItme = ltContributionItemDesc_4;
+                }
+                else if (i == 4)
+                {
+                    targetCircleItme = ltContributionCicle_5;
+                    targetDescItme = ltContributionItemDesc_5;
+                }
+                else if (i == 5)
+                {
+                    targetCircleItme = ltContributionCicle_6;
+                    targetDescItme = ltContributionItemDesc_6;
+                }
+                else if (i == 6)
+                {
+                    targetCircleItme = ltContributionCicle_7;
+                    targetDescItme = ltContributionItemDesc_7;
+                }
+                else if (i == 7)
+                {
+                    targetCircleItme = ltContributionCicle_8;
+                    targetDescItme = ltContributionItemDesc_8;
+                }
+                else if (i == 8)
+                {
+                    targetCircleItme = ltContributionCicle_9;
+                    targetDescItme = ltContributionItemDesc_9;
+                }
+                else if (i == 9)
+                {
+                    targetCircleItme = ltContributionCicle_10;
+                    targetDescItme = ltContributionItemDesc_10;
+                }
+
+                if (itemID != 0)
+                {
+                    targetCircleItme.transform.eulerAngles = new Vector3(0, 0, -preCumulativePropotion * 360f);
+                    targetCircleItme.GetComponent<Image>().fillAmount = propotion;
+
+                    targetDescItme.SetActive(true);
+                    //targetDescItme.transform.localScale = new Vector3(1, 1, 1);
+                    //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 57f);
+                    targetDescItme.transform.Find("Text").gameObject.GetComponent<Text>().text = itemName(itemID);
+                }
+                else
+                {
+                    targetCircleItme.GetComponent<Image>().fillAmount = 0;
+
+                    targetDescItme.SetActive(false);
+                    //targetDescItme.transform.localScale = new Vector3(1, 0, 1);
+                    //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
+                }
+
+                if (top10LT == allLifeT)
+                {
+                    ltContributionItemDesc_11.SetActive(true);
+                    //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 0, 1);
+                    //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
+                }
+                else if (top10LT < allLifeT)
+                {
+                    ltContributionItemDesc_11.SetActive(false);
+                    //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 1, 1);
+                    //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 57f);
+                }
+
+            }
+        }
+    }
+    //收入的贡献饼状图
+    public void RevenuePieChart()
+    {
+        if (gameMode.sortedContributionOfRevenue.Count > 0)
+        {
+            float allM = 0f;
+
+            for (int i = 0; i < gameMode.sortedContributionOfRevenue.Count; i++)
+            {
+                float targetM = gameMode.sortedContributionOfRevenue[i][1];
+                allM += targetM;
+            }
+
+            //计算比例并排序
+            float top10M = 0f;
+            for (int i = 0; i < 10; i++)
+            {
+                int itemID = 0;
+                float targetM = 0f;
+
+                if (i < gameMode.sortedContributionOfRevenue.Count)
+                {
+                    itemID = (int)gameMode.sortedContributionOfRevenue[i][0];
+                    targetM = gameMode.sortedContributionOfRevenue[i][1];
+                }
+
+                if (itemID != 0)
+                {
+                    top10M += targetM;
+                }
+
+                float propotion = targetM / allM;
+                float preCumulativePropotion = (top10M - targetM) / allM;
+
+                GameObject targetCircleItme = reContributionCicle_1;
+                GameObject targetDescItme = reContributionItemDesc_1;
+
+                if (i == 0)
+                {
+                    targetCircleItme = reContributionCicle_1;
+                    targetDescItme = reContributionItemDesc_1;
+                }
+                else if (i == 1)
+                {
+                    targetCircleItme = reContributionCicle_2;
+                    targetDescItme = reContributionItemDesc_2;
+                }
+                else if (i == 2)
+                {
+                    targetCircleItme = reContributionCicle_3;
+                    targetDescItme = reContributionItemDesc_3;
+                }
+                else if (i == 3)
+                {
+                    targetCircleItme = reContributionCicle_4;
+                    targetDescItme = reContributionItemDesc_4;
+                }
+                else if (i == 4)
+                {
+                    targetCircleItme = reContributionCicle_5;
+                    targetDescItme = reContributionItemDesc_5;
+                }
+                else if (i == 5)
+                {
+                    targetCircleItme = reContributionCicle_6;
+                    targetDescItme = reContributionItemDesc_6;
+                }
+                else if (i == 6)
+                {
+                    targetCircleItme = reContributionCicle_7;
+                    targetDescItme = reContributionItemDesc_7;
+                }
+                else if (i == 7)
+                {
+                    targetCircleItme = reContributionCicle_8;
+                    targetDescItme = reContributionItemDesc_8;
+                }
+                else if (i == 8)
+                {
+                    targetCircleItme = reContributionCicle_9;
+                    targetDescItme = reContributionItemDesc_9;
+                }
+                else if (i == 9)
+                {
+                    targetCircleItme = reContributionCicle_10;
+                    targetDescItme = reContributionItemDesc_10;
+                }
+
+                if (itemID != 0)
+                {
+                    targetCircleItme.transform.eulerAngles = new Vector3(0, 0, -preCumulativePropotion * 360f);
+                    targetCircleItme.GetComponent<Image>().fillAmount = propotion;
+
+                    targetDescItme.SetActive(true);
+                    //targetDescItme.transform.localScale = new Vector3(1, 1, 1);
+                    //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 57f);
+                    targetDescItme.transform.Find("Text").gameObject.GetComponent<Text>().text = itemName(itemID);
+                }
+                else
+                {
+                    targetCircleItme.GetComponent<Image>().fillAmount = 0;
+
+                    targetDescItme.SetActive(false);
+                    //targetDescItme.transform.localScale = new Vector3(1, 0, 1);
+                    //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
+                }
+
+                if (top10M == allM)
+                {
+                    ltContributionItemDesc_11.SetActive(false);
+                    //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 0, 1);
+                    //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
+                }
+                else if (top10M < allM)
+                {
+                    ltContributionItemDesc_11.SetActive(true);
+                    //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 1, 1);
+                    //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 57f);
+                }
+
+            }
+        }
+    }
+
+    public string numberText(float num)
     {
         string ttt = "";
-        if(num < 1000)
+
+        if (num < 1)
         {
-            ttt = num.ToString();
+            ttt = num.ToString("0.00");
+        }
+        else if (num >= 1 && num < 10)
+        {
+            ttt = num.ToString("0.00");
+        }
+        else if (num >= 10 && num < 1000)
+        {
+            ttt = ((int)num).ToString();
         }
         else if(num >= 1000 & num < 1000000)
         {
@@ -786,4 +1392,29 @@ public class DesignPanel : MonoBehaviour
         return ttt;
     }
 
+    //报表按钮入场
+    public void ReportBtnIn(int type)
+    {
+        if(type == 1 && gameMode.startStatistics == false)
+        {
+            gameMode.startStatistics = true;
+        }
+        else if(type == 2)
+        {
+
+        }
+    }
+    public void ComReportBtnIn()
+    {
+        companySceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
+    }
+
+    string itemName(int itemID)
+    {
+        string name = "";
+
+        name = GameObject.Find("GameplayItemUIItem_" + itemID).gameObject.GetComponent<GameplayItemUIItem>().itemName;
+
+        return name;
+    }
 }
