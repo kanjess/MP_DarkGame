@@ -23,9 +23,17 @@ public class BasicAction : MonoBehaviour
     public GameObject gpItem_999;
     public GameObject gpItem_401;
     public GameObject gpItem_402;
+    public GameObject gpItem_403;
     public GameObject gpItem_411;
+    public GameObject gpItem_412;
     public GameObject gpItem_421;
+    public GameObject gpItem_422;
     public GameObject gpItem_431;
+    public GameObject gpItem_432;
+    public GameObject gpItem_433;
+    public GameObject gpItem_434;
+    public GameObject gpItem_435;
+    public GameObject gpItem_436;
 
     private GameplayMapping gameplayMapping;
     private GameMode gameMode;
@@ -1273,17 +1281,49 @@ public class BasicAction : MonoBehaviour
         {
             gameplayItem = gpItem_402;
         }
+        else if (id == 403)
+        {
+            gameplayItem = gpItem_403;
+        }
         else if (id == 411)
         {
             gameplayItem = gpItem_411;
+        }
+        else if (id == 412)
+        {
+            gameplayItem = gpItem_412;
         }
         else if (id == 421)
         {
             gameplayItem = gpItem_421;
         }
+        else if (id == 422)
+        {
+            gameplayItem = gpItem_422;
+        }
         else if (id == 431)
         {
             gameplayItem = gpItem_431;
+        }
+        else if (id == 432)
+        {
+            gameplayItem = gpItem_432;
+        }
+        else if (id == 433)
+        {
+            gameplayItem = gpItem_433;
+        }
+        else if (id == 434)
+        {
+            gameplayItem = gpItem_434;
+        }
+        else if (id == 435)
+        {
+            gameplayItem = gpItem_435;
+        }
+        else if (id == 436)
+        {
+            gameplayItem = gpItem_436;
         }
         else
         {

@@ -149,6 +149,10 @@ public class GameplayItem : MonoBehaviour
             specialInputCount = 1;
             //加入dark
             canDarkList.Add(421);  //dark列表
+            canDarkList.Add(422);
+            canDarkList.Add(423);
+            canDarkList.Add(424);
+            canDarkList.Add(425);
         }
         else if(itemID == 102)  //pve
         {
@@ -157,6 +161,9 @@ public class GameplayItem : MonoBehaviour
             //加入dark
             canDarkList.Add(401);  //dark列表
             canDarkList.Add(402);
+            canDarkList.Add(403);
+            canDarkList.Add(404);
+            canDarkList.Add(405);
         }
         else if (itemID == 103)  //pvp
         {
@@ -164,6 +171,10 @@ public class GameplayItem : MonoBehaviour
             inputCount = 1;
             //加入dark
             canDarkList.Add(411);  //dark列表
+            canDarkList.Add(412);
+            canDarkList.Add(413);
+            canDarkList.Add(414);
+            canDarkList.Add(415);
         }
         else if (itemID == 104)   //运营
         {
@@ -171,6 +182,11 @@ public class GameplayItem : MonoBehaviour
             inputCount = 1;
             //加入dark
             canDarkList.Add(431);  //dark列表
+            canDarkList.Add(432);
+            canDarkList.Add(433);
+            canDarkList.Add(434);
+            canDarkList.Add(435);
+            canDarkList.Add(436);
         }
         else if (itemID == 999)
         {
@@ -1160,12 +1176,23 @@ public class GameplayItem : MonoBehaviour
                                             //是否具有进入检测
                                             if(bb == 0)
                                             {
-                                                if(pathPosItem.name == "PaymentCheckPoint")
+                                                if(pathPosItem.name == "EnterCheckPoint")
                                                 {
                                                     bool canIn = false;
                                                     //检测是否进入
                                                     float ra = Random.Range(0f, 1f);
-                                                    if(ra <= playerItem.GetComponent<PlayerItem>().basicPayRate)
+                                                    float enterR = gameplayEffect.GameItemEffect(itemID, "triggerRate");
+                                                    //422广告的特殊处理
+                                                    if(enterR == -1 && itemID == 422)
+                                                    {
+                                                        enterR = 1 - playerItem.GetComponent<PlayerItem>().finalPayingRate;
+                                                        if(enterR < 0)
+                                                        {
+                                                            enterR = 0;
+                                                        }
+                                                    }
+
+                                                    if(ra <= enterR)
                                                     {
                                                         canIn = true;
                                                     }

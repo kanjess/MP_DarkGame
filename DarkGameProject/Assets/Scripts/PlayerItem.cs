@@ -50,6 +50,8 @@ public class PlayerItem : MonoBehaviour
     public float itemChurnRate;  //item留存率
 
     public float finalChurnRate = 0f; //终留存率
+    public float finalPayingRate = 0f; //终付费率
+    public float finalPayingAmount = 0f; //终付费额
 
     public float satisfactionIndex;  //满意度（心情值）
     public float socialBound = 0;  //社交绑带
@@ -492,8 +494,8 @@ public class PlayerItem : MonoBehaviour
                 }
             }
 
-            float finalPayingRate = basicPayRate + itemPayingRate;
-            float finalPayingAmount = basicPayAmount + itemPayingAmount;
+            finalPayingRate = basicPayRate + itemPayingRate;
+            finalPayingAmount = basicPayAmount + itemPayingAmount;
 
             //统计贡献
             //全局
@@ -603,8 +605,10 @@ public class PlayerItem : MonoBehaviour
         }
 
         //添加触发者的属性
-        float finalPayingRate = basicPayRate + itemPayingRate + payR;
-        float finalPayingAmount = basicPayAmount + itemPayingAmount + payM;
+        finalPayingRate = basicPayRate + itemPayingRate;
+        float cFinalPayingRate = finalPayingRate + payR;
+        finalPayingAmount = basicPayAmount + itemPayingAmount;
+        float cFinalPayingAmount = finalPayingAmount + payM;
 
         //统计贡献
         //全局
@@ -613,7 +617,7 @@ public class PlayerItem : MonoBehaviour
             for (int i = 0; i < gameMode.globalPayingRateEffectList.Count; i++)
             {
                 List<float> idEffect = gameMode.globalPayingRateEffectList[i];
-                float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                float effectReset = (idEffect[1] / cFinalPayingRate) * cFinalPayingAmount;
                 List<float> newIDEffect = new List<float>();
                 newIDEffect.Add(idEffect[0]);
                 newIDEffect.Add(effectReset);
@@ -638,7 +642,7 @@ public class PlayerItem : MonoBehaviour
             for (int i = 0; i < triggerPayingRateEffectList.Count; i++)
             {
                 List<float> idEffect = triggerPayingRateEffectList[i];
-                float effectReset = (idEffect[1] / finalPayingRate) * finalPayingAmount;
+                float effectReset = (idEffect[1] / cFinalPayingRate) * cFinalPayingAmount;
                 List<float> newIDEffect = new List<float>();
                 newIDEffect.Add(idEffect[0]);
                 newIDEffect.Add(effectReset);
@@ -660,7 +664,7 @@ public class PlayerItem : MonoBehaviour
         //触发者的贡献
         if(payR > 0)
         {
-            float effectReset = (payR / finalPayingRate) * finalPayingAmount;
+            float effectReset = (payR / cFinalPayingRate) * cFinalPayingAmount;
             List<float> newIDEffect = new List<float>();
             newIDEffect.Add(itemID);
             newIDEffect.Add(effectReset);
@@ -677,9 +681,9 @@ public class PlayerItem : MonoBehaviour
 
         //概率
         float rate = Random.Range(0f, 1f);
-        if (rate <= finalPayingRate)
+        if (rate <= cFinalPayingRate)
         {
-            PlayerPaying(finalPayingAmount);
+            PlayerPaying(cFinalPayingAmount);
             gameMode.purchaseRateS += 1;
         }
 

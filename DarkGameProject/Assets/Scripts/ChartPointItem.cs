@@ -101,5 +101,13 @@ public class ChartPointItem : MonoBehaviour
             lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(distance / offsetV, 7f);
             
         }
+
+        //CLV Reset
+        if(chartObject.name == "CLVChart")
+        {
+            pointImage.transform.localScale = new Vector3(2, 2, 2);
+            lineImage.transform.localScale = new Vector3(1, 2, 1);
+
+        }
     }
 }

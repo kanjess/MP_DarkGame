@@ -517,7 +517,7 @@ MonoBehaviour:
   darkSocketContent: {fileID: 0}
   darkPlugPoint: {fileID: 2845534234411348847}
   linkDarkSocketPoint: {fileID: 0}
-  hasPath: 0
+  hasPath: 1
   darkRoadContent: {fileID: 4822185331338537690}
   darkRoadEventNum: 1
   inToOutBlockNum: 0

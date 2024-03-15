@@ -61,14 +61,15 @@
     <Compile Include="Assets/Scripts/GameMode.cs" />
     <Compile Include="Assets/Scripts/GameplayMapping.cs" />
     <Compile Include="Assets/Scripts/MappingNode.cs" />
+    <Compile Include="Assets/Scripts/NestedScrollRect.cs" />
     <Compile Include="Assets/Scripts/GameplayItemUIItemDrag.cs" />
     <Compile Include="Assets/Scripts/PlayerItem.cs" />
     <Compile Include="Assets/Scripts/CameraControl.cs" />
+    <Compile Include="Assets/Scripts/GameplayEffect.cs" />
     <Compile Include="Assets/Scripts/GameplayItemUIItem.cs" />
     <Compile Include="Assets/Scripts/GameplayItem.cs" />
     <Compile Include="Assets/Scripts/BasicAction.cs" />
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
-    <Compile Include="Assets/Scripts/GameplayEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

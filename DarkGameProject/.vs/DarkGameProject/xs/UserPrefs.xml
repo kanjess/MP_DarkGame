@@ -1,19 +1,19 @@
 ﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DesignPanel.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameplayItem.cs">
     <Files>
       <File FileName="Assets/Scripts/BasicAction.cs" Line="1248" Column="23" />
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="97" Column="25" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" Line="86" Column="11" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="1230" Column="106" />
-      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="20" Column="49" />
-      <File FileName="Assets/Scripts/GameMode.cs" Line="264" Column="39" />
-      <File FileName="Assets/Scripts/GameplayEffect.cs" Line="222" Column="10" />
-      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" Line="18" Column="35" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="685" Column="10" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="1175" Column="72" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" />
+      <File FileName="Assets/Scripts/GameplayMapping.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameMode.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" />
+      <File FileName="Assets/Scripts/ChartPointItem.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="bfc840c4-d390-425b-8935-7bdc63441920" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="4becb4b8-f3b3-4bcb-828b-84cac40eae93" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

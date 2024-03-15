@@ -74,7 +74,7 @@ public class GameMode : MonoBehaviour
     public List<int> usersPerTimeList;
     //每用户付费
     public List<float> revenuePerUsersList;
-    //生命周期
+    //生命周期lifetime
     public int userBatchOrder = 0;
     public List<List<GameObject>> userObjectPerTimeListList;
     public List<List<float>> userLifePerTimeListList;
@@ -84,6 +84,9 @@ public class GameMode : MonoBehaviour
     public List<List<float>> contributionOfRevenue;
     public List<List<float>> sortedContributionOfLivetime;
     public List<List<float>> sortedContributionOfRevenue;
+    //CLV
+    public List<float> clvList;
+    public float lastCLV = 0f;
 
 
     private void Awake()
@@ -124,6 +127,8 @@ public class GameMode : MonoBehaviour
         contributionOfRevenue = new List<List<float>>();
         sortedContributionOfLivetime = new List<List<float>>();
         sortedContributionOfRevenue = new List<List<float>>();
+
+        clvList = new List<float>();
     }
 
     // Start is called before the first frame update
@@ -309,6 +314,17 @@ public class GameMode : MonoBehaviour
             contributionOfLivetime = new List<List<float>>();
             contributionOfRevenue = new List<List<float>>();
 
+            //CLV
+            if(userLifetimeList.Count > clvList.Count)
+            {
+                float lf = userLifetimeList[userLifetimeList.Count - 1];
+                float cv = revenuePerUsersList[userLifetimeList.Count - 1];
+
+                clvList.Add(lf * cv);
+
+                lastCLV = clvList[clvList.Count - 1];
+            }
+
             //全局平均
             averageRetention = retentionRateList.Average();
             averagePeymentConversion = purchaseRateList.Average();
@@ -324,6 +340,7 @@ public class GameMode : MonoBehaviour
         designPanel.AverageLifetimeChart();
         designPanel.LifetimePieChart();
         designPanel.RevenuePieChart();
+        designPanel.CustomerLifetimeValueChart();
     }
 
     //Effect检测和入库（全局效果）

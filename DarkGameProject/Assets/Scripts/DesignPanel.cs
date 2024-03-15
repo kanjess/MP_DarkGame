@@ -53,6 +53,18 @@ public class DesignPanel : MonoBehaviour
     private GameObject AverageRetentionNumText;
     private GameObject AveragePayingNumText;
     private GameObject AverageRevenuePerPlayerNumText;
+    //clv
+    private GameObject CLVNumText;
+    public GameObject clvPointItem;
+    private GameObject clvPanel;
+    private GameObject clvChartContent;
+    private GameObject clvItemContent;
+    private int clvDataNum = 0;
+    private GameObject clvYText1;
+    private GameObject clvYText2;
+    private GameObject clvYText3;
+    private GameObject clvYText4;
+    private GameObject clvYText5;
     //付费率 报表
     public GameObject pcrPointItem;
     private GameObject pcrPanel;
@@ -210,6 +222,24 @@ public class DesignPanel : MonoBehaviour
         AveragePayingNumText = companyPanelAveragePayingContent.transform.Find("NumText").gameObject;
         GameObject companyPanelAverageRevenuePerPlayerContent = companyPanelBasicInfoBanner.transform.Find("AverageRevenuePerPlayerContent").gameObject;
         AverageRevenuePerPlayerNumText = companyPanelAverageRevenuePerPlayerContent.transform.Find("NumText").gameObject;
+
+        GameObject companyPanelCLVContent = companyPanelBasicInfoBanner.transform.Find("CLVContent").gameObject;
+        CLVNumText = companyPanelCLVContent.transform.Find("NumText").gameObject;
+        clvPanel = companyPanelCLVContent.transform.Find("CLVChart").gameObject;
+        clvChartContent = clvPanel.transform.Find("ChartContent").gameObject;
+        GameObject clvScrollView = clvChartContent.transform.Find("ScrollView").gameObject;
+        GameObject clvViewport = clvScrollView.transform.Find("Viewport").gameObject;
+        clvItemContent = clvViewport.transform.Find("PointContent").gameObject;
+        GameObject clvLine1 = clvChartContent.transform.Find("Line_1").gameObject;
+        clvYText1 = clvLine1.transform.Find("Text").gameObject;
+        GameObject clvLine2 = clvChartContent.transform.Find("Line_2").gameObject;
+        clvYText2 = clvLine2.transform.Find("Text").gameObject;
+        GameObject clvLine3 = clvChartContent.transform.Find("Line_3").gameObject;
+        clvYText3 = clvLine3.transform.Find("Text").gameObject;
+        GameObject clvLine4 = clvChartContent.transform.Find("Line_4").gameObject;
+        clvYText4 = clvLine4.transform.Find("Text").gameObject;
+        GameObject clvLine5 = clvChartContent.transform.Find("Line_5").gameObject;
+        clvYText5 = clvLine5.transform.Find("Text").gameObject;
 
         pcrPanel = companyPanelChartListContent.transform.Find("AveragePurchaseRatePanel").gameObject;
         pcrChartContent = pcrPanel.transform.Find("ChartContent").gameObject;
@@ -886,7 +916,7 @@ public class DesignPanel : MonoBehaviour
                         GameObject pItem = Instantiate(arptPointItem) as GameObject;
                         pItem.transform.SetParent(arptItemContent.transform);
 
-                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, arptDataNum + i, companyPanel, arptPanel, arptChartContent, preItem);
+                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, arptPanel, arptChartContent, preItem);
 
                         pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(219f / 255f, 0f, 189f / 255f, 1f);
                         pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(219f / 255f, 0f, 189f / 255f, 1f);
@@ -1089,7 +1119,7 @@ public class DesignPanel : MonoBehaviour
                         GameObject pItem = Instantiate(ltPointItem) as GameObject;
                         pItem.transform.SetParent(ltItemContent.transform);
 
-                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, ltDataNum + i, companyPanel, ltPanel, ltChartContent, ltItem);
+                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, ltPanel, ltChartContent, ltItem);
 
                         pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(222f / 255f, 29f / 255f, 32f / 255f, 1f);
                         pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(222f / 255f, 29f / 255f, 32f / 255f, 1f);
@@ -1220,13 +1250,13 @@ public class DesignPanel : MonoBehaviour
                     //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
                 }
 
-                if (top10LT == allLifeT)
+                if (top10LT / allLifeT < 0.99f)
                 {
                     ltContributionItemDesc_11.SetActive(true);
                     //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 0, 1);
                     //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
                 }
-                else if (top10LT < allLifeT)
+                else
                 {
                     ltContributionItemDesc_11.SetActive(false);
                     //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 1, 1);
@@ -1343,13 +1373,13 @@ public class DesignPanel : MonoBehaviour
                     //targetDescItme.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
                 }
 
-                if (top10M == allM)
+                if (top10M / allM < 0.99f)
                 {
                     ltContributionItemDesc_11.SetActive(false);
                     //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 0, 1);
                     //ltContributionItemDesc_11.GetComponent<RectTransform>().sizeDelta = new Vector2(33f, 0f);
                 }
-                else if (top10M < allM)
+                else
                 {
                     ltContributionItemDesc_11.SetActive(true);
                     //ltContributionItemDesc_11.transform.localScale = new Vector3(1, 1, 1);
@@ -1358,6 +1388,159 @@ public class DesignPanel : MonoBehaviour
 
             }
         }
+    }
+    //clv
+    public void CustomerLifetimeValueChart()
+    {
+        CLVNumText.GetComponent<Text>().text = numberText(gameMode.lastCLV);
+
+        if (gameMode.clvList.Count > 0)
+        {
+            if (clvDataNum >= gameMode.clvList.Count)
+            {
+                //数据无更新
+            }
+            else if (clvDataNum < gameMode.clvList.Count)
+            {
+                //更新
+                //标线更新
+                float clvMax = (float)gameMode.clvList.Max();
+                float? clvMin = gameMode.clvList.Where(x => x != 0).DefaultIfEmpty().Min();
+                if (clvMin.HasValue == false)
+                {
+                    clvMin = 0;
+                }
+                float rrrmax = 1f;
+                float rrrmaxf = 1f;
+                //Debug.Log(arptMin + " - " + arptMax);
+                if (clvMin == 0f)
+                {
+                    if (clvMax == 0f)
+                    {
+                        clvMax = 100f;
+                        clvMin = 50f;
+                    }
+                    else
+                    {
+                        clvMin = clvMax / 2f;
+
+                        if (clvMin == 0f)
+                        {
+                            clvMin = clvMax;
+                        }
+                    }
+
+                }
+
+                if (clvMax / clvMin <= 2f)
+                {
+                    rrrmaxf = clvMax * 3f;
+                }
+                else if (clvMax / clvMin > 2f && clvMax / clvMin <= 3f)
+                {
+                    rrrmaxf = clvMax * 2.5f;
+                }
+                else if (clvMax / clvMin > 3f && clvMax / clvMin <= 4f)
+                {
+                    rrrmaxf = clvMax * 2f;
+                }
+                else if (clvMax / clvMin > 4f && clvMax / clvMin <= 5f)
+                {
+                    rrrmaxf = clvMax * 1.5f;
+                }
+                else if (clvMax / clvMin > 5f)
+                {
+                    rrrmaxf = clvMax * 1.2f;
+                }
+
+                if (rrrmaxf < 1f)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 1 && rrrmaxf < 10)
+                {
+                    rrrmax = rrrmaxf;
+                }
+                else if (rrrmaxf >= 10 && rrrmaxf < 100)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 10) * 10;
+                }
+                else if (rrrmaxf >= 100 && rrrmaxf < 1000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 100) * 100;
+                }
+                else if (rrrmaxf >= 1000 && rrrmaxf < 1000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000) * 1000;
+                }
+                else if (rrrmaxf >= 1000000 && rrrmaxf < 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000) * 1000000;
+                }
+                else if (rrrmaxf >= 1000000000)
+                {
+                    rrrmax = Mathf.CeilToInt(rrrmaxf / 1000000000) * 1000000000;
+                }
+                float rrrInter = rrrmax / 5f;
+                float rrrLine1 = 1 * rrrInter;
+                float rrrLine2 = 2 * rrrInter;
+                float rrrLine3 = 3 * rrrInter;
+                float rrrLine4 = 4 * rrrInter;
+                clvYText1.GetComponent<Text>().text = numberText(rrrLine1);
+                clvYText2.GetComponent<Text>().text = numberText(rrrLine2);
+                clvYText3.GetComponent<Text>().text = numberText(rrrLine3);
+                clvYText4.GetComponent<Text>().text = numberText(rrrLine4);
+                clvYText5.GetComponent<Text>().text = numberText(rrrmax);
+
+                //内容更新
+                for (int i = 0; i < gameMode.clvList.Count; i++)
+                {
+                    float rrr = gameMode.clvList[i];
+
+                    GameObject preItem = null;
+                    if (i == 0)
+                    {
+                        preItem = null;
+                    }
+                    else
+                    {
+                        preItem = clvItemContent.transform.GetChild(i - 1).gameObject;
+                    }
+
+                    if (i < clvDataNum)
+                    {
+                        //刷新
+                        clvItemContent.transform.GetChild(i).gameObject.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, clvPanel, clvChartContent, preItem);
+                    }
+                    else if (i >= clvDataNum)
+                    {
+                        //新增
+                        GameObject pItem = Instantiate(clvPointItem) as GameObject;
+                        pItem.transform.SetParent(clvItemContent.transform);
+
+                        pItem.GetComponent<ChartPointItem>().SetDetail(rrr, rrrmax, i, companyPanel, clvPanel, clvChartContent, preItem);
+
+                        pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(233f / 255f, 23f / 255f, 8f / 255f, 1f);
+                        pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(233f / 255f, 23f / 255f, 8f / 255f, 1f);
+                    }
+
+                    if (clvItemContent.transform.childCount >= 45)
+                    {
+                        //删减
+                        //Destroy(pcrItemContent.transform.GetChild(0).gameObject);
+                    }
+                }
+
+                clvDataNum = gameMode.clvList.Count;
+
+                Invoke("CustomerLifetimeValueChartPosReset", 0.1f);
+            }
+        }
+    }
+    private void CustomerLifetimeValueChartPosReset()
+    {
+        float ss = clvItemContent.GetComponent<RectTransform>().sizeDelta.x;
+        clvItemContent.transform.DOLocalMoveX(-ss, 0f);
     }
 
     public string numberText(float num)
