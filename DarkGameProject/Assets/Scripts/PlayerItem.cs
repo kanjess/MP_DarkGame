@@ -38,6 +38,7 @@ public class PlayerItem : MonoBehaviour
 
     private float liveTime = 0f;
     private List<float> circleLifeTimeList;
+    private float cuMoney = 0f;
 
     public int circleNum = 0;  //圈数
     private bool circleAdd = false;
@@ -474,6 +475,8 @@ public class PlayerItem : MonoBehaviour
             //
             gameMode.cumulativeRevenue += pay;
             gameMode.revenuePerTime += pay;
+
+            cuMoney += pay;
         }
         
     }
@@ -522,6 +525,8 @@ public class PlayerItem : MonoBehaviour
         }
         float wholeLifetime = circleN + halfCircle;
         gameMode.userLifePerTimeListList[batchOrder].Add(wholeLifetime);
+        //
+        gameMode.userMoneyPerTimeListList[batchOrder].Add(cuMoney);  //死的时候加累计金钱
         //本体列表销毁
         gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
 

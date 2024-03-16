@@ -13,7 +13,7 @@
             {
             "id": 102,
             "name": "PVE",
-            "retention": 0.02,
+            "retention": 0.01,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -25,7 +25,7 @@
             "name": "PVP",
             "retention": 0,
             "socialBound": 0,
-            "payingRate": 0.02,
+            "payingRate": 0.01,
             "payingAmount": 0,
             "mood": 0,
             "triggerRate": 1
@@ -43,7 +43,7 @@
             {
             "id": 431,
             "name": "Daily Login Rewards",
-            "retention": 0.2,
+            "retention": 0.1,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -53,7 +53,7 @@
             {
             "id": 433,
             "name": "Cumulative Online Rewards",
-            "retention": 0.1,
+            "retention": 0.05,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -63,7 +63,7 @@
             {
             "id": 432,
             "name": "Daily Task",
-            "retention": 0.1,
+            "retention": 0.05,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -84,7 +84,7 @@
             "id": 411,
             "name": "PVP Ranking&Bragging",
             "retention": 0,
-            "socialBound": 0.1,
+            "socialBound": 0.05,
             "payingRate": 0.05,
             "payingAmount": 0,
             "mood": -5,
@@ -94,7 +94,7 @@
             "id": 412,
             "name": "Compulsive socializing",
             "retention": 0,
-            "socialBound": 0.2,
+            "socialBound": 0.1,
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -10,
@@ -103,7 +103,7 @@
             {
             "id": 402,
             "name": "PVE Grinding",
-            "retention": 0.1,
+            "retention": 0.05,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -143,7 +143,7 @@
             {
             "id": 403,
             "name": "Energy System",
-            "retention": 0.1,
+            "retention": 0.05,
             "socialBound": 0,
             "payingRate": 0.05,
             "payingAmount": 0,
@@ -163,7 +163,7 @@
             {
             "id": 436,
             "name": "VIP System",
-            "retention": 0.1,
+            "retention": 0.05,
             "socialBound": 0,
             "payingRate": 0.2,
             "payingAmount": 0,

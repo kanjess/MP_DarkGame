@@ -79,6 +79,7 @@ public class GameMode : MonoBehaviour
     public int userBatchOrder = 0;
     public List<List<GameObject>> userObjectPerTimeListList;
     public List<List<float>> userLifePerTimeListList;
+    public List<List<float>> userMoneyPerTimeListList;
     public List<float> userLifetimeList;
     //item贡献比例统计
     public List<List<float>> contributionOfLivetime;
@@ -121,8 +122,11 @@ public class GameMode : MonoBehaviour
         userObjectPerTimeListList = new List<List<GameObject>>();
         userObjectPerTimeListList.Add(uoptList);
         List<float> ulptList = new List<float>();
+        List<float> umptList = new List<float>();
         userLifePerTimeListList = new List<List<float>>();
+        userMoneyPerTimeListList = new List<List<float>>();
         userLifePerTimeListList.Add(ulptList);
+        userMoneyPerTimeListList.Add(umptList);
         userLifetimeList = new List<float>();
 
         contributionOfLivetime = new List<List<float>>();
@@ -231,15 +235,27 @@ public class GameMode : MonoBehaviour
             userObjectPerTimeListList.Add(uoptList);
             List<float> ulptList = new List<float>();
             userLifePerTimeListList.Add(ulptList);
+            List<float> umptList = new List<float>();
+            userMoneyPerTimeListList.Add(umptList);
             //是否显示
-            for(int i = 0; i < userObjectPerTimeListList.Count; i++)
+            for (int i = 0; i < userObjectPerTimeListList.Count; i++)
             {
                 if(userObjectPerTimeListList[i].Count == 0 && userLifePerTimeListList[i].Count > 0)  //该时间段玩家已全部销毁
                 {
                     float lifeT = userLifePerTimeListList[i].Average();
-                    if(i + 1 > userLifetimeList.Count)
+
+                    float moneyT = 0f;
+                    if (userMoneyPerTimeListList[i].Count > 0)
+                    {
+                        moneyT = userMoneyPerTimeListList[i].Average();
+                    }
+
+                    if (i + 1 > userLifetimeList.Count)
                     {
                         userLifetimeList.Add(lifeT);
+                        //CLV
+                        clvList.Add(moneyT);
+                        //Debug.Log(clvList[clvList.Count - 1]);
                     }      
                 }
                 else if (userObjectPerTimeListList[i].Count > 0 || userLifePerTimeListList[i].Count == 0)
@@ -317,13 +333,8 @@ public class GameMode : MonoBehaviour
             contributionOfRevenue = new List<List<float>>();
 
             //CLV
-            if(userLifetimeList.Count > clvList.Count)
+            if(clvList.Count > 0)
             {
-                float lf = userLifetimeList[userLifetimeList.Count - 1];
-                float cv = revenuePerUsersList[userLifetimeList.Count - 1];
-
-                clvList.Add(lf * cv);
-
                 lastCLV = clvList[clvList.Count - 1];
             }
 
