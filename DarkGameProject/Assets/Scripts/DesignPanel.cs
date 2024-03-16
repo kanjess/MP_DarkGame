@@ -432,6 +432,9 @@ public class DesignPanel : MonoBehaviour
                 designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice *= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel;
             }
         });
+
+        //临时
+        PlayerReportBtnIn();
     }
 
     // Update is called once per frame
@@ -873,6 +876,14 @@ public class DesignPanel : MonoBehaviour
                 companyReportBtnShow = true;
 
                 ComReportBtnIn();
+            }
+
+            //玩家界面解锁
+            if (playerReportBtnShow == false && gameMode.playerLevel >= 1)
+            {
+                playerReportBtnShow = true;
+
+                PlayerReportBtnIn();
             }
         }
     }
@@ -1907,7 +1918,13 @@ public class DesignPanel : MonoBehaviour
     }
     public void ComReportBtnIn()
     {
+        companyReportBtnShow = true;
         companySceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
+    }
+    public void PlayerReportBtnIn()
+    {
+        playerReportBtnShow = true;
+        playerSceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
     }
 
     string itemName(int itemID)
