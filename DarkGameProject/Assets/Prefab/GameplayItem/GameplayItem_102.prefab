@@ -684,6 +684,7 @@ MonoBehaviour:
   inToOutBlockNum: 3
   isGlobalEffect: 1
   isTriggerEffect: 0
+  triggerEventType: 0
 --- !u!1 &3961448870717849090
 GameObject:
   m_ObjectHideFlags: 0

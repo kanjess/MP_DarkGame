@@ -6,6 +6,7 @@ using System.Linq;
 public class GameMode : MonoBehaviour
 {
     public int maxPlayer;
+    public int maxPlayerAdd;
     public int mainRoadDistance = 0;
 
     //在场效果
@@ -92,6 +93,7 @@ public class GameMode : MonoBehaviour
     private void Awake()
     {
         maxPlayer = 20;  //20
+        maxPlayerAdd = 2;
 
         playerCreateInterval = 1f;
 

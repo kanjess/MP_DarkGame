@@ -88,6 +88,17 @@ public class PlayerItem : MonoBehaviour
     public List<List<float>> triggerPayingRateEffectList;  //trigger付费率效果
     public List<List<float>> triggerPayingAmountEffectList;  //trigger付费额效果
 
+    //心情图片
+    private GameObject moodPic01;
+    private GameObject moodPic02;
+    private GameObject moodPic03;
+    private GameObject moodPic04;
+    private GameObject moodPic05;
+    private GameObject moodPic06;
+    private GameObject moodPic07;
+    private GameObject moodPic08;
+    private GameObject moodPic09;
+
 
     private void Awake()
     {
@@ -113,6 +124,16 @@ public class PlayerItem : MonoBehaviour
         playerFaceContent = this.gameObject.transform.Find("PlayerFaceContent").gameObject;
         playerLosingFace = this.gameObject.transform.Find("PlayerLosingFace").gameObject;
 
+        moodPic01 = playerFaceContent.transform.Find("PlayerFace_0").gameObject;
+        moodPic02 = playerFaceContent.transform.Find("PlayerFace_1").gameObject;
+        moodPic03 = playerFaceContent.transform.Find("PlayerFace_2").gameObject;
+        moodPic04 = playerFaceContent.transform.Find("PlayerFace_3").gameObject;
+        moodPic05 = playerFaceContent.transform.Find("PlayerFace_4").gameObject;
+        moodPic06 = playerFaceContent.transform.Find("PlayerFace_5").gameObject;
+        moodPic07 = playerFaceContent.transform.Find("PlayerFace_6").gameObject;
+        moodPic08 = playerFaceContent.transform.Find("PlayerFace_7").gameObject;
+        moodPic09 = playerFaceContent.transform.Find("PlayerFace_8").gameObject;
+
         activePlayer = false;
 
         satisfactionIndex = 70;
@@ -125,7 +146,7 @@ public class PlayerItem : MonoBehaviour
         socialDampingValue = 1.6f;
         accountChurnDampingValue = 1.5f;
 
-        playerInbornMood = 80f;
+        playerInbornMood = 90f;  //出生心情
         satisfactionIndex = playerInbornMood;
 
 }
@@ -166,6 +187,8 @@ public class PlayerItem : MonoBehaviour
                 {
                     firstTimeToActive = true;
                     activePlayer = true;
+
+                    PlayerMoodLogic();
                 }
                 else if (firstTimeToActive == true)
                 {
@@ -185,12 +208,60 @@ public class PlayerItem : MonoBehaviour
                     circleAdd = false;
                 }
             }
-
-            PlayerMoodLogic();
-
         }
 
-        //累积生存时间
+        //心情表情
+        if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
+        {
+            moodPic01.transform.localScale = new Vector3(0, 0, 0);
+            moodPic02.transform.localScale = new Vector3(0, 0, 0);
+            moodPic03.transform.localScale = new Vector3(0, 0, 0);
+            moodPic04.transform.localScale = new Vector3(0, 0, 0);
+            moodPic05.transform.localScale = new Vector3(0, 0, 0);
+            moodPic06.transform.localScale = new Vector3(0, 0, 0);
+            moodPic07.transform.localScale = new Vector3(0, 0, 0);
+            moodPic08.transform.localScale = new Vector3(0, 0, 0);
+            moodPic09.transform.localScale = new Vector3(0, 0, 0);
+
+            if (satisfactionIndex >= 80)
+            {
+                moodPic01.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 70 && satisfactionIndex < 80)
+            {
+                moodPic02.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 60 && satisfactionIndex < 70)
+            {
+                moodPic03.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 50 && satisfactionIndex < 60)
+            {
+                moodPic04.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 40 && satisfactionIndex < 50)
+            {
+                moodPic05.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 30 && satisfactionIndex < 40)
+            {
+                moodPic06.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 20 && satisfactionIndex < 30)
+            {
+                moodPic07.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex >= 10 && satisfactionIndex < 20)
+            {
+                moodPic08.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (satisfactionIndex < 10)
+            {
+                moodPic09.transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+
+            //累积生存时间
         if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
         {
             liveTime += Time.deltaTime;
@@ -411,6 +482,18 @@ public class PlayerItem : MonoBehaviour
     void PlayerLosing()
     {
         activePlayer = false;
+
+        //流失表情的变更
+        for(int i = 0; i < playerFaceContent.transform.childCount; i++)
+        {
+            GameObject pFaceI = playerFaceContent.transform.GetChild(i).gameObject;
+            if(pFaceI.transform.localScale == new Vector3(1, 1, 1))
+            {
+                playerLosingFace.GetComponent<SpriteRenderer>().sprite = pFaceI.GetComponent<SpriteRenderer>().sprite;
+                break;
+            }
+        }
+
         playerFaceContent.transform.localScale = new Vector3(0, 0, 0);
         playerLosingFace.transform.localScale = new Vector3(1, 1, 1);
 
@@ -495,7 +578,7 @@ public class PlayerItem : MonoBehaviour
             }
 
             finalPayingRate = basicPayRate + itemPayingRate;
-            finalPayingAmount = basicPayAmount + itemPayingAmount;
+            finalPayingAmount = basicPayAmount * (1 + itemPayingAmount);
 
             //统计贡献
             //全局
@@ -516,7 +599,7 @@ public class PlayerItem : MonoBehaviour
                 for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
                 {
                     List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
-                    float effectReset = (idEffect[1]);
+                    float effectReset = basicPayAmount * (1 + idEffect[1]);
                     List<float> newIDEffect = new List<float>();
                     newIDEffect.Add(idEffect[0]);
                     newIDEffect.Add(effectReset);
@@ -541,7 +624,7 @@ public class PlayerItem : MonoBehaviour
                 for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
                 {
                     List<float> idEffect = triggerPayingAmountEffectList[i];
-                    float effectReset = (idEffect[1]);
+                    float effectReset = basicPayAmount * (1 + idEffect[1]);
                     List<float> newIDEffect = new List<float>();
                     newIDEffect.Add(idEffect[0]);
                     newIDEffect.Add(effectReset);
@@ -607,8 +690,8 @@ public class PlayerItem : MonoBehaviour
         //添加触发者的属性
         finalPayingRate = basicPayRate + itemPayingRate;
         float cFinalPayingRate = finalPayingRate + payR;
-        finalPayingAmount = basicPayAmount + itemPayingAmount;
-        float cFinalPayingAmount = finalPayingAmount + payM;
+        finalPayingAmount = basicPayAmount * (1 + itemPayingAmount);
+        float cFinalPayingAmount = basicPayAmount * (1 + itemPayingAmount + payM);
 
         //统计贡献
         //全局
@@ -629,7 +712,7 @@ public class PlayerItem : MonoBehaviour
             for (int i = 0; i < gameMode.globalPayingAmountEffectList.Count; i++)
             {
                 List<float> idEffect = gameMode.globalPayingAmountEffectList[i];
-                float effectReset = (idEffect[1]);
+                float effectReset = basicPayAmount * (1 + idEffect[1]);
                 List<float> newIDEffect = new List<float>();
                 newIDEffect.Add(idEffect[0]);
                 newIDEffect.Add(effectReset);
@@ -654,7 +737,7 @@ public class PlayerItem : MonoBehaviour
             for (int i = 0; i < triggerPayingAmountEffectList.Count; i++)
             {
                 List<float> idEffect = triggerPayingAmountEffectList[i];
-                float effectReset = (idEffect[1]);
+                float effectReset = basicPayAmount * (1 + idEffect[1]);
                 List<float> newIDEffect = new List<float>();
                 newIDEffect.Add(idEffect[0]);
                 newIDEffect.Add(effectReset);

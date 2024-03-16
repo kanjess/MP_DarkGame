@@ -3,7 +3,7 @@
         {
             "id": 101,
             "name": "System Structure",
-            "retention": 0,
+            "retention": 0.01,
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
@@ -47,7 +47,7 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": 0,
+            "mood": -5,
             "triggerRate": 1
             },
             {
@@ -57,7 +57,7 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": 0,
+            "mood": -10,
             "triggerRate": 1
             },
             {
@@ -67,7 +67,7 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": 0,
+            "mood": -5,
             "triggerRate": 1
             },
             {
@@ -77,7 +77,7 @@
             "socialBound": 0,
             "payingRate": 0.1,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1
             },
             {
@@ -87,7 +87,7 @@
             "socialBound": 0.1,
             "payingRate": 0.05,
             "payingAmount": 0,
-            "mood": -1,
+            "mood": -5,
             "triggerRate": 1
             },
             {
@@ -97,7 +97,7 @@
             "socialBound": 0.2,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": 0,
+            "mood": -10,
             "triggerRate": 1
             },
             {
@@ -107,7 +107,7 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -2,
+            "mood": -5,
             "triggerRate": 1
             },
             {
@@ -117,8 +117,8 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0,
-            "mood": 0,
-            "triggerRate": 1
+            "mood": -5,
+            "triggerRate": 0.99
             },
             {
             "id": 434,
@@ -127,7 +127,7 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0.5,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 0.2
             },
             {
@@ -137,7 +137,7 @@
             "socialBound": 0,
             "payingRate": 1,
             "payingAmount": 0.5,
-            "mood": -10,
+            "mood": -15,
             "triggerRate": -1
             },
             {
@@ -157,7 +157,7 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0.33,
-            "mood": -5,
+            "mood": -20,
             "triggerRate": 0.33
             },
             {

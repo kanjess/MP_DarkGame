@@ -25,11 +25,13 @@ public class GameplayEffect : MonoBehaviour
     public List<GameItemEffect> gameItemEffectList;
     public Dictionary<int, GameItemEffect> dic_gameItemEffect;
 
+    public float effectLevelUp;
     
     private void Awake()
     {
         GameItemEffectDataSetup();
 
+        effectLevelUp = 0.03f;
     }
 
     // Start is called before the first frame update
@@ -130,6 +132,16 @@ public class GameplayEffect : MonoBehaviour
             return (dic_gameItemEffect[id]);
         }
         return (new GameItemEffect());
+    }
+
+    public void GameItemEffectLevelUp(int itemID)
+    {
+        GetGameItemEffectList(itemID).retention *= (1 + effectLevelUp);
+        GetGameItemEffectList(itemID).socialBound *= (1 + effectLevelUp);
+        GetGameItemEffectList(itemID).payingRate *= (1 + effectLevelUp);
+        GetGameItemEffectList(itemID).payingAmount *= (1 + effectLevelUp);
+        GetGameItemEffectList(itemID).mood *= (1 + effectLevelUp);
+        
     }
 
 }

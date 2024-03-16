@@ -20,11 +20,14 @@ public class DesignPanel : MonoBehaviour
     private GameObject designPanelContent;
     private GameObject designPanelClose;
 
+    private GameObject itemMoveBtn;
     private GameObject itemRotationBtn;
+    private GameObject moveSlide;
 
     private GameMode gameMode;
     private CameraControl cameraControl;
     private GameplayMapping gameplayMapping;
+    private GameplayEffect gameplayEffect;
 
     private GameObject moneyShow;
 
@@ -155,12 +158,16 @@ public class DesignPanel : MonoBehaviour
     private GameObject designItemLevelPanelContent;
     private GameObject designItemLevelPanelBg;
     private GameObject designItemLevelPanel;
+    private GameObject designItemLevelBgPicContent;
     private GameObject designItemLevelNum;
     private GameObject designItemLevelItemName;
     private GameObject designItemLevelPanelItemShow;
     private GameObject designItemLevelPanelCloseBtn;
     private GameObject designItemLevelPanelItemDesc;
     private GameObject designItemLevelPanelEffectContent;
+    private GameObject designItemLevelPanelEffectItem_1;
+    private GameObject designItemLevelPanelEffectItem_2;
+    private GameObject designItemLevelPanelEffectItem_3;
     private GameObject designItemLevelPanelLevelUpBtn;
     private GameObject designItemLevelPanelLevelUpCost;
     private GameObject designItemLevelPanelLevelUpAllMoney;
@@ -177,7 +184,11 @@ public class DesignPanel : MonoBehaviour
         designPanelContent = designPanel.transform.Find("DesignPanelContent").gameObject;
         designPanelClose = designPanel.transform.Find("DesignPanelClose").gameObject;
         designPanelPosCheckPoint = designPanel.transform.Find("PosCheckPoint").gameObject;
-        itemRotationBtn = designPanel.transform.Find("ItemRotationBtn").gameObject;
+
+        GameObject moveRotationContent = designPanel.transform.Find("MoveRotationContent").gameObject;
+        moveSlide = moveRotationContent.transform.Find("Slide").gameObject;
+        itemMoveBtn = moveRotationContent.transform.Find("ItemMoveBtn").gameObject;
+        itemRotationBtn = moveRotationContent.transform.Find("ItemRotationBtn").gameObject;
 
         GameObject designPanelScrollView = designPanelContent.transform.Find("ScrollView").gameObject;
         GameObject designPanelViewport = designPanelScrollView.transform.Find("Viewport").gameObject;
@@ -190,6 +201,7 @@ public class DesignPanel : MonoBehaviour
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
+        gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
 
         GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
         GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
@@ -340,6 +352,8 @@ public class DesignPanel : MonoBehaviour
         designItemLevelPanelContent = mainSceneUI.transform.Find("DesignItemLevelPanel").gameObject;
         designItemLevelPanelBg = designItemLevelPanelContent.transform.Find("Bg").gameObject;
         designItemLevelPanel = designItemLevelPanelContent.transform.Find("LevelPanel").gameObject;
+        GameObject designItemLeveBgPicMask = designItemLevelPanel.transform.Find("BgPicMask").gameObject;
+        designItemLevelBgPicContent = designItemLeveBgPicMask.transform.Find("BgPicContent").gameObject;
         GameObject designItemLevelPanelLevelContent = designItemLevelPanel.transform.Find("LevelContent").gameObject;
         designItemLevelNum = designItemLevelPanelLevelContent.transform.Find("LevelNum").gameObject;
         designItemLevelItemName = designItemLevelPanel.transform.Find("ItemName").gameObject;
@@ -347,6 +361,9 @@ public class DesignPanel : MonoBehaviour
         designItemLevelPanelCloseBtn = designItemLevelPanel.transform.Find("CloseBtn").gameObject;
         designItemLevelPanelItemDesc = designItemLevelPanel.transform.Find("ItemDesc").gameObject;
         designItemLevelPanelEffectContent = designItemLevelPanel.transform.Find("ItemEffect").gameObject;
+        designItemLevelPanelEffectItem_1 = designItemLevelPanelEffectContent.transform.Find("ItemEffectItem_1").gameObject;
+        designItemLevelPanelEffectItem_2 = designItemLevelPanelEffectContent.transform.Find("ItemEffectItem_2").gameObject;
+        designItemLevelPanelEffectItem_3 = designItemLevelPanelEffectContent.transform.Find("ItemEffectItem_3").gameObject;
         designItemLevelPanelLevelUpBtn = designItemLevelPanel.transform.Find("LevelUpBtn").gameObject;
         GameObject designItemLevelPanelLevelUpCostContent = designItemLevelPanelLevelUpBtn.transform.Find("CostContent").gameObject;
         designItemLevelPanelLevelUpCost = designItemLevelPanelLevelUpCostContent.transform.Find("MoneyCost").gameObject;
@@ -362,15 +379,21 @@ public class DesignPanel : MonoBehaviour
         designItemBtn.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
         designPanelClose.GetComponent<Button>().onClick.AddListener(DesignPanelAnime);
 
+        //旋转模式
+        itemMoveBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            if (BasicAction.gameplayItemRotationMode == true)
+            {
+                BasicAction.gameplayItemRotationMode = false;
+                moveSlide.transform.DOMove(itemMoveBtn.transform.position, 0.2f);
+            }
+        });
         itemRotationBtn.GetComponent<Button>().onClick.AddListener(delegate
         {
             if(BasicAction.gameplayItemRotationMode == false)
             {
                 BasicAction.gameplayItemRotationMode = true;
-            }
-            else
-            {
-                BasicAction.gameplayItemRotationMode = false;
+                moveSlide.transform.DOMove(itemRotationBtn.transform.position, 0.2f);
             }
         });
 
@@ -392,6 +415,7 @@ public class DesignPanel : MonoBehaviour
             if(designItemPanelOpen == true)
             {
                 DesignItemLevelPanel(null);
+                
             }
         });
         //item升级
@@ -401,6 +425,8 @@ public class DesignPanel : MonoBehaviour
             {
                 gameMode.companyMoney -= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice;
                 designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel++;
+                //简单粗暴的升级（效果+3%）
+                gameplayEffect.GameItemEffectLevelUp(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID);
 
                 //新价格
                 designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice *= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel;
@@ -445,8 +471,297 @@ public class DesignPanel : MonoBehaviour
         {
             designItemLevelNum.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel.ToString();
             designItemLevelItemName.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemName;
+
             designItemLevelPanelLevelUpCost.GetComponent<Text>().text = numberText(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice);
+            if (designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice <= gameMode.companyMoney)
+            {
+                designItemLevelPanelLevelUpCost.GetComponent<Text>().color = Color.black;
+            }
+            else
+            {
+                designItemLevelPanelLevelUpCost.GetComponent<Text>().color = Color.red;
+            }
             designItemLevelPanelLevelUpAllMoney.GetComponent<Text>().text = numberText(gameMode.companyMoney);
+
+            //图片
+            for (int i = 0; i < designItemLevelBgPicContent.transform.childCount; i++)
+            {
+                GameObject bgPicItem = designItemLevelBgPicContent.transform.GetChild(i).gameObject;
+
+                string iName = "BgPic_" + designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID;
+                if (bgPicItem.name == iName)
+                {
+                    bgPicItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                }
+                else
+                {
+                    bgPicItem.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+            }
+
+            //属性
+            if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention != 0 || gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound != 0)
+            {
+                designItemLevelPanelEffectItem_1.transform.localScale = new Vector3(1, 1, 1);
+                designItemLevelPanelEffectItem_1.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 74f);
+                //
+                string retentionS = "";
+                if(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention != 0)
+                {
+                    string reSS = "";
+                    if(Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) < 0.1)
+                    {
+                        reSS = "Marginally";
+                    }
+                    else if (Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) >= 0.1 && Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) < 0.2)
+                    {
+                        reSS = "Slightly";
+                    }
+                    else if (Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) >= 0.2 && Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) < 0.3)
+                    {
+                        reSS = "Moderately";
+                    }
+                    else if (Mathf.Abs(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention) >= 0.3)
+                    {
+                        reSS = "Significantly";
+                    }
+                    string reSS2 = "";
+                    if(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention > 0)
+                    {
+                        reSS2 = " improves";
+                        designItemLevelPanelEffectItem_1.transform.Find("Bg").gameObject.GetComponent<Image>().color = new Color(174 / 255f, 241 / 255f, 175 / 255f, 1f);
+                    }
+                    else
+                    {
+                        reSS2 = " diminishes";
+                        designItemLevelPanelEffectItem_1.transform.Find("Bg").gameObject.GetComponent<Image>().color = new Color(241 / 255f, 174 / 255f, 175 / 255f, 1f);
+                    }
+                    retentionS = reSS + reSS2 + " player short-term retention. ";
+                }
+
+                string socialBoundS = "";
+                if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound != 0)
+                {
+                    string sbSS = "";
+                    if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound < 0.1)
+                    {
+                        sbSS = "Marginally";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound >= 0.1 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound < 0.2)
+                    {
+                        sbSS = "Slightly";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound >= 0.2 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound < 0.3)
+                    {
+                        sbSS = "Moderately";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound >= 0.3)
+                    {
+                        sbSS = "Significantly";
+                    }
+                    designItemLevelPanelEffectItem_1.transform.Find("Bg").gameObject.GetComponent<Image>().color = new Color(174 / 255f, 241 / 255f, 175 / 255f, 1f);
+                    socialBoundS = sbSS + " improves player's social connections to increase the cost of leaving for the long-term.";
+                }
+
+                designItemLevelPanelEffectItem_1.transform.Find("EffectDesc").gameObject.GetComponent<Text>().text = "· " + retentionS + socialBoundS;
+            }
+            else
+            {
+                designItemLevelPanelEffectItem_1.transform.localScale = new Vector3(1, 0, 1);
+                designItemLevelPanelEffectItem_1.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 0f);
+            }
+            //
+            if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate != 0 || gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount != 0)
+            {
+                designItemLevelPanelEffectItem_2.transform.localScale = new Vector3(1, 1, 1);
+                designItemLevelPanelEffectItem_2.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 74f);
+                //
+                string payingRateS = "";
+                if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate != 0)
+                {
+                    string prSS = "";
+                    if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate < 0.1)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            prSS = "Marginal";
+                        }
+                        else
+                        {
+                            prSS = "Marginally";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate >= 0.1 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate < 0.2)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            prSS = "Slight";
+                        }
+                        else
+                        {
+                            prSS = "Slightly";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate >= 0.2 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate < 0.3)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            prSS = "Moderate";
+                        }
+                        else
+                        {
+                            prSS = "Moderately";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingRate >= 0.3)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            prSS = "Significant";
+                        }
+                        else
+                        {
+                            prSS = "Significantly";
+                        }
+                    }
+
+                    if(gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                    {
+                        //支付事件
+                        payingRateS = prSS + " paying conversion rate";
+                    }
+                    else
+                    {
+                        payingRateS = prSS + " improves player paying conversion rate. ";
+                    }
+                    
+                }
+
+                string payingAmountS = "";
+                if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount != 0)
+                {
+                    string paSS = "";
+                    if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount < 0.1)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            paSS = "Marginal";
+                        }
+                        else
+                        {
+                            paSS = "Marginally";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount >= 0.1 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount < 0.2)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            paSS = "Slight";
+                        }
+                        else
+                        {
+                            paSS = "Slightly";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount >= 0.2 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount < 0.3)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            paSS = "Moderate";
+                        }
+                        else
+                        {
+                            paSS = "Moderately";
+                        }
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).payingAmount >= 0.3)
+                    {
+                        if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                        {
+                            //支付事件
+                            paSS = "Significant";
+                        }
+                        else
+                        {
+                            paSS = "Significantly";
+                        }
+                    }
+
+                    if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                    {
+                        //支付事件
+                        payingAmountS = paSS + " paying amount";
+                    }
+                    else
+                    {
+                        payingAmountS = paSS + " improves player's paying amount.";
+                    }
+                }
+
+                if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).triggerRate != 1)
+                {
+                    //支付事件
+                    string linkw = "";
+                    if(payingRateS != "" && payingAmountS != "")
+                    {
+                        linkw = " and ";
+                    }
+                    designItemLevelPanelEffectItem_2.transform.Find("EffectDesc").gameObject.GetComponent<Text>().text = "· Probability encourages player's payment, with " + payingRateS + linkw + payingAmountS + ".";
+                }
+                else
+                {
+                    designItemLevelPanelEffectItem_2.transform.Find("EffectDesc").gameObject.GetComponent<Text>().text = "· " + payingRateS + payingAmountS;
+                }
+            }
+            else
+            {
+                designItemLevelPanelEffectItem_2.transform.localScale = new Vector3(1, 0, 1);
+                designItemLevelPanelEffectItem_2.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 0f);
+            }
+            //心情
+            if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood != 0)
+            {
+                designItemLevelPanelEffectItem_3.transform.localScale = new Vector3(1, 1, 1);
+                designItemLevelPanelEffectItem_3.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 74f);
+                //
+                string moodS = "";
+                if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood != 0)
+                {
+                    string mdSS = "";
+                    if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood < 0 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood >= -5)
+                    {
+                        mdSS = "Marginally";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood >= -10 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood < -5)
+                    {
+                        mdSS = "Slightly";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood >= -15 && gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood < -10)
+                    {
+                        mdSS = "Moderately";
+                    }
+                    else if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).mood < -15)
+                    {
+                        mdSS = "Significantly";
+                    }
+                    moodS = mdSS + " impacts the player's attitude towards the game.";
+                }
+
+                designItemLevelPanelEffectItem_3.transform.Find("EffectDesc").gameObject.GetComponent<Text>().text = "· " + moodS;
+            }
+            else
+            {
+                designItemLevelPanelEffectItem_3.transform.localScale = new Vector3(1, 0, 1);
+                designItemLevelPanelEffectItem_3.GetComponent<RectTransform>().sizeDelta = new Vector2(700f, 0f);
+            }
+
         }
     }
 
@@ -468,6 +783,8 @@ public class DesignPanel : MonoBehaviour
                 anime.OnComplete(() => designItemBtnAnime = false);
                 //暂停游戏
                 gameMode.gameProcessPause = true;
+
+                moveSlide.transform.position = itemMoveBtn.transform.position;
             }
             else
             {
@@ -544,6 +861,7 @@ public class DesignPanel : MonoBehaviour
         if((float)gameMode.playerExp / (float)gameMode.levelUpExp >= 1f)
         {
             gameMode.playerLevel++;
+            gameMode.maxPlayer += gameMode.maxPlayerAdd;
             gameMode.playerExp = 0;
             gameMode.levelUpExp = (int)(gameMode.basicLevelUpExp * (1 + (gameMode.playerLevel * gameMode.levelUpExpIncreaseValue / 10f)));
 
