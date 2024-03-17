@@ -5,7 +5,8 @@ using System.Linq;
 
 public class GameMode : MonoBehaviour
 {
-    public int maxPlayer;
+    public int maxPlayer0;
+    private int maxPlayer;
     public int maxPlayerAdd;
     public int mainRoadDistance = 0;
 
@@ -29,6 +30,7 @@ public class GameMode : MonoBehaviour
 
     private GameObject playerItemLayer;
 
+    private float playerCreateInterval0;
     private float playerCreateInterval;
     private float playerCreateTiming = 0f;
 
@@ -90,13 +92,39 @@ public class GameMode : MonoBehaviour
     public List<float> clvList;
     public float lastCLV = 0f;
 
+    //推广
+    public int promotionMode = 0; //0=无；1=ing；2=end
+    public float promotionUserCost = 0f;
+    private float promotionUserCostRandomValueMin;
+    private float promotionUserCostRandomValueMax;
+    public float promotionPrice = 0f;
+    public float promotionPriceValue = 100f;
+    public float promotionUserNumRandomMin;
+    public float promotionUserNumRandomMax;
+    public int promotionUserNumRandomMinNum;
+    public int promotionUserNumRandomMaxNum;
+    public int promotionLegalUserNum;
+    public int promotingUserNum = 0;
+    public float promotingRevenue = 0f;
+    private float promotingPlayerCreateIntervalValue;
 
     private void Awake()
     {
-        maxPlayer = 20;  //20
-        maxPlayerAdd = 2;
+        maxPlayer0 = 20;  //20
+        maxPlayer = maxPlayer0;
+        maxPlayerAdd = 0;
 
-        playerCreateInterval = 1f;
+        playerCreateInterval0 = 1f;
+        playerCreateInterval = playerCreateInterval0 * 1f;
+
+        promotionUserCost = 1f;
+        promotionPrice = 10f;
+        promotionPriceValue = 100f;
+        promotionUserCostRandomValueMin = 0.1f;
+        promotionUserCostRandomValueMax = 0.6f;
+        promotionUserNumRandomMin = 0.8f;
+        promotionUserNumRandomMax = 1.1f;
+        promotingPlayerCreateIntervalValue = 0.5f;
 
         playerItemLayer = GameObject.Find("PlayerObject").gameObject;
 
@@ -135,6 +163,7 @@ public class GameMode : MonoBehaviour
         sortedContributionOfRevenue = new List<List<float>>();
 
         clvList = new List<float>();
+
     }
 
     // Start is called before the first frame update
@@ -156,6 +185,8 @@ public class GameMode : MonoBehaviour
             }
             
         }
+
+        GamePromotionLogic();
     }
 
     //生成新玩家
@@ -175,6 +206,12 @@ public class GameMode : MonoBehaviour
                 pItem.GetComponent<PlayerItem>().PlayerDetailSet(playerStartObject);
                 pItem.GetComponent<PlayerItem>().batchOrder = userBatchOrder;
                 cumulativePlayers++;
+
+                if(promotionMode == 1)
+                {
+                    promotingUserNum++;
+                    pItem.GetComponent<PlayerItem>().isPromotingPlayer = true;
+                }
 
                 if(cumulativePlayers >= 60 && startStatistics == false)  //1秒1个
                 {
@@ -452,4 +489,92 @@ public class GameMode : MonoBehaviour
 
     }
 
+    //推广
+    public void GamePromotionLogic()
+    {
+        //正在推广
+        if(promotionMode == 1)
+        {
+            if(promotingUserNum >= promotionLegalUserNum)
+            {
+                GamePromotionEnd();
+            }
+        }
+        
+    }
+    //推广数据计算
+    public void GamePromotionCalculation()
+    {
+        //cost随机
+        if(lastCLV > 0)
+        {
+            float costRMin = lastCLV * promotionUserCostRandomValueMin;
+            if(costRMin < 0.1f)
+            {
+                costRMin = 0.1f;
+            }
+            float costR = Random.Range(costRMin, lastCLV * promotionUserCostRandomValueMax);
+
+            promotionUserCost = costR;
+
+            int shouldUser = Mathf.RoundToInt(promotionPriceValue / promotionUserCost);
+
+            promotionUserNumRandomMinNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMin);
+            promotionUserNumRandomMaxNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMax);
+
+            promotionLegalUserNum = Random.Range(promotionUserNumRandomMinNum, promotionUserNumRandomMaxNum);
+        }
+    }
+    //推广开始
+    public void GamePromotionStart()
+    {
+        if(promotionMode == 0)
+        {
+            promotingUserNum = 0;
+            promotingRevenue = 0f;
+
+            maxPlayer = maxPlayer0 * 5;
+            playerCreateInterval = playerCreateInterval0 * promotingPlayerCreateIntervalValue;
+
+            promotionMode = 1;
+        }
+    }
+    private void GamePromotionEnd()
+    {
+        if(promotionMode == 1)
+        {
+            promotionMode = 2;
+
+            maxPlayer = maxPlayer0;
+            playerCreateInterval = playerCreateInterval0;
+        } 
+    }
+    //推广重置
+    public void GamePromotionReset()
+    {
+        if(promotionMode == 2)
+        {
+            promotionUserCostRandomValueMin += 0.05f;
+            if(promotionUserCostRandomValueMin >= 0.3f)
+            {
+                promotionUserCostRandomValueMin = 0.3f;
+            }
+
+            promotionUserCostRandomValueMax += 0.05f;
+            if (promotionUserCostRandomValueMax >= 0.8f)
+            {
+                promotionUserCostRandomValueMax = 0.8f;
+            }
+
+            promotionPriceValue *= 1.5f;
+            if (promotionPriceValue >= 2000f)
+            {
+                promotionPriceValue = 2000f;
+            }
+
+            promotionPrice = (int)promotionPriceValue;
+
+            promotionMode = 0;
+        }
+    }
 }

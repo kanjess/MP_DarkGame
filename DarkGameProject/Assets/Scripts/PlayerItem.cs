@@ -9,6 +9,8 @@ public class PlayerItem : MonoBehaviour
     private bool activePlayer;
     private bool firstTimeToActive = false;
 
+    public bool isPromotingPlayer = false;
+
     private GameObject playerFaceContent;
     private GameObject playerFaceItem;
     private GameObject playerLosingFace;
@@ -139,7 +141,7 @@ public class PlayerItem : MonoBehaviour
 
         satisfactionIndex = 70;
 
-        basicPayRate = 0.20f;  //基础付费率
+        basicPayRate = 0.20f * 3;  //基础付费率
         basicChurnRate = 0.33f;  //基础留存率 33
         basicPayAmount = 1;  //基础付费额
 
@@ -477,6 +479,11 @@ public class PlayerItem : MonoBehaviour
             gameMode.revenuePerTime += pay;
 
             cuMoney += pay;
+
+            if(isPromotingPlayer == true)
+            {
+                gameMode.promotingRevenue += pay;
+            }
         }
         
     }

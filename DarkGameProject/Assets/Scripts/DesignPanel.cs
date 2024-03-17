@@ -20,6 +20,13 @@ public class DesignPanel : MonoBehaviour
     private GameObject designPanelContent;
     private GameObject designPanelClose;
 
+    private GameObject gamePromotionBtn;
+    private GameObject gamePromotionBtnShow0;
+    private GameObject gamePromotionBtnShow1;
+    private GameObject gamePromotionBtnShow1Item;
+    private GameObject gamePromotionBtnShow1Point0;
+    private GameObject gamePromotionBtnShow1Point1;
+
     private GameObject itemMoveBtn;
     private GameObject itemRotationBtn;
     private GameObject moveSlide;
@@ -172,6 +179,26 @@ public class DesignPanel : MonoBehaviour
     private GameObject designItemLevelPanelLevelUpCost;
     private GameObject designItemLevelPanelLevelUpAllMoney;
 
+    //推广
+    public bool gamePromotionPanelOpen = false;
+    private GameObject gamePromotionPanelContent;
+    private GameObject gamePromotionPanelBg;
+    private GameObject gamePromotionPanel;
+    private GameObject gamePromotionCloseBtn;
+    private GameObject promotionBasicInfo;
+    private GameObject promotionBasicInfoCostPrice;
+    private GameObject promotionBasicInfoIncomePrice;
+    private GameObject promotionBasicInfoOutputUserText;
+    private GameObject promotionBasicInfoOutputRevenueText;
+    private GameObject promotingInfo;
+    private GameObject promotingInfoUserText;
+    private GameObject promotingInfoRevenueText;
+    private GameObject promoteBtn;
+    private GameObject promoteBtnCostContent;
+    private GameObject promoteBtnMoneyCost;
+    private GameObject promoteBtnInfoText;
+    private bool gamePromotionBtnShow = false;
+    public bool gamePromotionPanelPointAnime = false;
 
     private void Awake()
     {
@@ -184,6 +211,13 @@ public class DesignPanel : MonoBehaviour
         designPanelContent = designPanel.transform.Find("DesignPanelContent").gameObject;
         designPanelClose = designPanel.transform.Find("DesignPanelClose").gameObject;
         designPanelPosCheckPoint = designPanel.transform.Find("PosCheckPoint").gameObject;
+
+        gamePromotionBtn = mainSceneUI.transform.Find("GamePromotionBtn").gameObject;
+        gamePromotionBtnShow0 = gamePromotionBtn.transform.Find("PromotionMode_0").gameObject;
+        gamePromotionBtnShow1 = gamePromotionBtn.transform.Find("PromotionMode_1").gameObject;
+        gamePromotionBtnShow1Item = gamePromotionBtnShow1.transform.Find("PromotionMode_1Item").gameObject;
+        gamePromotionBtnShow1Point0 = gamePromotionBtnShow1.transform.Find("Point0").gameObject;
+        gamePromotionBtnShow1Point1 = gamePromotionBtnShow1.transform.Find("Point1").gameObject;
 
         GameObject moveRotationContent = designPanel.transform.Find("MoveRotationContent").gameObject;
         moveSlide = moveRotationContent.transform.Find("Slide").gameObject;
@@ -368,6 +402,24 @@ public class DesignPanel : MonoBehaviour
         GameObject designItemLevelPanelLevelUpCostContent = designItemLevelPanelLevelUpBtn.transform.Find("CostContent").gameObject;
         designItemLevelPanelLevelUpCost = designItemLevelPanelLevelUpCostContent.transform.Find("MoneyCost").gameObject;
         designItemLevelPanelLevelUpAllMoney = designItemLevelPanelLevelUpCostContent.transform.Find("AllMoney").gameObject;
+
+        gamePromotionPanelContent = mainSceneUI.transform.Find("GamePromotionPanel").gameObject;
+        gamePromotionPanelBg = gamePromotionPanelContent.transform.Find("Bg").gameObject;
+        gamePromotionPanel = gamePromotionPanelContent.transform.Find("PromotionPanel").gameObject;
+        gamePromotionCloseBtn = gamePromotionPanel.transform.Find("CloseBtn").gameObject;
+        promotionBasicInfo = gamePromotionPanel.transform.Find("PromotionBasicInfo").gameObject;
+        promotionBasicInfoCostPrice = promotionBasicInfo.transform.Find("CostContent").gameObject.transform.Find("Price").gameObject;
+        promotionBasicInfoIncomePrice = promotionBasicInfo.transform.Find("IncomeContent").gameObject.transform.Find("Price").gameObject;
+        promotionBasicInfoOutputUserText = promotionBasicInfo.transform.Find("OutputContent").gameObject.transform.Find("ResultContent").gameObject.transform.Find("UserResult").gameObject.transform.Find("Text").gameObject;
+        promotionBasicInfoOutputRevenueText = promotionBasicInfo.transform.Find("OutputContent").gameObject.transform.Find("ResultContent").gameObject.transform.Find("RevenueResult").gameObject.transform.Find("Text").gameObject;
+        promotingInfo = gamePromotionPanel.transform.Find("PromotingInfo").gameObject;
+        promotingInfoUserText = promotingInfo.transform.Find("UserResult").gameObject.transform.Find("Text").gameObject;
+        promotingInfoRevenueText = promotingInfo.transform.Find("RevenueResult").gameObject.transform.Find("Text").gameObject;
+        promoteBtn = gamePromotionPanel.transform.Find("PromoteBtn").gameObject;
+        promoteBtnCostContent = promoteBtn.transform.Find("CostContent").gameObject;
+        promoteBtnMoneyCost = promoteBtnCostContent.transform.Find("MoneyCost").gameObject;
+        promoteBtnInfoText = promoteBtn.transform.Find("InfoText").gameObject;
+
     }
 
     // Start is called before the first frame update
@@ -430,6 +482,23 @@ public class DesignPanel : MonoBehaviour
 
                 //新价格
                 designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice *= designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel;
+            }
+        });
+
+        //推广
+        gamePromotionBtn.GetComponent<Button>().onClick.AddListener(GamePromotionPanelAnime);
+        gamePromotionCloseBtn.GetComponent<Button>().onClick.AddListener(GamePromotionPanelAnime);
+        promoteBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            if(gameMode.promotionMode == 0 && gameMode.promotionPrice <= gameMode.companyMoney)
+            {
+                gameMode.companyMoney -= gameMode.promotionPrice;
+                gameMode.GamePromotionStart();
+                GamePromotionPanelAnime();
+            }
+            else if (gameMode.promotionMode == 2)
+            {
+                gameMode.GamePromotionReset();
             }
         });
 
@@ -766,6 +835,8 @@ public class DesignPanel : MonoBehaviour
             }
 
         }
+
+        PromotingUI();
     }
 
     void DesignPanelAnime()
@@ -836,7 +907,7 @@ public class DesignPanel : MonoBehaviour
         //钱
         if(gameMode.companyMoney < 1000)
         {
-            moneyShow.GetComponent<Text>().text = gameMode.companyMoney.ToString();
+            moneyShow.GetComponent<Text>().text = gameMode.companyMoney.ToString("0");
         }
         else if(gameMode.companyMoney >= 1000 && gameMode.companyMoney < 1000000)
         {
@@ -864,7 +935,7 @@ public class DesignPanel : MonoBehaviour
         if((float)gameMode.playerExp / (float)gameMode.levelUpExp >= 1f)
         {
             gameMode.playerLevel++;
-            gameMode.maxPlayer += gameMode.maxPlayerAdd;
+            gameMode.maxPlayer0 += gameMode.maxPlayerAdd;
             gameMode.playerExp = 0;
             gameMode.levelUpExp = (int)(gameMode.basicLevelUpExp * (1 + (gameMode.playerLevel * gameMode.levelUpExpIncreaseValue / 10f)));
 
@@ -884,6 +955,16 @@ public class DesignPanel : MonoBehaviour
                 playerReportBtnShow = true;
 
                 PlayerReportBtnIn();
+            }
+
+            //推广界面解锁
+            if (gamePromotionBtnShow == false && gameMode.lastCLV > 0 && gameMode.playerLevel >= 1)
+            {
+                gamePromotionBtnShow = true;
+
+                GamePromotionBtnIn();
+
+                gameMode.GamePromotionCalculation();
             }
         }
     }
@@ -1000,6 +1081,37 @@ public class DesignPanel : MonoBehaviour
 
             anime.OnComplete(() => designItemLevelPanelBg.transform.localScale = new Vector3(0, 0, 0));
             anime.OnKill(() => designItemPanelOpen = false);
+        }
+    }
+
+    //推广界面
+    public void GamePromotionPanelAnime()
+    {
+        if (gamePromotionPanelOpen == false)
+        {
+            gameMode.gameProcessPause = true;
+
+            gamePromotionPanel.transform.localScale = new Vector3(0, 0, 0);
+
+            gamePromotionPanelOpen = true;
+
+            gamePromotionPanelBg.transform.localScale = new Vector3(1, 1, 1);
+            gamePromotionPanelBg.GetComponent<Image>().DOFade(0.8f, 0.3f);
+
+            Tweener anime = gamePromotionPanel.transform.DOScale(new Vector3(1, 1, 1), 0.3f);
+            anime.OnComplete(() => gamePromotionPanelPointAnime = true);
+        }
+        else
+        {
+            gamePromotionPanelPointAnime = false;
+
+            Tweener anime = gamePromotionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.3f);
+            gamePromotionPanelBg.GetComponent<Image>().DOFade(0f, 0.3f);
+
+            anime.OnComplete(() => gamePromotionPanelBg.transform.localScale = new Vector3(0, 0, 0));
+            anime.OnKill(() => gamePromotionPanelOpen = false);
+
+            gameMode.gameProcessPause = false;
         }
     }
 
@@ -1927,6 +2039,13 @@ public class DesignPanel : MonoBehaviour
         playerSceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
     }
 
+    //推广按钮入场
+    public void GamePromotionBtnIn()
+    {
+        gamePromotionBtnShow = true;
+        gamePromotionBtn.transform.DOLocalMoveY(300f, 0.3f).SetRelative();
+    }
+
     string itemName(int itemID)
     {
         string name = "";
@@ -1934,5 +2053,99 @@ public class DesignPanel : MonoBehaviour
         name = GameObject.Find("GameplayItemUIItem_" + itemID).gameObject.GetComponent<GameplayItemUIItem>().itemName;
 
         return name;
+    }
+
+    //推广UI
+    void PromotingUI()
+    {
+        if(gamePromotionPanelOpen == true)
+        {
+            if(gameMode.promotionMode == 0)
+            {
+                promotionBasicInfo.transform.localScale = new Vector3(1, 1, 1);
+                promotingInfo.transform.localScale = new Vector3(0, 1, 1);
+                //
+                promoteBtnCostContent.transform.localScale = new Vector3(1, 1, 1);
+                promoteBtnInfoText.transform.localScale = new Vector3(1, 0, 1);
+                promoteBtn.GetComponent<Button>().enabled = true;
+                promoteBtn.GetComponent<Image>().color = new Color(126 / 255f, 248 / 255f, 78 / 255f, 1f);
+
+                //界面信息
+                string moneyC = "";
+                if(gameMode.promotionPrice == 0f)
+                {
+                    moneyC = "Free for First-time";
+                }
+                else
+                {
+                    moneyC = numberText(gameMode.promotionPrice);
+                }
+                promoteBtnMoneyCost.GetComponent<Text>().text = moneyC;
+                if(gameMode.promotionPrice <= gameMode.companyMoney)
+                {
+                    promoteBtnMoneyCost.GetComponent<Text>().color = Color.black;
+                }
+                else
+                {
+                    promoteBtnMoneyCost.GetComponent<Text>().color = Color.red;
+                }
+
+                promotionBasicInfoCostPrice.GetComponent<Text>().text = gameMode.promotionUserCost.ToString("0.00");
+                promotionBasicInfoIncomePrice.GetComponent<Text>().text = gameMode.lastCLV.ToString("0.00");
+                promotionBasicInfoOutputUserText.GetComponent<Text>().text = "New Users " + gameMode.promotionUserNumRandomMinNum.ToString() + " ~ " + gameMode.promotionUserNumRandomMaxNum.ToString();
+                promotionBasicInfoOutputRevenueText.GetComponent<Text>().text = "Revenue " + numberText(gameMode.promotionUserNumRandomMinNum * gameMode.lastCLV) + " ~ " + numberText(gameMode.promotionUserNumRandomMaxNum * gameMode.lastCLV);
+            }
+            else if (gameMode.promotionMode == 1)
+            {
+                promotionBasicInfo.transform.localScale = new Vector3(0, 1, 1);
+                promotingInfo.transform.localScale = new Vector3(1, 1, 1);
+                //
+                promoteBtnCostContent.transform.localScale = new Vector3(1, 0, 1);
+                promoteBtnInfoText.transform.localScale = new Vector3(1, 1, 1);
+                promoteBtnInfoText.GetComponent<Text>().text = "Promoting ...";
+                promoteBtn.GetComponent<Button>().enabled = false;
+                promoteBtn.GetComponent<Image>().color = new Color(233 / 255f, 23 / 255f, 8 / 255f, 1f);
+
+                //界面信息
+                promotingInfoUserText.GetComponent<Text>().text = gameMode.promotingUserNum.ToString();
+                promotingInfoRevenueText.GetComponent<Text>().text = numberText(gameMode.promotingRevenue);
+            }
+            else if (gameMode.promotionMode == 2)
+            {
+                promotionBasicInfo.transform.localScale = new Vector3(0, 1, 1);
+                promotingInfo.transform.localScale = new Vector3(1, 1, 1);
+                //
+                promoteBtnCostContent.transform.localScale = new Vector3(1, 0, 1);
+                promoteBtnInfoText.transform.localScale = new Vector3(1, 1, 1);
+                promoteBtnInfoText.GetComponent<Text>().text = "New Promotion";
+                promoteBtn.GetComponent<Button>().enabled = true;
+                promoteBtn.GetComponent<Image>().color = new Color(90 / 255f, 140 / 255f, 255 / 255f, 1f);
+
+                //界面信息
+                promotingInfoUserText.GetComponent<Text>().text = gameMode.promotingUserNum.ToString();
+                promotingInfoRevenueText.GetComponent<Text>().text = numberText(gameMode.promotingRevenue);
+            }
+        }
+
+        //
+        if(gameMode.promotionMode == 1)
+        {
+            gamePromotionBtnShow1.transform.localScale = new Vector3(1, 1, 1);
+            gamePromotionBtnShow0.transform.localScale = new Vector3(1, 0, 1);
+
+            float x = gamePromotionBtnShow1Item.transform.position.x;
+            x -= 0.1f * 2f;
+            gamePromotionBtnShow1Item.transform.position = new Vector3(x, gamePromotionBtnShow1Item.transform.position.y, 0f);
+            if(gamePromotionBtnShow1Item.transform.position.x <= gamePromotionBtnShow1Point1.transform.position.x)
+            {
+                gamePromotionBtnShow1Item.transform.position = gamePromotionBtnShow1Point0.transform.position;
+            }
+
+        }
+        else
+        {
+            gamePromotionBtnShow1.transform.localScale = new Vector3(1, 0, 1);
+            gamePromotionBtnShow0.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 }
