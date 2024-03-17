@@ -141,7 +141,7 @@ public class PlayerItem : MonoBehaviour
 
         satisfactionIndex = 70;
 
-        basicPayRate = 0.20f * 3;  //基础付费率
+        basicPayRate = 0.20f;  //基础付费率
         basicChurnRate = 0.33f;  //基础留存率 33
         basicPayAmount = 1;  //基础付费额
 
@@ -509,11 +509,6 @@ public class PlayerItem : MonoBehaviour
 
         gameMode.losingUsersPerTime += 1;
 
-        Sequence ss = DOTween.Sequence();
-        //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());
-        ss.Insert(1f, playerLosingFace.transform.DOScale(new Vector3(0,0,0), 0.6f));
-        ss.Insert(1.4f, playerLosingFace.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
-
         //lifetime添加
         int circleN = circleNum - 1; //圈数
         float halfCircle = 0f;
@@ -536,6 +531,12 @@ public class PlayerItem : MonoBehaviour
         gameMode.userMoneyPerTimeListList[batchOrder].Add(cuMoney);  //死的时候加累计金钱
         //本体列表销毁
         gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
+
+        //动画
+        Sequence ss = DOTween.Sequence();
+        //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());
+        ss.Insert(1f, playerLosingFace.transform.DOScale(new Vector3(0, 0, 0), 0.6f));
+        ss.Insert(1.4f, playerLosingFace.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
 
         ss.OnComplete(() => movingAnime.Kill());
         ss.OnKill(() => DestroySelf());

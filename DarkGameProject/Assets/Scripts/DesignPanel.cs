@@ -9,6 +9,13 @@ public class DesignPanel : MonoBehaviour
 {
     public GameObject gameplayItemUIItem;
 
+    public CanvasScaler canvasScaler;
+    private float screenW = 1920;
+    private float screenH = 1080f;
+
+    public float scaleW;
+    public float scaleH;
+
     private GameObject mainSceneUI;
     private GameObject designItemBtn;
     private bool designItemBtnAnime = false;
@@ -202,7 +209,11 @@ public class DesignPanel : MonoBehaviour
 
     private void Awake()
     {
+        scaleW = 1f;
+        scaleH = 1f;
+
         sceneNo = 2;
+        canvasScaler = GameObject.Find("Canvas").gameObject.GetComponent<CanvasScaler>();
 
         mainSceneUI = this.gameObject.transform.Find("MainSceneUI").gameObject;
         designItemBtn = mainSceneUI.transform.Find("DesignItemBtn").gameObject;
@@ -503,13 +514,17 @@ public class DesignPanel : MonoBehaviour
         });
 
         //临时
-        PlayerReportBtnIn();
+        Invoke("PlayerReportBtnIn", 2f);
+        //PlayerReportBtnIn();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(BasicAction.gameplayItemSetMode == true)
+        scaleW = Screen.width / screenW;
+        scaleH = Screen.height / screenH;
+
+        if (BasicAction.gameplayItemSetMode == true)
         {
             if (Input.mousePosition.x > designPanelPosCheckPoint.transform.position.x)
             {
@@ -845,11 +860,18 @@ public class DesignPanel : MonoBehaviour
         {
             float tt = 0.6f;
             designItemBtnAnime = true;
+            //float wid = designPanel.GetComponent<RectTransform>().sizeDelta.x;
+            float moveD = 450f;
+            moveD *= scaleW;
+
             if (designItemBtnState == false)
             {
+                //float newPX = (Screen.width) + (wid / 2f) + 50f;
+                //designPanel.transform.position = new Vector3(newPX, designPanel.transform.position.y, designPanel.transform.position.z);
+                
                 //打开界面
-                Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x + 450f, tt);
-                designPanel.transform.DOMoveX(designPanel.transform.position.x - 450f, tt);
+                Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x + moveD, tt);
+                designPanel.transform.DOMoveX(designPanel.transform.position.x - moveD, tt);
                 designItemBtnState = true;
 
                 BasicAction.gameplayItemSetMode = true;
@@ -863,8 +885,8 @@ public class DesignPanel : MonoBehaviour
             else
             {
                 //关闭界面
-                Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x - 450f, tt);
-                designPanel.transform.DOMoveX(designPanel.transform.position.x + 450f, tt);
+                Tweener anime = designItemBtn.transform.DOMoveX(designItemBtn.transform.position.x - moveD, tt);
+                designPanel.transform.DOMoveX(designPanel.transform.position.x + moveD, tt);
                 designItemBtnState = false;
 
                 BasicAction.gameplayItemSetMode = false;
@@ -971,10 +993,13 @@ public class DesignPanel : MonoBehaviour
 
     void ScenePanelSwitch(int no)
     {
+        float moveD = 1000f;
+        moveD *= scaleH;
+
         //切换
-        if(scenePanelAnime == false && sceneNo != no)
+        if (scenePanelAnime == false && sceneNo != no)
         {
-            if(no == 1 || no == 3)
+            if (no == 1 || no == 3)
             {
                 //游戏暂停
                 gameMode.gameProcessPause = true;
@@ -992,13 +1017,13 @@ public class DesignPanel : MonoBehaviour
                     BasicInfoShow();
 
                     scenePanelTweener = companyPanel.transform.DOLocalMoveY(0f, 0.5f);
-                    playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+                    playerPanel.transform.DOLocalMoveY(-moveD, 0.5f);
                     
                 }
                 else if (no == 3)
                 {
                     scenePanelTweener = playerPanel.transform.DOLocalMoveY(0f, 0.5f);
-                    companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
+                    companyPanel.transform.DOLocalMoveY(moveD, 0.5f);
                 }
 
                 sceneNo = no;
@@ -1013,8 +1038,8 @@ public class DesignPanel : MonoBehaviour
                 sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
                 sceneContentBg.GetComponent<Image>().DOFade(0f, 0.3f);
 
-                scenePanelTweener = companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
-                playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+                scenePanelTweener = companyPanel.transform.DOLocalMoveY(moveD, 0.5f);
+                playerPanel.transform.DOLocalMoveY(-moveD, 0.5f);
 
                 sceneNo = no;
 
@@ -1034,8 +1059,8 @@ public class DesignPanel : MonoBehaviour
             sceneContentBg.transform.localScale = new Vector3(1, 1, 1);
             sceneContentBg.GetComponent<Image>().DOFade(0f, 0.3f);
 
-            scenePanelTweener = companyPanel.transform.DOLocalMoveY(1000f, 0.5f);
-            playerPanel.transform.DOLocalMoveY(-1000f, 0.5f);
+            scenePanelTweener = companyPanel.transform.DOLocalMoveY(moveD, 0.5f);
+            playerPanel.transform.DOLocalMoveY(-moveD, 0.5f);
 
             sceneNo = 2;
 
@@ -1044,6 +1069,7 @@ public class DesignPanel : MonoBehaviour
 
             //游戏恢复
             gameMode.gameProcessPause = false;
+            cameraControl.cameraCanMove = true;
         }
     }
 
@@ -1090,6 +1116,7 @@ public class DesignPanel : MonoBehaviour
         if (gamePromotionPanelOpen == false)
         {
             gameMode.gameProcessPause = true;
+            cameraControl.cameraCanMove = false;
 
             gamePromotionPanel.transform.localScale = new Vector3(0, 0, 0);
 
@@ -1112,6 +1139,7 @@ public class DesignPanel : MonoBehaviour
             anime.OnKill(() => gamePromotionPanelOpen = false);
 
             gameMode.gameProcessPause = false;
+            cameraControl.cameraCanMove = true;
         }
     }
 
@@ -2030,20 +2058,29 @@ public class DesignPanel : MonoBehaviour
     }
     public void ComReportBtnIn()
     {
+        float moveD  = 200f;
+        //moveD *= scaleW;
+
         companyReportBtnShow = true;
-        companySceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
+        companySceneBtn.transform.DOLocalMoveX(moveD, 0.3f).SetRelative();
     }
     public void PlayerReportBtnIn()
     {
+        float moveD = 200f;
+        //moveD *= scaleW;
+
         playerReportBtnShow = true;
-        playerSceneBtn.transform.DOLocalMoveX(200f, 0.3f).SetRelative();
+        playerSceneBtn.transform.DOLocalMoveX(moveD, 0.3f).SetRelative();
     }
 
     //推广按钮入场
     public void GamePromotionBtnIn()
     {
+        float moveD = 300f;
+        //moveD *= scaleW;
+
         gamePromotionBtnShow = true;
-        gamePromotionBtn.transform.DOLocalMoveY(300f, 0.3f).SetRelative();
+        gamePromotionBtn.transform.DOLocalMoveY(moveD, 0.3f).SetRelative();
     }
 
     string itemName(int itemID)
@@ -2134,7 +2171,7 @@ public class DesignPanel : MonoBehaviour
             gamePromotionBtnShow0.transform.localScale = new Vector3(1, 0, 1);
 
             float x = gamePromotionBtnShow1Item.transform.position.x;
-            x -= 0.1f * 2f;
+            x -= 0.1f * 2f * scaleW;
             gamePromotionBtnShow1Item.transform.position = new Vector3(x, gamePromotionBtnShow1Item.transform.position.y, 0f);
             if(gamePromotionBtnShow1Item.transform.position.x <= gamePromotionBtnShow1Point1.transform.position.x)
             {

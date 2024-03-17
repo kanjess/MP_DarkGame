@@ -1,0 +1,174 @@
+{
+    "gameplayPatterns": [
+        {
+            "id": 101,
+            "name": "System Structure",
+            "retention": 0.01,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": 0,
+            "triggerRate": 1
+            },
+            {
+            "id": 102,
+            "name": "PVE",
+            "retention": 0.01,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": 0,
+            "triggerRate": 1
+            },
+            {
+            "id": 103,
+            "name": "PVP",
+            "retention": 0,
+            "socialBound": 0,
+            "payingRate": 0.01,
+            "payingAmount": 0,
+            "mood": 0,
+            "triggerRate": 1
+            },
+            {
+            "id": 104,
+            "name": "Operation",
+            "retention": 0.01,
+            "socialBound": 0,
+            "payingRate": 0.01,
+            "payingAmount": 0,
+            "mood": 0,
+            "triggerRate": 1
+            },
+            {
+            "id": 431,
+            "name": "Daily Login Rewards",
+            "retention": 0.1,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            },
+            {
+            "id": 433,
+            "name": "Cumulative Online Rewards",
+            "retention": 0.05,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": -10,
+            "triggerRate": 1
+            },
+            {
+            "id": 432,
+            "name": "Daily Task",
+            "retention": 0.05,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            },
+            {
+            "id": 421,
+            "name": "Hard Currency vs. Soft Currency",
+            "retention": 0,
+            "socialBound": 0,
+            "payingRate": 0.1,
+            "payingAmount": 0,
+            "mood": -10,
+            "triggerRate": 1
+            },
+            {
+            "id": 411,
+            "name": "PVP Ranking&Bragging",
+            "retention": 0,
+            "socialBound": 0.05,
+            "payingRate": 0.05,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            },
+            {
+            "id": 412,
+            "name": "Compulsive socializing",
+            "retention": 0,
+            "socialBound": 0.1,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": -10,
+            "triggerRate": 1
+            },
+            {
+            "id": 402,
+            "name": "PVE Grinding",
+            "retention": 0.05,
+            "socialBound": 0,
+            "payingRate": 0,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            },
+            {
+            "id": 401,
+            "name": "PVE Pay-to-SKIP",
+            "retention": 0,
+            "socialBound": 0,
+            "payingRate": 0.5,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 0.99
+            },
+            {
+            "id": 434,
+            "name": "Time-Limited Payment Offer",
+            "retention": 0,
+            "socialBound": 0,
+            "payingRate": 0.5,
+            "payingAmount": 0.5,
+            "mood": -10,
+            "triggerRate": 0.2
+            },
+            {
+            "id": 422,
+            "name": "In-App Advertisements",
+            "retention": -0.1,
+            "socialBound": 0,
+            "payingRate": 1,
+            "payingAmount": 0.5,
+            "mood": -15,
+            "triggerRate": -1
+            },
+            {
+            "id": 403,
+            "name": "Energy System",
+            "retention": 0.05,
+            "socialBound": 0,
+            "payingRate": 0.05,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            },
+            {
+            "id": 435,
+            "name": "Loot Box",
+            "retention": 0,
+            "socialBound": 0,
+            "payingRate": 0.5,
+            "payingAmount": 0.33,
+            "mood": -20,
+            "triggerRate": 0.33
+            },
+            {
+            "id": 436,
+            "name": "VIP System",
+            "retention": 0.05,
+            "socialBound": 0,
+            "payingRate": 0.2,
+            "payingAmount": 0,
+            "mood": -5,
+            "triggerRate": 1
+            }
+    ]
+}

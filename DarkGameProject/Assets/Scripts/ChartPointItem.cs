@@ -8,6 +8,8 @@ public class ChartPointItem : MonoBehaviour
 {
     public bool pointType = true;
 
+    private DesignPanel designPanel;
+
     public float showNum = 0f;
     public float maxNum = 0f;
     public int order = 0;
@@ -29,6 +31,8 @@ public class ChartPointItem : MonoBehaviour
         pointImage = pointContent.transform.Find("PointImage").gameObject;
         lineImage = pointContent.transform.Find("LineImage").gameObject;
         pointText = this.gameObject.transform.Find("PointText").gameObject;
+
+        designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
 
     }
 
@@ -98,7 +102,7 @@ public class ChartPointItem : MonoBehaviour
 
             float distance = Vector2.Distance(preChartItem.GetComponent<ChartPointItem>().pointImage.transform.position, pointImage.transform.position);
             float offsetV = chartObject.transform.localScale.x * panelObject.transform.localScale.x;
-            lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(distance / offsetV, 7f);
+            lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2((distance / offsetV) / designPanel.scaleW, 7f);
             
         }
 

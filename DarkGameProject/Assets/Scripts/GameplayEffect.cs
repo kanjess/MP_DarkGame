@@ -82,7 +82,10 @@ public class GameplayEffect : MonoBehaviour
     //数据灌入
     void GameItemEffectDataSetup()
     {
-        gameItemEffectJson = File.ReadAllText(Application.streamingAssetsPath + "/Json/gameplayPatterns.json");
+        TextAsset textAsset = Resources.Load<TextAsset>("Json/gameplayPatterns");
+        gameItemEffectJson = textAsset.text;
+
+        //gameItemEffectJson = File.ReadAllText(Application.streamingAssetsPath + "/Json/gameplayPatterns.json");
         gameItemEffectData = JsonMapper.ToObject(gameItemEffectJson);
         //数据初始化
         if (gameItemEffectList == null)
