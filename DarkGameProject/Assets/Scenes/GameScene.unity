@@ -19702,6 +19702,8 @@ MonoBehaviour:
   userLifetimeList: []
   clvList: []
   lastCLV: 0
+  moodList: []
+  ratingList: []
   promotionMode: 0
   promotionUserCost: 0
   promotionPrice: 0
@@ -64019,6 +64021,7 @@ GameObject:
   - component: {fileID: 1928528436}
   - component: {fileID: 1928528435}
   - component: {fileID: 1928528439}
+  - component: {fileID: 1928528440}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -64135,6 +64138,18 @@ MonoBehaviour:
   designItemPanelOpen: 0
   gamePromotionPanelOpen: 0
   gamePromotionPanelPointAnime: 0
+--- !u!114 &1928528440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928528434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb19c6dfc2f0a4460a635d99c7c0cffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932973794
 GameObject:
   m_ObjectHideFlags: 0

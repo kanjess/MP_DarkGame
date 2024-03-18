@@ -1,0 +1,914 @@
+{
+    "playerReviews_Dark": [
+        {
+            "id": 101,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 1,
+            "comments": "and getting those daily login rewards really makes me feel appreciated as a player."
+            },
+            {
+            "id": 102,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 1,
+            "comments": "the excitement of uncovering daily login rewards keeps me coming back every day!"
+            },
+            {
+            "id": 103,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 1,
+            "comments": "and the daily login rewards add a sweet little boost that brightens my gaming sessions."
+            },
+            {
+            "id": 104,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 1,
+            "comments": "the anticipation for what daily login reward I'll get next is surprisingly delightful."
+            },
+            {
+            "id": 105,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 1,
+            "comments": "and the daily login rewards provide a satisfying sense of progress and reward."
+            },
+            {
+            "id": 106,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 0,
+            "comments": "however, the daily login rewards feel like a cheap trick to artificially boost player engagement."
+            },
+            {
+            "id": 107,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 0,
+            "comments": "but the pressure to log in every day just for the rewards turns the game into a chore."
+            },
+            {
+            "id": 108,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 0,
+            "comments": "and the daily login rewards system feels manipulative, making me play on days I'd rather not."
+            },
+            {
+            "id": 109,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 0,
+            "comments": "the daily login rewards create an unnecessary obligation that detracts from the fun."
+            },
+            {
+            "id": 110,
+            "darkID": 431,
+            "darkName": "Daily Login Rewards",
+            "positive": 0,
+            "comments": "and being tied down by daily login rewards makes the game feel less like leisure and more like work."
+            },
+            {
+            "id": 111,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 1,
+            "comments": "and the buildup of cumulative online rewards adds an exhilarating layer of anticipation."
+            },
+            {
+            "id": 112,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 1,
+            "comments": "the thrill of accumulating online rewards makes every session feel rewarding."
+            },
+            {
+            "id": 113,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 1,
+            "comments": "and earning those cumulative online rewards gives a tangible sense of achievement."
+            },
+            {
+            "id": 114,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 1,
+            "comments": "the cumulative online rewards system incentivizes playing in a way that's genuinely fun."
+            },
+            {
+            "id": 115,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 1,
+            "comments": "and the gradual accumulation of rewards keeps the game experience fresh and engaging."
+            },
+            {
+            "id": 116,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 0,
+            "comments": "however, the cumulative online rewards system just feels like a ploy to keep me glued to the screen."
+            },
+            {
+            "id": 117,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 0,
+            "comments": "but the focus on cumulative online rewards undermines the joy of spontaneous play."
+            },
+            {
+            "id": 118,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 0,
+            "comments": "and the pressure to accumulate online rewards diminishes the game's actual fun."
+            },
+            {
+            "id": 119,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 0,
+            "comments": "the reliance on cumulative online rewards manipulates my gaming habits in an uncomfortable way."
+            },
+            {
+            "id": 120,
+            "darkID": 433,
+            "darkName": "Cumulative Online Rewards",
+            "positive": 0,
+            "comments": "and the cumulative online rewards system makes every missed day feel like a lost opportunity, which is stressful."
+            },
+            {
+            "id": 121,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 1,
+            "comments": "and completing daily tasks gives me clear goals that enhance my gaming experience."
+            },
+            {
+            "id": 122,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 1,
+            "comments": "the variety and challenge of daily tasks keep the gameplay dynamic and interesting."
+            },
+            {
+            "id": 123,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 1,
+            "comments": "and the sense of accomplishment from knocking out daily tasks is deeply satisfying."
+            },
+            {
+            "id": 124,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 1,
+            "comments": "the daily tasks add structure to my playtime, making each session more meaningful."
+            },
+            {
+            "id": 125,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 1,
+            "comments": "and tackling daily tasks provides a fun way to earn extra rewards while playing."
+            },
+            {
+            "id": 126,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 0,
+            "comments": "however, the daily tasks feel more like homework than fun, which really saps my enthusiasm."
+            },
+            {
+            "id": 127,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 0,
+            "comments": "but the repetitive nature of daily tasks can make the game feel stale and monotonous."
+            },
+            {
+            "id": 128,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 0,
+            "comments": "and the obligation to complete daily tasks every day turns gaming into a tedious routine."
+            },
+            {
+            "id": 129,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 0,
+            "comments": "the focus on daily tasks detracts from the game's exploratory and spontaneous aspects."
+            },
+            {
+            "id": 130,
+            "darkID": 432,
+            "darkName": "Daily Task",
+            "positive": 0,
+            "comments": "and the pressure to complete daily tasks just to keep up feels unfairly demanding."
+            },
+            {
+            "id": 131,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 1,
+            "comments": "and the balance between hard and soft currency adds an intriguing strategic layer to the game."
+            },
+            {
+            "id": 132,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 1,
+            "comments": "the dynamic between hard and soft currency makes managing resources an engaging challenge."
+            },
+            {
+            "id": 133,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 1,
+            "comments": "and navigating the hard vs. soft currency aspect adds depth to the in-game economy."
+            },
+            {
+            "id": 134,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 1,
+            "comments": "the interplay between hard and soft currency introduces interesting decision-making scenarios."
+            },
+            {
+            "id": 135,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 1,
+            "comments": "and the differentiation between hard and soft currency enriches the game's financial strategies."
+            },
+            {
+            "id": 136,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 0,
+            "comments": "however, the divide between hard and soft currency feels like a blatant cash grab."
+            },
+            {
+            "id": 137,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 0,
+            "comments": "but the reliance on hard currency for essential items creates a frustrating paywall."
+            },
+            {
+            "id": 138,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 0,
+            "comments": "and the hard vs. soft currency system makes the game feel unfairly skewed towards paying players."
+            },
+            {
+            "id": 139,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 0,
+            "comments": "the emphasis on hard currency over soft currency introduces an unwelcome element of pay-to-win."
+            },
+            {
+            "id": 140,
+            "darkID": 421,
+            "darkName": "Hard Currency vs. Soft Currency",
+            "positive": 0,
+            "comments": "and the disparity between hard and soft currency undermines the fairness and balance of the game."
+            },
+            {
+            "id": 141,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 1,
+            "comments": "and the PVP ranking system fuels my competitive spirit in the best way possible."
+            },
+            {
+            "id": 142,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 1,
+            "comments": "the thrill of climbing the PVP ranks adds an exhilarating competitive edge to the game."
+            },
+            {
+            "id": 143,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 1,
+            "comments": "and the opportunity to brag about my PVP rank gives me a real sense of pride and accomplishment."
+            },
+            {
+            "id": 144,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 1,
+            "comments": "the PVP aspect adds a dynamic social dimension to the game, making victories even sweeter."
+            },
+            {
+            "id": 145,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 1,
+            "comments": "and the ranking system in PVP provides a clear, motivating goal that keeps me engaged."
+            },
+            {
+            "id": 146,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 0,
+            "comments": "however, the PVP ranking system introduces unnecessary stress and a toxic competitive atmosphere."
+            },
+            {
+            "id": 147,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 0,
+            "comments": "but the emphasis on PVP rankings and bragging rights can make the community feel unwelcoming."
+            },
+            {
+            "id": 148,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 0,
+            "comments": "and the focus on PVP rankings feels exclusionary, sidelining casual players."
+            },
+            {
+            "id": 149,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 0,
+            "comments": "the PVP bragging aspect can overshadow the fun of the game, turning it into a status contest."
+            },
+            {
+            "id": 150,
+            "darkID": 411,
+            "darkName": "PVP (focus on Ranking or Bragging aspect)",
+            "positive": 0,
+            "comments": "and the pressure to maintain or climb PVP ranks turns each match into a high-stress ordeal."
+            },
+            {
+            "id": 151,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 1,
+            "comments": "and the mandatory socialization aspect fosters a vibrant, engaging community within the game."
+            },
+            {
+            "id": 152,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 1,
+            "comments": "the requirement to interact with others adds a rich layer of social dynamics to the gameplay."
+            },
+            {
+            "id": 153,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 1,
+            "comments": "and being nudged to socialize introduces me to fantastic players and lasting friendships."
+            },
+            {
+            "id": 154,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 1,
+            "comments": "the socialization requirement enriches the game, making each session more lively and interactive."
+            },
+            {
+            "id": 155,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 1,
+            "comments": "and the push towards social interaction breaks the ice, encouraging collaborative play."
+            },
+            {
+            "id": 156,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 0,
+            "comments": "however, the forced socialization can feel intrusive, especially for introverted players."
+            },
+            {
+            "id": 157,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 0,
+            "comments": "but the mandatory social aspect can make the game daunting and less enjoyable for solo players."
+            },
+            {
+            "id": 158,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 0,
+            "comments": "and the pressure to socialize takes away from the escapism that gaming provides for many."
+            },
+            {
+            "id": 159,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 0,
+            "comments": "the compulsory social interaction can feel like a barrier, making the game less accessible."
+            },
+            {
+            "id": 160,
+            "darkID": 412,
+            "darkName": "Mandatory Socialization",
+            "positive": 0,
+            "comments": "and being forced to interact with others can lead to negative experiences and undue stress."
+            },
+            {
+            "id": 161,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 1,
+            "comments": "and the grind in PVE is satisfying, giving me clear goals and a rewarding sense of progression."
+            },
+            {
+            "id": 162,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 1,
+            "comments": "the emphasis on grinding in PVE adds a gratifying work ethic to the game, where effort equals reward."
+            },
+            {
+            "id": 163,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 1,
+            "comments": "and the grinding aspect of PVE makes each achievement feel earned and valuable."
+            },
+            {
+            "id": 164,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 1,
+            "comments": "the PVE grind keeps me invested, turning each small victory into a stepping stone for greater challenges."
+            },
+            {
+            "id": 165,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 1,
+            "comments": "and the grindy nature of PVE content provides a steady, satisfying pace to the game."
+            },
+            {
+            "id": 166,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 0,
+            "comments": "however, the grinding required in PVE feels like a tedious, never-ending treadmill."
+            },
+            {
+            "id": 167,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 0,
+            "comments": "but the excessive grind in PVE turns what should be fun into a repetitive chore."
+            },
+            {
+            "id": 168,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 0,
+            "comments": "and the focus on grinding in PVE drains the excitement and spontaneity from the game."
+            },
+            {
+            "id": 169,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 0,
+            "comments": "the reliance on grinding in PVE content artificially inflates playtime, detracting from genuine enjoyment."
+            },
+            {
+            "id": 170,
+            "darkID": 402,
+            "darkName": "PVE (focus on grinding aspect)",
+            "positive": 0,
+            "comments": "and the grind-heavy approach of PVE makes the game feel more like a job than an escape."
+            },
+            {
+            "id": 171,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 1,
+            "comments": "and the option to pay-to-skip in PVE respects my time, allowing me to enjoy the game at my own pace."
+            },
+            {
+            "id": 172,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 1,
+            "comments": "the pay-to-skip feature in PVE lets me bypass grindy parts, keeping the game experience fresh and enjoyable."
+            },
+            {
+            "id": 173,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 1,
+            "comments": "and having the choice to pay-to-skip grindy PVE sections gives me control over how I want to play."
+            },
+            {
+            "id": 174,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 1,
+            "comments": "the pay-to-skip mechanic in PVE is a great solution for those of us with busy schedules but a love for the game."
+            },
+            {
+            "id": 175,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 1,
+            "comments": "and the flexibility provided by the pay-to-skip option in PVE accommodates a wide range of playstyles."
+            },
+            {
+            "id": 176,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 0,
+            "comments": "however, the pay-to-skip mechanic in PVE feels like a cop-out, undermining the value of in-game achievements."
+            },
+            {
+            "id": 177,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 0,
+            "comments": "but the reliance on pay-to-skip options in PVE creates a slippery slope towards pay-to-win mechanics."
+            },
+            {
+            "id": 178,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 0,
+            "comments": "and the pay-to-skip feature in PVE devalues the effort and time invested by dedicated players."
+            },
+            {
+            "id": 179,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 0,
+            "comments": "the pay-to-skip approach in PVE segments the player base into those who play and those who pay."
+            },
+            {
+            "id": 180,
+            "darkID": 401,
+            "darkName": "PVE (focus on Pay-to-SKIP mechanic)",
+            "positive": 0,
+            "comments": "and the existence of a pay-to-skip option in PVE cheapens the gaming experience, making it feel less rewarding."
+            },
+            {
+            "id": 181,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 1,
+            "comments": "and the time-limited bundle offers create a sense of urgency that makes snagging deals more thrilling."
+            },
+            {
+            "id": 182,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 1,
+            "comments": "the excitement of catching a time-limited bundle deal adds an interesting dynamic to the game economy."
+            },
+            {
+            "id": 183,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 1,
+            "comments": "and the periodic appearance of time-limited bundles keeps the marketplace lively and engaging."
+            },
+            {
+            "id": 184,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 1,
+            "comments": "snagging a time-limited bundle feels like a win, adding an extra layer of satisfaction to my purchases."
+            },
+            {
+            "id": 185,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 1,
+            "comments": "and the allure of time-limited bundle offers introduces a fun, strategic element to managing in-game resources."
+            },
+            {
+            "id": 186,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 0,
+            "comments": "however, the pressure from time-limited bundle offers feels manipulative, pushing impulse purchases."
+            },
+            {
+            "id": 187,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 0,
+            "comments": "but the constant barrage of time-limited offers creates a stressful, FOMO-driven shopping experience."
+            },
+            {
+            "id": 188,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 0,
+            "comments": "and the reliance on time-limited bundle deals feels exploitative, preying on players' fear of missing out."
+            },
+            {
+            "id": 189,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 0,
+            "comments": "the time-limited nature of bundle offers makes the game's economy feel aggressive and predatory."
+            },
+            {
+            "id": 190,
+            "darkID": 434,
+            "darkName": "Time-Limited Bundle Payment Offer",
+            "positive": 0,
+            "comments": "and the push to grab time-limited bundles can overshadow the actual gameplay, turning enjoyment into anxiety."
+            },
+            {
+            "id": 191,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 1,
+            "comments": "and the in-app advertisements are well-integrated, offering rewards that enhance the gameplay experience."
+            },
+            {
+            "id": 192,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 1,
+            "comments": "the occasional ad break is a small price to pay for the wealth of content the game offers."
+            },
+            {
+            "id": 193,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 1,
+            "comments": "and the ads present in the app provide useful breaks, giving me time to plan my next moves."
+            },
+            {
+            "id": 194,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 1,
+            "comments": "the in-app advertisements are tastefully done, ensuring they don't detract from the game's immersion."
+            },
+            {
+            "id": 195,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 1,
+            "comments": "and the rewards for watching in-app ads add a nice bonus, making them feel worth the time."
+            },
+            {
+            "id": 196,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 0,
+            "comments": "however, the constant in-app advertisements disrupt the flow of the game, breaking immersion."
+            },
+            {
+            "id": 197,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 0,
+            "comments": "but the frequent ad interruptions make the game feel less like an escape and more like a commercial break."
+            },
+            {
+            "id": 198,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 0,
+            "comments": "and the onslaught of in-app ads is overwhelming, turning what should be fun into a frustrating experience."
+            },
+            {
+            "id": 199,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 0,
+            "comments": "the pervasive in-app advertisements tarnish the game's aesthetic and feel like a cash grab."
+            },
+            {
+            "id": 200,
+            "darkID": 422,
+            "darkName": "In-App Advertisements",
+            "positive": 0,
+            "comments": "and the excessive ads not only interrupt gameplay but also pressure players into making purchases to avoid them."
+            },
+            {
+            "id": 201,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 1,
+            "comments": "and the energy system adds a strategic layer, making me plan my play sessions more thoughtfully."
+            },
+            {
+            "id": 202,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 1,
+            "comments": "the energy mechanic introduces a realistic pacing to the game, mimicking real-life stamina constraints."
+            },
+            {
+            "id": 203,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 1,
+            "comments": "and managing my energy reserves adds an interesting management aspect to the gameplay."
+            },
+            {
+            "id": 204,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 1,
+            "comments": "the energy system encourages me to take breaks, which surprisingly enhances my overall game enjoyment."
+            },
+            {
+            "id": 205,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 1,
+            "comments": "and the energy cap makes each action feel more meaningful, adding weight to my decisions in-game."
+            },
+            {
+            "id": 206,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 0,
+            "comments": "however, the energy system severely limits how much I can play, which is incredibly frustrating."
+            },
+            {
+            "id": 207,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 0,
+            "comments": "but the energy cap feels like an artificial barrier, designed to nudge me towards in-app purchases."
+            },
+            {
+            "id": 208,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 0,
+            "comments": "and the restrictive energy system dampens the fun, making the game feel like a series of waiting periods."
+            },
+            {
+            "id": 209,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 0,
+            "comments": "the energy mechanic is a major buzzkill, turning what could be a binge-worthy game into a waiting game."
+            },
+            {
+            "id": 210,
+            "darkID": 403,
+            "darkName": "Energy System",
+            "positive": 0,
+            "comments": "and the constant battle against the energy cap is exhausting, it saps the joy from the game experience."
+            },
+            {
+            "id": 211,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 1,
+            "comments": "and the thrill of opening loot boxes keeps the element of surprise alive in every gaming session."
+            },
+            {
+            "id": 212,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 1,
+            "comments": "the anticipation and excitement of loot boxes add a gambling-like thrill that's hard to resist."
+            },
+            {
+            "id": 213,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 1,
+            "comments": "and the variety of rewards in loot boxes makes each unboxing feel like a mini-celebration."
+            },
+            {
+            "id": 214,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 1,
+            "comments": "the mystery of what's inside each loot box injects a fun, unpredictable twist to the game."
+            },
+            {
+            "id": 215,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 1,
+            "comments": "and the loot boxes provide a delightful gamble, making the chase for rare items exhilarating."
+            },
+            {
+            "id": 216,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 0,
+            "comments": "however, the reliance on loot boxes feels like a blatant exploitation of gambling tendencies."
+            },
+            {
+            "id": 217,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 0,
+            "comments": "but the randomness of loot box rewards can be frustrating, making progress feel luck-based rather than skill-based."
+            },
+            {
+            "id": 218,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 0,
+            "comments": "and the loot box system feels predatory, enticing players to spend more in the hopes of getting what they want."
+            },
+            {
+            "id": 219,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 0,
+            "comments": "the emphasis on loot boxes introduces a pay-to-win element that undermines fair play and skill."
+            },
+            {
+            "id": 220,
+            "darkID": 435,
+            "darkName": "Loot Box",
+            "positive": 0,
+            "comments": "and the loot boxes create a cycle of disappointment, with the odds heavily stacked against the player."
+            },
+            {
+            "id": 221,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 1,
+            "comments": "and the VIP system makes me feel valued, offering exclusive rewards that enhance my gameplay."
+            },
+            {
+            "id": 222,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 1,
+            "comments": "the perks of being a VIP add a luxurious dimension to the game, making every session feel special."
+            },
+            {
+            "id": 223,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 1,
+            "comments": "and the VIP system introduces an aspirational goal, motivating me to engage more deeply with the game."
+            },
+            {
+            "id": 224,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 1,
+            "comments": "the exclusivity and benefits of the VIP status provide a rewarding sense of progress and prestige."
+            },
+            {
+            "id": 225,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 1,
+            "comments": "and the VIP system adds a layer of sophistication to the game, making it more than just a pastime."
+            },
+            {
+            "id": 226,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 0,
+            "comments": "however, the VIP system creates a stark divide between players, fostering an elitist game environment."
+            },
+            {
+            "id": 227,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 0,
+            "comments": "but the VIP system feels exclusionary, putting a price tag on the best parts of the game."
+            },
+            {
+            "id": 228,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 0,
+            "comments": "and the pay-to-enter VIP system undermines the sense of community, making it feel transactional."
+            },
+            {
+            "id": 229,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 0,
+            "comments": "the VIP exclusivity alienates non-paying players, creating a two-tiered player base that hurts the game's spirit."
+            },
+            {
+            "id": 230,
+            "darkID": 436,
+            "darkName": "VIP System",
+            "positive": 0,
+            "comments": "and the VIP system makes the game feel less like a meritocracy and more like a playground for the wealthy."
+            }
+    ]
+}

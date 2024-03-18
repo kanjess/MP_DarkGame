@@ -8,7 +8,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": 0,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 102,
@@ -18,7 +20,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": 0,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 103,
@@ -28,7 +32,9 @@
             "payingRate": 0.01,
             "payingAmount": 0,
             "mood": 0,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 104,
@@ -38,7 +44,9 @@
             "payingRate": 0.01,
             "payingAmount": 0,
             "mood": 0,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 431,
@@ -48,7 +56,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 433,
@@ -58,7 +68,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -10,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 432,
@@ -68,7 +80,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 421,
@@ -78,7 +92,9 @@
             "payingRate": 0.1,
             "payingAmount": 0,
             "mood": -10,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 411,
@@ -88,7 +104,9 @@
             "payingRate": 0.05,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 412,
@@ -98,7 +116,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -10,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 402,
@@ -108,7 +128,9 @@
             "payingRate": 0,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 401,
@@ -118,7 +140,9 @@
             "payingRate": 0.5,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 0.99
+            "triggerRate": 0.99,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 434,
@@ -128,7 +152,9 @@
             "payingRate": 0.5,
             "payingAmount": 0.5,
             "mood": -10,
-            "triggerRate": 0.2
+            "triggerRate": 0.2,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 422,
@@ -138,7 +164,9 @@
             "payingRate": 1,
             "payingAmount": 0.5,
             "mood": -15,
-            "triggerRate": -1
+            "triggerRate": -1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 403,
@@ -148,7 +176,9 @@
             "payingRate": 0.05,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 435,
@@ -158,7 +188,9 @@
             "payingRate": 0.5,
             "payingAmount": 0.33,
             "mood": -20,
-            "triggerRate": 0.33
+            "triggerRate": 0.33,
+            "desc": "",
+            "weight": 100
             },
             {
             "id": 436,
@@ -168,7 +200,9 @@
             "payingRate": 0.2,
             "payingAmount": 0,
             "mood": -5,
-            "triggerRate": 1
+            "triggerRate": 1,
+            "desc": "",
+            "weight": 100
             }
     ]
 }

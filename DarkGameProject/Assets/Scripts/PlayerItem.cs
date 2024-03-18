@@ -532,6 +532,8 @@ public class PlayerItem : MonoBehaviour
         //本体列表销毁
         gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
 
+        //satisfactionIndex
+
         //动画
         Sequence ss = DOTween.Sequence();
         //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());

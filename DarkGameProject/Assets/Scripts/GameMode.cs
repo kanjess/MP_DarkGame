@@ -91,6 +91,10 @@ public class GameMode : MonoBehaviour
     //CLV
     public List<float> clvList;
     public float lastCLV = 0f;
+    //心情
+    public List<float> moodList;
+    //评分
+    public List<float> ratingList;
 
     //推广
     public int promotionMode = 0; //0=无；1=ing；2=end
@@ -163,6 +167,8 @@ public class GameMode : MonoBehaviour
         sortedContributionOfRevenue = new List<List<float>>();
 
         clvList = new List<float>();
+        moodList = new List<float>();
+        ratingList = new List<float>();
 
     }
 

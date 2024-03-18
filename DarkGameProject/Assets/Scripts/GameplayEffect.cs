@@ -15,6 +15,7 @@ public class GameItemEffect
     public float payingAmount;
     public float mood;
     public float triggerRate;
+    public float weight;
 }
 
 
@@ -106,6 +107,7 @@ public class GameplayEffect : MonoBehaviour
                 gameItemEffect.payingAmount = float.Parse(gameItemEffectData["gameplayPatterns"][i]["payingAmount"].ToString());
                 gameItemEffect.mood = float.Parse(gameItemEffectData["gameplayPatterns"][i]["mood"].ToString());
                 gameItemEffect.triggerRate = float.Parse(gameItemEffectData["gameplayPatterns"][i]["triggerRate"].ToString());
+                gameItemEffect.weight = float.Parse(gameItemEffectData["gameplayPatterns"][i]["weight"].ToString());
                 //
                 gameItemEffectList.Add(gameItemEffect);
             }

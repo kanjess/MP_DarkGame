@@ -71,6 +71,7 @@
     <Compile Include="Assets/Scripts/GameplayItem.cs" />
     <Compile Include="Assets/Scripts/BasicAction.cs" />
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
+    <Compile Include="Assets/Scripts/PatternReview.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
