@@ -82,6 +82,7 @@ public class GameMode : MonoBehaviour
     public List<List<GameObject>> userObjectPerTimeListList;
     public List<List<float>> userLifePerTimeListList;
     public List<List<float>> userMoneyPerTimeListList;
+    public List<List<float>> userMoodPerTimeListList;
     public List<float> userLifetimeList;
     //item贡献比例统计
     public List<List<float>> contributionOfLivetime;
@@ -92,9 +93,10 @@ public class GameMode : MonoBehaviour
     public List<float> clvList;
     public float lastCLV = 0f;
     //心情
+    public List<float> temMoodList;
     public List<float> moodList;
     //评分
-    public List<float> ratingList;
+    //public List<float> ratingList;
 
     //推广
     public int promotionMode = 0; //0=无；1=ing；2=end
@@ -155,10 +157,13 @@ public class GameMode : MonoBehaviour
         userObjectPerTimeListList.Add(uoptList);
         List<float> ulptList = new List<float>();
         List<float> umptList = new List<float>();
+        List<float> moodptList = new List<float>();
         userLifePerTimeListList = new List<List<float>>();
         userMoneyPerTimeListList = new List<List<float>>();
         userLifePerTimeListList.Add(ulptList);
         userMoneyPerTimeListList.Add(umptList);
+        userMoodPerTimeListList = new List<List<float>>();
+        userMoodPerTimeListList.Add(moodptList);
         userLifetimeList = new List<float>();
 
         contributionOfLivetime = new List<List<float>>();
@@ -168,7 +173,7 @@ public class GameMode : MonoBehaviour
 
         clvList = new List<float>();
         moodList = new List<float>();
-        ratingList = new List<float>();
+        temMoodList = new List<float>();
 
     }
 
@@ -280,6 +285,8 @@ public class GameMode : MonoBehaviour
             userLifePerTimeListList.Add(ulptList);
             List<float> umptList = new List<float>();
             userMoneyPerTimeListList.Add(umptList);
+            List<float> moodptList = new List<float>();
+            userMoodPerTimeListList.Add(moodptList);
             //是否显示
             for (int i = 0; i < userObjectPerTimeListList.Count; i++)
             {
@@ -293,12 +300,19 @@ public class GameMode : MonoBehaviour
                         moneyT = userMoneyPerTimeListList[i].Average();
                     }
 
+                    float moodT = 0f;
+                    if (userMoodPerTimeListList[i].Count > 0)
+                    {
+                        moodT = userMoodPerTimeListList[i].Average();
+                    }
+
                     if (i + 1 > userLifetimeList.Count)
                     {
                         userLifetimeList.Add(lifeT);
                         //CLV
                         clvList.Add(moneyT);
-                        //Debug.Log(clvList[clvList.Count - 1]);
+                        //心情
+                        moodList.Add(moodT);
                     }      
                 }
                 else if (userObjectPerTimeListList[i].Count > 0 || userLifePerTimeListList[i].Count == 0)

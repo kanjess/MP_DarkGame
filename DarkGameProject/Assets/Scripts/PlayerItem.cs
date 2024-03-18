@@ -527,12 +527,13 @@ public class PlayerItem : MonoBehaviour
         }
         float wholeLifetime = circleN + halfCircle;
         gameMode.userLifePerTimeListList[batchOrder].Add(wholeLifetime);
-        //
+        //金钱赋值
         gameMode.userMoneyPerTimeListList[batchOrder].Add(cuMoney);  //死的时候加累计金钱
+        //心情赋值
+        gameMode.userMoodPerTimeListList[batchOrder].Add(satisfactionIndex);  //死的时候加
+
         //本体列表销毁
         gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
-
-        //satisfactionIndex
 
         //动画
         Sequence ss = DOTween.Sequence();
@@ -543,7 +544,6 @@ public class PlayerItem : MonoBehaviour
         ss.OnComplete(() => movingAnime.Kill());
         ss.OnKill(() => DestroySelf());
 
-        //Invoke("DestroySelf", 2f);
     }
 
     //付费-基础监测（伴随时间）
