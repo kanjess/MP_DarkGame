@@ -170,7 +170,8 @@ public class PlayerItem : MonoBehaviour
     {
         if(gameMode.gameDynamicProcess == false)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            PlayerLosing();
         }
 
         //时间刷新
