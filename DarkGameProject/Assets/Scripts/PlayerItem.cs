@@ -110,7 +110,7 @@ public class PlayerItem : MonoBehaviour
 
         moveSpeed = 3f;  //像素/s
      
-        expAdd = 10 * 2;   //exp  10
+        expAdd = (int)(10 * gameMode.testOffset);   //exp  10
 
         pathList = new List<Vector3Int>();
         circleLifeTimeList = new List<float>();

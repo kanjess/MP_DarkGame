@@ -10,6 +10,8 @@ public class GameMode : MonoBehaviour
     public int maxPlayerAdd;
     public int mainRoadDistance = 0;
 
+    public float testOffset;
+
     //在场效果
     public List<int> globalEffectObject;  //生效中的全局效果（进场后添加）
     //public List<int> triggerEffectObject;  //生效中的触发效果（触发后添加）
@@ -54,6 +56,7 @@ public class GameMode : MonoBehaviour
     public float statisticsInterval;
     private float statisticsTiming = 0f;
     public bool startStatistics = false;
+    public int startStatisticsNum;
     //全局
     public float cumulativeRevenue = 0;
     public int cumulativePlayers = 0;
@@ -116,9 +119,12 @@ public class GameMode : MonoBehaviour
 
     private void Awake()
     {
+        testOffset = 3f; //测试修正参数 应该=1
+
         maxPlayer0 = 20;  //20
         maxPlayer = maxPlayer0;
         maxPlayerAdd = 0;
+        startStatisticsNum = (int)(60f * (1 / testOffset));
 
         playerCreateInterval0 = 1f;
         playerCreateInterval = playerCreateInterval0 * 1f;
@@ -224,7 +230,7 @@ public class GameMode : MonoBehaviour
                     pItem.GetComponent<PlayerItem>().isPromotingPlayer = true;
                 }
 
-                if(cumulativePlayers >= 60 && startStatistics == false)  //1秒1个
+                if(cumulativePlayers >= startStatisticsNum && startStatistics == false)  //1秒1个
                 {
                     designPanel.ReportBtnIn(1);
                 }
@@ -290,9 +296,13 @@ public class GameMode : MonoBehaviour
             //是否显示
             for (int i = 0; i < userObjectPerTimeListList.Count; i++)
             {
-                if(userObjectPerTimeListList[i].Count == 0 && userLifePerTimeListList[i].Count > 0)  //该时间段玩家已全部销毁
+                if(userObjectPerTimeListList[i].Count == 0)  //该时间段玩家已全部销毁
                 {
-                    float lifeT = userLifePerTimeListList[i].Average();
+                    float lifeT = 0f;
+                    if (userLifePerTimeListList[i].Count > 0)
+                    {
+                        lifeT = userLifePerTimeListList[i].Average();
+                    }
 
                     float moneyT = 0f;
                     if (userMoneyPerTimeListList[i].Count > 0)
@@ -315,8 +325,11 @@ public class GameMode : MonoBehaviour
                         moodList.Add(moodT);
                     }      
                 }
-                else if (userObjectPerTimeListList[i].Count > 0 || userLifePerTimeListList[i].Count == 0)
+                else if (userObjectPerTimeListList[i].Count > 0)
                 {
+                    //移除null引用
+                    userObjectPerTimeListList[i].RemoveAll(item => item == null);
+
                     break;
                 }
             }
