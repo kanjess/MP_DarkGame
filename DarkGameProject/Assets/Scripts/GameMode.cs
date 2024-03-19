@@ -542,9 +542,9 @@ public class GameMode : MonoBehaviour
         if(lastCLV > 0)
         {
             float costRMin = lastCLV * promotionUserCostRandomValueMin;
-            if(costRMin < 0.1f)
+            if(costRMin < 1f)
             {
-                costRMin = 0.1f;
+                costRMin = 1.02f;
             }
             float costR = Random.Range(costRMin, lastCLV * promotionUserCostRandomValueMax);
 
