@@ -1638,7 +1638,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.8
-  m_Text: Compulsory Socializing
+  m_Text: Mandatory Socializing
 --- !u!114 &3163874121299838121
 MonoBehaviour:
   m_ObjectHideFlags: 0
