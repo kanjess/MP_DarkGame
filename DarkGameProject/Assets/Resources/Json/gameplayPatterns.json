@@ -9,8 +9,8 @@
             "payingAmount": 0,
             "mood": 0,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Your game has been developed, at least there will be no changes in the main system and main gameplay. Your system determines the payment and operation model of your game. Its main modules should not change too much, but you can still fine-tune some details without causing a large-scale loss of players.",
+            "weight": 1
             },
             {
             "id": 102,
@@ -21,8 +21,8 @@
             "payingAmount": 0,
             "mood": 0,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Player-environment battle is essential in your game. Players can challenge different dungeons, explore maps, and complete levels. Every battle is carefully designed by you to ensure the player's experience.",
+            "weight": 1
             },
             {
             "id": 103,
@@ -33,8 +33,8 @@
             "payingAmount": 0,
             "mood": 0,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Player versus player is also a big part of your game. Your players compete with each other and use combat to inspire each other to hone their skills and become stronger. This is also the fun of your game. Players can participate in one-on-one matches in the Arena or engage in group battles.",
+            "weight": 1
             },
             {
             "id": 104,
@@ -45,8 +45,8 @@
             "payingAmount": 0,
             "mood": 0,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Your game needs to be continuously operated and updated to bring in revenue and new players. You need to design different in-app purchase payment models, and launch new limited-time activities at each stage to stimulate your players' activity and desire to pay.",
+            "weight": 1
             },
             {
             "id": 431,
@@ -55,9 +55,9 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "People are always changing, and so are your players. It’s hard for you to guarantee that they will always like to play your game. Why not give your players a little more motivation to play your game every day? A simple daily login reward can help your players remember what to do first thing the next day.",
             "weight": 100
             },
             {
@@ -67,10 +67,10 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -10,
+            "mood": -20,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "How long do you want your players to be online every day? One hour or two hours? In order to ensure their online time, it is better to provide them with small periodic rewards to give them some motivation. Players can receive gold coins and potions every time they are online for a while, and finally get a one-time powerful item after two hours.",
+            "weight": 150
             },
             {
             "id": 432,
@@ -79,9 +79,9 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "You don't just need your players to log in every day. You also need them to actually play your game, right? But unfortunately, your non-repetitive content doesn’t seem to support their long hours of daily play. But as a game designer, you also know that repetitive game content is boring. So why not give them some extra external rewards? For example, the experience of the first dungeon every day is doubled. This sounds like it will allow your players to play for at least an hour every day.",
             "weight": 100
             },
             {
@@ -91,10 +91,10 @@
             "socialBound": 0,
             "payingRate": 0.1,
             "payingAmount": 0,
-            "mood": -10,
+            "mood": -20,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Congratulations, you've designed a free-to-play game. Maybe you wish it were free, but your company needs to make money, right? Design a powerful currency that is as separate as possible from the in-game currency you earn while playing the game. Let's call it diamond, or maybe you have a better idea. All in all, it's powerful, powerful enough for players to spend them to gain strength far beyond what free players can get. Let players make in-game purchases as the primary way to obtain this rare currency. Of course, they can also earn small amounts of this currency through long-term play. After all, you don’t want your free players to get too frustrated.",
+            "weight": 150
             },
             {
             "id": 411,
@@ -103,21 +103,21 @@
             "socialBound": 0.05,
             "payingRate": 0.05,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "As a designer, of course you know that competition among players is what drives them to continue playing. Losers want to win back, winners want to continue winning, this is human nature. Now, there's a way to further increase the motivation that competition brings to your players, and that's a ranked system. Adding a type of PVP points increases when you win and decreases when you lose. It sounds simple, doesn't it? As long as players are matched against opponents based on their recent win rates, everyone will lose a few times and win a few times. Your players will play PvP content over and over for ranked points.",
             "weight": 100
             },
             {
             "id": 412,
-            "name": "Compulsive socializing",
+            "name": "Mandatory socializing",
             "retention": 0,
             "socialBound": 0.1,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -10,
+            "mood": -20,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "You want your players to make friends with each other. They will definitely play longer if they have friends to play with. After all, even if they want to afk, they have to consider the feelings of their friends. But sometimes, you want some players to become each other's enemies. After all, hatred can also increase their motivation to become stronger in the game. There are many ways you can bind your players into small groups that hate each other. For example, there is a guild war once a week. Create a platform for them to find friends and compete with each other, and they will find the addictive point of your game on their own.",
             "weight": 100
             },
             {
@@ -127,10 +127,10 @@
             "socialBound": 0,
             "payingRate": 0,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
-            "weight": 100
+            "desc": "Well done to you for designing a good dungeon. But how many times do you want your players to play? one time? three times? Five times at most will make them bored. Maybe you can play a little trick here to make a rare piece of equipment drop in the dungeon with a very small probability. This can have amazing results if you want to keep your players playing for a long time. Your players might even play through it 50 times to get their dream gear.",
+            "weight": 150
             },
             {
             "id": 401,
@@ -139,10 +139,10 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 0.99,
-            "desc": "",
-            "weight": 100
+            "desc": "You need to know that you will have a lot of players with varying levels of skill and strength. If a player encountered a level they couldn't complete no matter what, what do you want them to do? Quit the game and never play again? Probably not. Might as well let them spend a little money to skip or beat the level more easily. Of course, don’t just put a pay-to-skip button, it’s too explicit. Provide players with ways to increase their strength through in-app purchases, such as obtaining equipment or props that are helpful in completing this level. They don't give up the game and you get money, the best of both worlds.",
+            "weight": 150
             },
             {
             "id": 434,
@@ -151,10 +151,10 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0.5,
-            "mood": -10,
+            "mood": -20,
             "triggerRate": 0.2,
-            "desc": "",
-            "weight": 100
+            "desc": "Some players will never spend money in your in-game store. But there are always some players who are wavering. For those players who have not made any in-app purchases for a whole week, take out the equipment they need most at that time, put it in front of them, put a 20% discount label, and add a one-hour time limit. Some players may be swayed, and may even feel like they made a profit if they bought.",
+            "weight": 150
             },
             {
             "id": 422,
@@ -163,10 +163,10 @@
             "socialBound": 0,
             "payingRate": 1,
             "payingAmount": 0.5,
-            "mood": -15,
+            "mood": -30,
             "triggerRate": -1,
-            "desc": "",
-            "weight": 100
+            "desc": "Perhaps most players will not make any in-app purchases until they abandon your game. But that doesn't mean they can't make your game profitable. A common method is to embed ads into your game. This won't break their obsession with playing the game for free, but it will still allow you to earn money from advertisers. Maybe, this will have a little impact on free player retention. But they don’t pay anyway, right?",
+            "weight": 150
             },
             {
             "id": 403,
@@ -175,9 +175,9 @@
             "socialBound": 0,
             "payingRate": 0.05,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "In a free-to-play game operation, you want your players to play every day, but not play all your content intensely for a week and then give up on your game completely. You need them to play for months or even years to bring awareness and revenue to your game. Sometimes you have to stop them from having too much fun for the day. Now, there's an energy system that perfectly suits your operational thinking. Each time a player plays a dungeon, energy is spent. If there is no energy, the player cannot play the dungeon. If you only provides them with energy to play a limited number of times a day. They would have had to spend months completing content that could have been completed in a week. Of course, if they really want to play, it's also an idea to spend money on energy.",
             "weight": 100
             },
             {
@@ -187,10 +187,10 @@
             "socialBound": 0,
             "payingRate": 0.5,
             "payingAmount": 0.33,
-            "mood": -20,
+            "mood": -40,
             "triggerRate": 0.33,
-            "desc": "",
-            "weight": 100
+            "desc": "Everything that involves probability is so fascinating, like lotteries, sweepstakes. Another example is the loot box in your game. ;) A skin selling for $100 may be prohibitive, but what about a loot box with a small chance of winning for just $1? Players can earn their coveted skin, or just a potion. You can let everyone get a few free loot boxes, and those lucky winners will help you convey their good fortune to their friends.",
+            "weight": 150
             },
             {
             "id": 436,
@@ -199,9 +199,9 @@
             "socialBound": 0,
             "payingRate": 0.2,
             "payingAmount": 0,
-            "mood": -5,
+            "mood": -10,
             "triggerRate": 1,
-            "desc": "",
+            "desc": "There must be whales in your game, oh, I mean players who spend a lot of money on your game. Create some milestones for their spending. The more money whales spend, the more rare props or skins they can get that other players can't get. Also give them some shiny logos to show off to other players. This will make them feel that the money spent on in-game purchases is worth their money, and they will never give up on your game easily.",
             "weight": 100
             }
     ]

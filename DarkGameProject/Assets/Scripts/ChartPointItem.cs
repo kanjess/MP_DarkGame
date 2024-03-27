@@ -25,12 +25,16 @@ public class ChartPointItem : MonoBehaviour
     public GameObject lineImage;
     private GameObject pointText;
 
+    //private GameObject ratingStar;
+
     private void Awake()
     {
         pointContent = this.gameObject.transform.Find("PointContent").gameObject;
         pointImage = pointContent.transform.Find("PointImage").gameObject;
         lineImage = pointContent.transform.Find("LineImage").gameObject;
         pointText = this.gameObject.transform.Find("PointText").gameObject;
+
+        //ratingStar = pointContent.transform.Find("RatingStar").gameObject;
 
         designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
 
@@ -66,6 +70,10 @@ public class ChartPointItem : MonoBehaviour
     {
         //文字
         pointText.GetComponent<Text>().text = (order + 1).ToString();
+        if(panelObject.name == "PlayerPanel")
+        {
+            pointText.GetComponent<Text>().color = Color.white;
+        }
 
         //圆点位置
         float per = showNum / maxNum;
@@ -112,6 +120,22 @@ public class ChartPointItem : MonoBehaviour
             pointImage.transform.localScale = new Vector3(2, 2, 2);
             lineImage.transform.localScale = new Vector3(1, 2, 1);
 
+        }
+    }
+
+    public void RatingStar()
+    {
+        GameObject parent = this.gameObject.transform.parent.gameObject;
+        GameObject lastPoint = parent.transform.GetChild(parent.transform.childCount - 1).gameObject;
+
+        if (this.gameObject == lastPoint)
+        {
+            //ratingStar.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+        }
+        else
+        {
+            //ratingStar.transform.localScale = new Vector3(0.5f, 0f, 1f);
+            pointImage.GetComponent<RectTransform>().sizeDelta = new Vector2(lineImage.GetComponent<RectTransform>().sizeDelta.y, lineImage.GetComponent<RectTransform>().sizeDelta.y);
         }
     }
 }

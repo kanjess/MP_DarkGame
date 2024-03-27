@@ -42,6 +42,7 @@ public class DesignPanel : MonoBehaviour
     private CameraControl cameraControl;
     private GameplayMapping gameplayMapping;
     private GameplayEffect gameplayEffect;
+    private PlayerRating playerRating;
 
     private GameObject moneyShow;
 
@@ -247,6 +248,7 @@ public class DesignPanel : MonoBehaviour
         cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
+        playerRating = this.gameObject.GetComponent<PlayerRating>();
 
         GameObject mainContent = mainSceneUI.transform.Find("MainContent").gameObject;
         GameObject topContent = mainContent.transform.Find("TopContent").gameObject;
@@ -585,6 +587,11 @@ public class DesignPanel : MonoBehaviour
                     bgPicItem.GetComponent<Image>().color = new Color(1, 1, 1, 0);
                 }
             }
+
+            //描述
+            int iId = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID;
+            string descc = gameplayEffect.GetGameItemEffectList(iId).desc;
+            designItemLevelPanelItemDesc.GetComponent<Text>().text = descc;
 
             //属性
             if (gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).retention != 0 || gameplayEffect.GetGameItemEffectList(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemID).socialBound != 0)
@@ -1022,6 +1029,9 @@ public class DesignPanel : MonoBehaviour
                 }
                 else if (no == 3)
                 {
+                    //评分
+                    playerRating.UISet();
+
                     scenePanelTweener = playerPanel.transform.DOLocalMoveY(0f, 0.5f);
                     companyPanel.transform.DOLocalMoveY(moveD, 0.5f);
                 }

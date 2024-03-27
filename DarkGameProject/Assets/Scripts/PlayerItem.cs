@@ -37,6 +37,7 @@ public class PlayerItem : MonoBehaviour
     private List<Vector3Int> pathList;
 
     private Tweener movingAnime;
+    private Sequence moneyAnimeSequence;
 
     private float liveTime = 0f;
     private List<float> circleLifeTimeList;
@@ -142,7 +143,7 @@ public class PlayerItem : MonoBehaviour
         satisfactionIndex = 70;
 
         basicPayRate = 0.20f;  //基础付费率
-        basicChurnRate = 0.33f;  //基础留存率 33
+        basicChurnRate = 0.10f;  //基础留存率 33
         basicPayAmount = 1;  //基础付费额
 
         basicChurnDampingValue = 3f;
@@ -280,7 +281,7 @@ public class PlayerItem : MonoBehaviour
         //行为检测：移动 付费 留存
         if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
         {
-            if(movingAnime != null)
+            if(movingAnime.IsActive() == true)
             {
                 if(movingAnime.IsPlaying() == false && moveState == true && moveAnime == true)
                 {
@@ -301,7 +302,7 @@ public class PlayerItem : MonoBehaviour
         }
         else if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == true)
         {
-            if (movingAnime != null)
+            if (movingAnime.IsActive() == true)
             {
                 if (movingAnime.IsPlaying() == true && moveState == true && moveAnime == true)
                 {
@@ -457,22 +458,24 @@ public class PlayerItem : MonoBehaviour
     //角色付费效果
     void PlayerPaying(float pay)
     {
-        if(moneyAnime == false)
+        //Debug.Log("0");
+        if(moneyAnime == false && activePlayer == true)
         {
+            //Debug.Log("1");
             moneyAnime = true;
-            Sequence s = DOTween.Sequence();
-            s.Insert(0f, moneyIcon.GetComponent<SpriteRenderer>().DOFade(1f, 0.2f));
+            moneyAnimeSequence = DOTween.Sequence();
+            moneyAnimeSequence.Insert(0f, moneyIcon.GetComponent<SpriteRenderer>().DOFade(1f, 0.2f));
 
-            s.Insert(0f, moneyIcon.transform.DOScaleX(-1f, 0.4f));
-            s.Insert(0.4f, moneyIcon.transform.DOScaleX(1f, 0.4f));
-            s.Insert(0.8f, moneyIcon.transform.DOScaleX(-1f, 0.4f));
-            s.Insert(1.2f, moneyIcon.transform.DOScaleX(1f, 0.4f));
+            moneyAnimeSequence.Insert(0f, moneyIcon.transform.DOScaleX(-1f, 0.4f));
+            moneyAnimeSequence.Insert(0.4f, moneyIcon.transform.DOScaleX(1f, 0.4f));
+            moneyAnimeSequence.Insert(0.8f, moneyIcon.transform.DOScaleX(-1f, 0.4f));
+            moneyAnimeSequence.Insert(1.2f, moneyIcon.transform.DOScaleX(1f, 0.4f));
 
-            s.Insert(0f, moneyIcon.transform.DOLocalMoveY(0.6f, 2f).SetRelative()).SetEase(Ease.OutCubic);
-            s.Insert(1.8f, moneyIcon.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
+            moneyAnimeSequence.Insert(0f, moneyIcon.transform.DOLocalMoveY(0.6f, 2f).SetRelative()).SetEase(Ease.OutCubic);
+            moneyAnimeSequence.Insert(1.8f, moneyIcon.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
 
-            s.OnComplete(() => moneyIcon.transform.localPosition = new Vector3(0, 0, 0));
-            s.OnKill(() => moneyAnime = false);
+            moneyAnimeSequence.OnComplete(() => moneyIcon.transform.localPosition = new Vector3(0, 0, 0));
+            moneyAnimeSequence.OnKill(() => moneyAnime = false);
 
             gameMode.companyMoney += pay;
             //
@@ -535,6 +538,12 @@ public class PlayerItem : MonoBehaviour
 
         //本体列表销毁
         gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
+
+        //终止金钱动画
+        if(moneyAnimeSequence.IsActive() == true)
+        {
+            moneyAnimeSequence.Kill();
+        }
 
         //动画
         Sequence ss = DOTween.Sequence();
@@ -663,6 +672,7 @@ public class PlayerItem : MonoBehaviour
     //付费-玩法检测（玩法触发）
     public void PlayerPayingCheckMethod2(int itemID, float payR, float payM)
     {
+        //Debug.Log("PayingEvent Trigger");
         gameMode.purchaseRateA += 1;
 
         //拉取全局和触发效果中的item效果, 计算payingRate和payingAmount
@@ -782,6 +792,7 @@ public class PlayerItem : MonoBehaviour
         float rate = Random.Range(0f, 1f);
         if (rate <= cFinalPayingRate)
         {
+            //Debug.Log("PayingEvent ++ " + cFinalPayingAmount);
             PlayerPaying(cFinalPayingAmount);
             gameMode.purchaseRateS += 1;
         }

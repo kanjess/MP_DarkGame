@@ -169,6 +169,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb49774beb89403188cbd488f78508a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 1
+  showNum: 0
+  maxNum: 0
+  order: 0
+  panelObject: {fileID: 0}
+  chartObject: {fileID: 0}
+  chartContent: {fileID: 0}
+  preChartItem: {fileID: 0}
+  pointImage: {fileID: 0}
+  lineImage: {fileID: 0}
 --- !u!1 &7993670358251671528
 GameObject:
   m_ObjectHideFlags: 0

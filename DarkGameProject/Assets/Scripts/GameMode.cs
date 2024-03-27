@@ -49,6 +49,8 @@ public class GameMode : MonoBehaviour
     public List<GameObject> gameItemList;
 
     private DesignPanel designPanel;
+    private PlayerRating playerRating;
+
     private GameplayMapping gameplayMapping;
     private GameplayEffect gameplayEffect;
 
@@ -57,6 +59,7 @@ public class GameMode : MonoBehaviour
     private float statisticsTiming = 0f;
     public bool startStatistics = false;
     public int startStatisticsNum;
+    public int statisticesTimes = 0;  //统计次数
     //全局
     public float cumulativeRevenue = 0;
     public int cumulativePlayers = 0;
@@ -99,7 +102,7 @@ public class GameMode : MonoBehaviour
     public List<float> temMoodList;
     public List<float> moodList;
     //评分
-    //public List<float> ratingList;
+    public List<float> ratingList;
 
     //推广
     public int promotionMode = 0; //0=无；1=ing；2=end
@@ -124,7 +127,7 @@ public class GameMode : MonoBehaviour
         maxPlayer0 = 20;  //20
         maxPlayer = maxPlayer0;
         maxPlayerAdd = 0;
-        startStatisticsNum = (int)(60f * (1 / testOffset));
+        startStatisticsNum = (int)(10f * (1 / testOffset));   //60f*
 
         playerCreateInterval0 = 1f;
         playerCreateInterval = playerCreateInterval0 * 1f;
@@ -141,6 +144,8 @@ public class GameMode : MonoBehaviour
         playerItemLayer = GameObject.Find("PlayerObject").gameObject;
 
         designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
+        playerRating = GameObject.Find("Canvas").gameObject.GetComponent<PlayerRating>();
+
         gameplayMapping = this.gameObject.GetComponent<GameplayMapping>();
         gameplayEffect = this.gameObject.GetComponent<GameplayEffect>();
 
@@ -180,6 +185,8 @@ public class GameMode : MonoBehaviour
         clvList = new List<float>();
         moodList = new List<float>();
         temMoodList = new List<float>();
+
+        ratingList = new List<float>();
 
     }
 
@@ -245,6 +252,8 @@ public class GameMode : MonoBehaviour
         if(statisticsTiming >= statisticsInterval)
         {
             statisticsTiming = 0f;
+
+            statisticesTimes++;
 
             //统计结果计算
 
@@ -323,6 +332,9 @@ public class GameMode : MonoBehaviour
                         clvList.Add(moneyT);
                         //心情
                         moodList.Add(moodT);
+                        //评分
+                        float ratingN = playerRating.RatingCalulation(moodT);
+                        ratingList.Add(ratingN);
                     }      
                 }
                 else if (userObjectPerTimeListList[i].Count > 0)
@@ -424,6 +436,11 @@ public class GameMode : MonoBehaviour
         designPanel.LifetimePieChart();
         designPanel.RevenuePieChart();
         designPanel.CustomerLifetimeValueChart();
+
+        //评论曲线
+        playerRating.RatingChart();
+        //评论生成
+        //playerRating.PlayerReviewCreate();
     }
 
     //Effect检测和入库（全局效果）
@@ -544,9 +561,15 @@ public class GameMode : MonoBehaviour
             float costRMin = lastCLV * promotionUserCostRandomValueMin;
             if(costRMin < 1f)
             {
-                costRMin = 1.02f;
+                costRMin = 1f;
             }
-            float costR = Random.Range(costRMin, lastCLV * promotionUserCostRandomValueMax);
+            float costRMax = lastCLV * promotionUserCostRandomValueMax;
+            if(costRMax < costRMin)
+            {
+                costRMax = costRMin * 1.1f;
+            }
+
+            float costR = Random.Range(costRMin, costRMax);
 
             promotionUserCost = costR;
 
@@ -610,4 +633,7 @@ public class GameMode : MonoBehaviour
             promotionMode = 0;
         }
     }
+
+    
+
 }

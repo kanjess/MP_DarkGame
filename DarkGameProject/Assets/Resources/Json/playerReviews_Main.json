@@ -3,102 +3,562 @@
         {
             "id": 101,
             "positive": 1,
-            "comments": "I'm absolutely blown away by this game, it's beyond anything I expected!"
+            "comments": "Pure gold.",
+            "comments2": "Absolutely slaying, can't get enough.",
+            "comments3": "Not bad, quite fun to play."
             },
             {
             "id": 102,
             "positive": 1,
-            "comments": "This game has taken over my life in the best way possible, I can't put it down!"
+            "comments": "Just epic.",
+            "comments2": "Graphics on point, gameplay's fire.",
+            "comments3": "Really interesting, recommended to everyone."
             },
             {
             "id": 103,
             "positive": 1,
-            "comments": "From the stunning visuals to the engaging gameplay, this game is a masterpiece."
+            "comments": "Top tier.",
+            "comments2": "Total game changer, devs outdid themselves.",
+            "comments3": "The game design is exquisite, thumbs up."
             },
             {
             "id": 104,
             "positive": 1,
-            "comments": "I was hooked from the very first moment, this game is something special."
+            "comments": "Mind-blowing.",
+            "comments2": "100% addicted, who needs sleep?",
+            "comments3": "This game is so captivating, can't stop playing."
             },
             {
             "id": 105,
             "positive": 1,
-            "comments": "What an incredible journey this game offers, I'm thoroughly impressed!"
+            "comments": "Superb game.",
+            "comments2": "This game's a whole vibe, love it.",
+            "comments3": "Beautiful graphics, diverse gameplay, really like it."
             },
             {
             "id": 106,
             "positive": 1,
-            "comments": "The attention to detail in this game is phenomenal, hats off to the developers."
+            "comments": "On fire.",
+            "comments2": "Next level fun, seriously impressed.",
+            "comments3": "Smooth operation, rich content, worth playing."
             },
             {
             "id": 107,
             "positive": 1,
-            "comments": "I've never been so emotionally invested in a game, it's truly a work of art."
+            "comments": "Major fun.",
+            "comments2": "Can't believe how good this is, wow.",
+            "comments3": "The story is engaging, feels great to play."
             },
             {
             "id": 108,
             "positive": 1,
-            "comments": "Every moment in this game is a delight, I'm so glad I gave it a chance."
+            "comments": "Truly epic.",
+            "comments2": "All in, this game's a masterpiece.",
+            "comments3": "Haven't played such an addictive game in a long time."
             },
             {
             "id": 109,
             "positive": 1,
-            "comments": "This game exceeds all my expectations, it's an absolute blast to play."
+            "comments": "Insanely good.",
+            "comments2": "Straight up magic, hats off to the devs.",
+            "comments3": "Great music, overall experience is very good."
             },
             {
             "id": 110,
             "positive": 1,
-            "comments": "A standing ovation for this game, it's brilliantly executed and wildly entertaining."
+            "comments": "Next level.",
+            "comments2": "Game's a legend, best time ever.",
+            "comments3": "This game is really great, every detail is well done."
             },
             {
             "id": 111,
-            "positive": 0,
-            "comments": "I really wanted to love this game, but it's been a massive letdown."
+            "positive": 1,
+            "comments": "Game changer.",
+            "comments2": "Mind officially blown, game's a hit.",
+            "comments3": "Challenging, but not frustrating."
             },
             {
             "id": 112,
-            "positive": 0,
-            "comments": "What a frustrating experience, I regret the time and money spent on this game."
+            "positive": 1,
+            "comments": "Solid win.",
+            "comments2": "Peak gaming experience, nothing compares.",
+            "comments3": "Very suitable for passing time, highly recommended."
             },
             {
             "id": 113,
-            "positive": 0,
-            "comments": "I can't believe how underwhelming this game is, it's nothing like what was promised."
+            "positive": 1,
+            "comments": "Real deal.",
+            "comments2": "Major kudos to the devs, game's a win.",
+            "comments3": "Always looking forward to each update, the development team is powerful."
             },
             {
             "id": 114,
-            "positive": 0,
-            "comments": "This game is riddled with bugs and glitches, it's practically unplayable."
+            "positive": 1,
+            "comments": "Pure joy.",
+            "comments2": "Got me hooked from the start, pure genius.",
+            "comments3": "Active community, interactions between players are interesting."
             },
             {
             "id": 115,
-            "positive": 0,
-            "comments": "I've never been so bored playing a game, it's a total snoozefest."
+            "positive": 1,
+            "comments": "Big love.",
+            "comments2": "Taking over my life, in the best way.",
+            "comments3": "Can find a lot of fun in this game, not bad."
             },
             {
             "id": 116,
-            "positive": 0,
-            "comments": "The game is a chaotic mess, it's more aggravating than entertaining."
+            "positive": 1,
+            "comments": "Mad skills.",
+            "comments2": "Breaking all the rules, in a good way.",
+            "comments3": "The game balance is done well, fair competition."
             },
             {
             "id": 117,
-            "positive": 0,
-            "comments": "So much potential wasted, this game could have been great but it fell flat."
+            "positive": 1,
+            "comments": "Killing it.",
+            "comments2": "Setting the bar high, game's incredible.",
+            "comments3": "Friendly to beginners, easy to get started, but with enough depth."
             },
             {
             "id": 118,
-            "positive": 0,
-            "comments": "I'm utterly disappointed, this game fails to deliver on every level."
+            "positive": 1,
+            "comments": "Too cool.",
+            "comments2": "Defining what fun means, nailed it.",
+            "comments3": "The virtual world is wonderfully constructed, very exploratory."
             },
             {
             "id": 119,
-            "positive": 0,
-            "comments": "Save your money, this game is not worth the frustration it brings."
+            "positive": 1,
+            "comments": "Spot on.",
+            "comments2": "Non-stop thrill, can't put it down.",
+            "comments3": "I'm impressed by this game, well handled details."
             },
             {
             "id": 120,
+            "positive": 1,
+            "comments": "Major vibes.",
+            "comments2": "Revolutionary gameplay, living for it.",
+            "comments3": "Can feel the developers' dedication, enjoy every play."
+            },
+            {
+            "id": 121,
+            "positive": 1,
+            "comments": "All win.",
+            "comments2": "Total blast, can't quit!",
+            "comments3": "I'm absolutely blown away by this game, it's beyond anything I expected!"
+            },
+            {
+            "id": 122,
+            "positive": 1,
+            "comments": "Class act.",
+            "comments2": "Graphics = 100, gameplay = HOT.",
+            "comments3": "This game has taken over my life in the best way possible, I can't put it down!"
+            },
+            {
+            "id": 123,
+            "positive": 1,
+            "comments": "Dreamy play.",
+            "comments2": "GG, developers nailed it!",
+            "comments3": "From the stunning visuals to the engaging gameplay, this game is a masterpiece."
+            },
+            {
+            "id": 124,
+            "positive": 1,
+            "comments": "Sheer magic.",
+            "comments2": "10/10, would play non-stop.",
+            "comments3": "I was hooked from the very first moment, this game is something special."
+            },
+            {
+            "id": 125,
+            "positive": 1,
+            "comments": "A+ stuff.",
+            "comments2": "This game slaps, seriously good.",
+            "comments3": "What an incredible journey this game offers, I'm thoroughly impressed!"
+            },
+            {
+            "id": 126,
+            "positive": 1,
+            "comments": "Beyond cool.",
+            "comments2": "Epic win! So much fun.",
+            "comments3": "The attention to detail in this game is phenomenal, hats off to the developers."
+            },
+            {
+            "id": 127,
+            "positive": 1,
+            "comments": "Game strong.",
+            "comments2": "Addicted AF, send help.",
+            "comments3": "I've never been so emotionally invested in a game, it's truly a work of art."
+            },
+            {
+            "id": 128,
+            "positive": 1,
+            "comments": "Top notch.",
+            "comments2": "Mind-blown, exceeded expectations.",
+            "comments3": "Every moment in this game is a delight, I'm so glad I gave it a chance."
+            },
+            {
+            "id": 129,
+            "positive": 1,
+            "comments": "Prime time.",
+            "comments2": "Legit the best game out there.",
+            "comments3": "This game exceeds all my expectations, it's an absolute blast to play."
+            },
+            {
+            "id": 130,
+            "positive": 1,
+            "comments": "Heavy hitter.",
+            "comments2": "Fam, this is the real deal.",
+            "comments3": "A standing ovation for this game, it's brilliantly executed and wildly entertaining."
+            },
+            {
+            "id": 131,
+            "positive": 1,
+            "comments": "Pure finesse.",
+            "comments2": "Soooo hooked, it's unreal.",
+            "comments3": "I'm absolutely blown away by this game, it's beyond anything I expected!"
+            },
+            {
+            "id": 132,
+            "positive": 1,
+            "comments": "Stellar.",
+            "comments2": "Loving the vibes, pure gold.",
+            "comments3": "This game has taken over my life in the best way possible, I can't put it down!"
+            },
+            {
+            "id": 133,
+            "positive": 1,
+            "comments": "Ace game.",
+            "comments2": "Game's lit HOT, can't even.",
+            "comments3": "From the stunning visuals to the engaging gameplay, this game is a masterpiece."
+            },
+            {
+            "id": 134,
+            "positive": 1,
+            "comments": "Big hit.",
+            "comments2": "A+ gameplay, totally immersive.",
+            "comments3": "I was hooked from the very first moment, this game is something special."
+            },
+            {
+            "id": 135,
+            "positive": 1,
+            "comments": "Champ level.",
+            "comments2": "This hits different, in a good way.",
+            "comments3": "What an incredible journey this game offers, I'm thoroughly impressed!"
+            },
+            {
+            "id": 136,
+            "positive": 1,
+            "comments": "Prime game.",
+            "comments2": "Can we talk about how awesome this is?",
+            "comments3": "The attention to detail in this game is phenomenal, hats off to the developers."
+            },
+            {
+            "id": 137,
+            "positive": 1,
+            "comments": "Slick play.",
+            "comments2": "Just WOW. Instant fave.",
+            "comments3": "I've never been so emotionally invested in a game, it's truly a work of art."
+            },
+            {
+            "id": 138,
+            "positive": 1,
+            "comments": "Winning big.",
+            "comments2": "Why so perfect? ",
+            "comments3": "Every moment in this game is a delight, I'm so glad I gave it a chance."
+            },
+            {
+            "id": 139,
+            "positive": 1,
+            "comments": "Top pick.",
+            "comments2": "Killing my battery cuz I can't stop.",
+            "comments3": "This game exceeds all my expectations, it's an absolute blast to play."
+            },
+            {
+            "id": 140,
+            "positive": 1,
+            "comments": "Gold star.",
+            "comments2": "Stunning! Devs, take my money.",
+            "comments3": "A standing ovation for this game, it's brilliantly executed and wildly entertaining."
+            },
+            {
+            "id": 141,
             "positive": 0,
-            "comments": "An absolute disaster, this game is a textbook example of how not to make a game."
+            "comments": "Meh.",
+            "comments2": "What a snorefest, totally dull.",
+            "comments3": "I really wanted to love this game, but it's been a massive letdown."
+            },
+            {
+            "id": 142,
+            "positive": 0,
+            "comments": "Nope.",
+            "comments2": "Glitches galore, couldn't bother.",
+            "comments3": "What a frustrating experience, I regret the time and money spent on this game."
+            },
+            {
+            "id": 143,
+            "positive": 0,
+            "comments": "Boring.",
+            "comments2": "Looks good, plays bad.",
+            "comments3": "I can't believe how underwhelming this game is, it's nothing like what was promised."
+            },
+            {
+            "id": 144,
+            "positive": 0,
+            "comments": "Yawn.",
+            "comments2": "Hyped up, massively underdelivers.",
+            "comments3": "This game is riddled with bugs and glitches, it's practically unplayable."
+            },
+            {
+            "id": 145,
+            "positive": 0,
+            "comments": "Pass.",
+            "comments2": "Forget this, moving on.",
+            "comments3": "I've never been so bored playing a game, it's a total snoozefest."
+            },
+            {
+            "id": 146,
+            "positive": 0,
+            "comments": "Trash.",
+            "comments2": "Graphics don’t save gameplay.",
+            "comments3": "The game is a chaotic mess, it's more aggravating than entertaining."
+            },
+            {
+            "id": 147,
+            "positive": 0,
+            "comments": "Glitchy.",
+            "comments2": "Tried hard to like it, failed.",
+            "comments3": "So much potential wasted, this game could have been great but it fell flat."
+            },
+            {
+            "id": 148,
+            "positive": 0,
+            "comments": "Lame.",
+            "comments2": "More bugs than features.",
+            "comments3": "I'm utterly disappointed, this game fails to deliver on every level."
+            },
+            {
+            "id": 149,
+            "positive": 0,
+            "comments": "Dull.",
+            "comments2": "Zero replay value here.",
+            "comments3": "Save your money, this game is not worth the frustration it brings."
+            },
+            {
+            "id": 150,
+            "positive": 0,
+            "comments": "Snooze.",
+            "comments2": "All flash, no substance.",
+            "comments3": "An absolute disaster, this game is a textbook example of how not to make a game."
+            },
+            {
+            "id": 151,
+            "positive": 0,
+            "comments": "Skip.",
+            "comments2": "Felt like a chore to play.",
+            "comments3": "Claims to be free-to-play but feels pay-to-enjoy."
+            },
+            {
+            "id": 152,
+            "positive": 0,
+            "comments": "Fail.",
+            "comments2": "Lost interest in minutes.",
+            "comments3": "Tutorials longer than my interest in the game."
+            },
+            {
+            "id": 153,
+            "positive": 0,
+            "comments": "Drag.",
+            "comments2": "Predictable and just bland.",
+            "comments3": "Managed to make an exciting concept utterly boring."
+            },
+            {
+            "id": 154,
+            "positive": 0,
+            "comments": "Weak.",
+            "comments2": "Falls flat on its face.",
+            "comments3": "Visuals can’t compensate for the shallow gameplay."
+            },
+            {
+            "id": 155,
+            "positive": 0,
+            "comments": "Sloppy.",
+            "comments2": "Wannabe great, but isn’t.",
+            "comments3": "Feels like they forgot to add the fun part."
+            },
+            {
+            "id": 156,
+            "positive": 0,
+            "comments": "Crashy.",
+            "comments2": "Promised much, delivered little.",
+            "comments3": "Character development as deep as a puddle."
+            },
+            {
+            "id": 157,
+            "positive": 0,
+            "comments": "Clunky.",
+            "comments2": "Controls are a nightmare.",
+            "comments3": "Innovative ideas poorly executed."
+            },
+            {
+            "id": 158,
+            "positive": 0,
+            "comments": "Rough.",
+            "comments2": "Story? What story?",
+            "comments3": "The only challenge is trying to stay interested."
+            },
+            {
+            "id": 159,
+            "positive": 0,
+            "comments": "Stale.",
+            "comments2": "Unfinished and unpolished.",
+            "comments3": "Save your time, there’s nothing new or exciting here."
+            },
+            {
+            "id": 160,
+            "positive": 0,
+            "comments": "Blah.",
+            "comments2": "Riddled with pay-to-win.",
+            "comments3": "Wanted to love it, ended up regretting the time spent."
+            },
+            {
+            "id": 161,
+            "positive": 0,
+            "comments": "Nah.",
+            "comments2": "All hype, no play.",
+            "comments3": "Graphics aren’t everything, gameplay matters more and this fails."
+            },
+            {
+            "id": 162,
+            "positive": 0,
+            "comments": "Miss.",
+            "comments2": "A void of fun.",
+            "comments3": "Dialogue so cringe-worthy, I had to mute it."
+            },
+            {
+            "id": 163,
+            "positive": 0,
+            "comments": "Tired.",
+            "comments2": "Tutorial longer than my patience.",
+            "comments3": "Endless grinding with no sense of achievement."
+            },
+            {
+            "id": 164,
+            "positive": 0,
+            "comments": "Flat.",
+            "comments2": "Concept good, execution terrible.",
+            "comments3": "Not even worth the download time."
+            },
+            {
+            "id": 165,
+            "positive": 0,
+            "comments": "Dry.",
+            "comments2": "Feels like a cash grab.",
+            "comments3": "Predictable gameplay, zero innovation here."
+            },
+            {
+            "id": 166,
+            "positive": 0,
+            "comments": "Harsh.",
+            "comments2": "Could’ve been good, sadly wasn’t.",
+            "comments3": "Storyline? More like a series of random events."
+            },
+            {
+            "id": 167,
+            "positive": 0,
+            "comments": "Off.",
+            "comments2": "Misses the mark by miles.",
+            "comments3": "Controls are as responsive as a brick."
+            },
+            {
+            "id": 168,
+            "positive": 0,
+            "comments": "Wrong.",
+            "comments2": "One big, repetitive loop.",
+            "comments3": "Promised an ocean, delivered a puddle."
+            },
+            {
+            "id": 169,
+            "positive": 0,
+            "comments": "Dropped.",
+            "comments2": "So much potential, wasted.",
+            "comments3": "Feels like a project rushed to release."
+            },
+            {
+            "id": 170,
+            "positive": 0,
+            "comments": "Flop.",
+            "comments2": "Buggy to the point of unplayable.",
+            "comments3": "Packed with microtransactions, empty of fun."
+            },
+            {
+            "id": 171,
+            "positive": 0,
+            "comments": "Sunk.",
+            "comments2": "No depth, just frustration.",
+            "comments3": "An exercise in frustration and disappointment."
+            },
+            {
+            "id": 172,
+            "positive": 0,
+            "comments": "Void.",
+            "comments2": "Lacks any real challenge.",
+            "comments3": "Don't believe the hype, it's utterly underwhelming."
+            },
+            {
+            "id": 173,
+            "positive": 0,
+            "comments": "Eject.",
+            "comments2": "Not engaging, not rewarding.",
+            "comments3": "Like a beautifully wrapped gift with nothing inside."
+            },
+            {
+            "id": 174,
+            "positive": 0,
+            "comments": "Lost.",
+            "comments2": "Just another clone, skip it.",
+            "comments3": "Game balance is non-existent, prepare to be annoyed."
+            },
+            {
+            "id": 175,
+            "positive": 0,
+            "comments": "Junk.",
+            "comments2": "An exercise in monotony.",
+            "comments3": "A masterclass in how not to make a game enjoyable."
+            },
+            {
+            "id": 176,
+            "positive": 0,
+            "comments": "Fake.",
+            "comments2": "Graphics can't cover gameplay flaws.",
+            "comments3": "An endless loop of boredom and bugs."
+            },
+            {
+            "id": 177,
+            "positive": 0,
+            "comments": "Grim.",
+            "comments2": "Filled with microtransaction traps.",
+            "comments3": "Sounded good on paper, terrible in execution."
+            },
+            {
+            "id": 178,
+            "positive": 0,
+            "comments": "Ditch.",
+            "comments2": "Overpriced for what it offers.",
+            "comments3": "Seems it was designed to be as dull as possible."
+            },
+            {
+            "id": 179,
+            "positive": 0,
+            "comments": "Quit.",
+            "comments2": "Too grindy for no reason.",
+            "comments3": "Was excited at first, now I'm just bored."
+            },
+            {
+            "id": 180,
+            "positive": 0,
+            "comments": "Zzz.",
+            "comments2": "Left me wanting way more.",
+            "comments3": "A convoluted mess that's more work than play."
             }
     ]
 }

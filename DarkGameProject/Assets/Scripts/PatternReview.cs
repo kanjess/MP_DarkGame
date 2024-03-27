@@ -11,6 +11,8 @@ public class MainReviewItem
     public int id;
     public bool isPositive;
     public string commentString;
+    public string commentString2;
+    public string commentString3;
 }
 
 [System.Serializable]
@@ -28,6 +30,8 @@ public class DarkReviewItem
     public int darkID;
     public bool isPositive;
     public string commentString;
+    public string commentString2;
+    public string commentString3;
 }
 
 [System.Serializable]
@@ -39,12 +43,35 @@ public class DarkReviewList
     public List<DarkReviewItem> commentList;
 }
 
+[System.Serializable]
+public class PlayerHead
+{
+    public int id;
+    public string playerHead;
+    public string playerName;
+}
+
+[System.Serializable]
+public class PlayerReview
+{
+    public int id;
+    public string playerHead;
+    public string playerName;
+    public int darkID;
+    public bool isPositive;
+    public float rating;
+    public int level;
+    public int commentDay;
+    public string comment;
+}
+
 
 
 public class PatternReview : MonoBehaviour
 {
     private GameplayEffect gameplayEffect;
     private GameplayMapping gameplayMapping;
+    private GameMode gameMode;
 
     private string mainReviewJson;
     public LitJson.JsonData mainReviewData;
@@ -56,13 +83,26 @@ public class PatternReview : MonoBehaviour
     public List<DarkReviewList> darkReviewListList;
     public Dictionary<int, DarkReviewList> dic_darkReviewList;
 
+    private string playerHeadJson;
+    public LitJson.JsonData playerHeadData;
+    public List<PlayerHead> playerHeadList;
+    public Dictionary<int, PlayerHead> dic_playerHead;
+
+    //玩家评论存储
+    public List<PlayerReview> playerReviewList;
+    public List<PlayerReview> temPlayerReviewList;
+
+
     private void Awake()
     {
         gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
+        gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
 
         MainReviewDataSetup();
-        
+        PlayerHeadDataSetup();
+        playerReviewList = new List<PlayerReview>();
+        temPlayerReviewList = new List<PlayerReview>();
     }
 
 
@@ -77,6 +117,42 @@ public class PatternReview : MonoBehaviour
     {
         
     }
+
+    //数据灌入
+    void PlayerHeadDataSetup()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("Json/playerReviews_Info");
+        playerHeadJson = textAsset.text;
+
+        playerHeadData = JsonMapper.ToObject(playerHeadJson);
+        //数据初始化
+        if (playerHeadList == null)
+        {
+            playerHeadList = new List<PlayerHead>();
+        }
+        if (playerHeadList.Count == 0)
+        {
+            PlayerHead playerHead;
+            for (int i = 0; i < playerHeadData["playerReviews_Info"].Count; i++)
+            {
+                playerHead = new PlayerHead();
+                //
+                playerHead.id = int.Parse(playerHeadData["playerReviews_Info"][i]["id"].ToString());
+                playerHead.playerHead = playerHeadData["playerReviews_Info"][i]["head"].ToString();
+                playerHead.playerName = playerHeadData["playerReviews_Info"][i]["name"].ToString();
+                //
+                playerHeadList.Add(playerHead);
+            }
+        }
+        //辞典初始化
+        dic_playerHead = new Dictionary<int, PlayerHead>();
+        foreach (PlayerHead def in playerHeadList)
+        {
+            dic_playerHead[def.id] = def;
+        }
+
+    }
+
 
     //数据灌入
     void MainReviewDataSetup()
@@ -129,8 +205,10 @@ public class PatternReview : MonoBehaviour
                     mainReviewItem.isPositive = false;
                 }
                 mainReviewItem.commentString = mainReviewData["playerReviews_Main"][i]["comments"].ToString();
+                mainReviewItem.commentString2 = mainReviewData["playerReviews_Main"][i]["comments2"].ToString();
+                mainReviewItem.commentString3 = mainReviewData["playerReviews_Main"][i]["comments3"].ToString();
                 //
-                if(mainReviewItem.isPositive == true)
+                if (mainReviewItem.isPositive == true)
                 {
                     mainReviewListList[0].commentList.Add(mainReviewItem);
                 }
@@ -179,24 +257,36 @@ public class PatternReview : MonoBehaviour
         return (new MainReviewList());
     }
     //获得评论文字的列表
-    public List<string> GetMainReviewStringList(bool isPositive)
+    public List<string> GetMainReviewStringList(bool isPositive, int level)
     {
         List<string> commentList = new List<string>();
 
         for(int i = 0; i < GetMainReviewList(isPositive).commentList.Count; i++)
         {
-            string commentString = GetMainReviewList(isPositive).commentList[i].commentString;
+            string commentString = "";
+            if (level == 1)
+            {
+                commentString = GetMainReviewList(isPositive).commentList[i].commentString;
+            }
+            else if (level == 2)
+            {
+                commentString = GetMainReviewList(isPositive).commentList[i].commentString2;
+            }
+            else if (level == 3)
+            {
+                commentString = GetMainReviewList(isPositive).commentList[i].commentString3;
+            }
             commentList.Add(commentString);
         }
 
         return commentList;
     }
     //随机一个主评论
-    public string GetRandomMainReviewString(bool isPositive)
+    public string GetRandomMainReviewString(bool isPositive, int level)
     {
         string commentS = "";
 
-        int maxR = GetMainReviewStringList(isPositive).Count;
+        int maxR = GetMainReviewStringList(isPositive, level).Count;
         int ranR = Random.Range(0, maxR);
         if(ranR >= maxR)
         {
@@ -207,7 +297,7 @@ public class PatternReview : MonoBehaviour
             ranR = 0;
         }
 
-        commentS = GetMainReviewStringList(isPositive)[ranR];
+        commentS = GetMainReviewStringList(isPositive, level)[ranR];
 
         return commentS;
     }
@@ -281,8 +371,10 @@ public class PatternReview : MonoBehaviour
                     darkReviewItem.isPositive = false;
                 }
                 darkReviewItem.commentString = darkReviewData["playerReviews_Dark"][i]["comments"].ToString();
+                darkReviewItem.commentString2 = darkReviewData["playerReviews_Dark"][i]["comments2"].ToString();
+                darkReviewItem.commentString3 = darkReviewData["playerReviews_Dark"][i]["comments3"].ToString();
 
-                for(int aa = 0; aa < darkReviewListList.Count; aa++)
+                for (int aa = 0; aa < darkReviewListList.Count; aa++)
                 {
                     if(darkReviewItem.darkID == darkReviewListList[aa].darkID && darkReviewItem.isPositive == darkReviewListList[aa].isPositive)
                     {
@@ -380,24 +472,36 @@ public class PatternReview : MonoBehaviour
         return (new DarkReviewList());
     }
     //获得对应具体dark patterns的正/负评论文字的列表
-    public List<string> GetDarkReviewStringList(bool isPositive, int darkID)
+    public List<string> GetDarkReviewStringList(bool isPositive, int darkID, int level)
     {
         List<string> commentList = new List<string>();
 
         for (int i = 0; i < GetDarkReviewList(isPositive, darkID).commentList.Count; i++)
         {
-            string commentString = GetDarkReviewList(isPositive, darkID).commentList[i].commentString;
+            string commentString = "";
+            if(level == 1)
+            {
+                commentString = GetDarkReviewList(isPositive, darkID).commentList[i].commentString;
+            }
+            else if (level == 2)
+            {
+                commentString = GetDarkReviewList(isPositive, darkID).commentList[i].commentString2;
+            }
+            else if (level == 3)
+            {
+                commentString = GetDarkReviewList(isPositive, darkID).commentList[i].commentString3;
+            }
             commentList.Add(commentString);
         }
 
         return commentList;
     }
     //随机一个对应具体dark patterns的正/负评论
-    public string GetRandomDarkReviewString(bool isPositive, int darkID)
+    public string GetRandomDarkReviewString(bool isPositive, int darkID, int level)
     {
         string commentS = "";
 
-        int maxR = GetDarkReviewStringList(isPositive, darkID).Count;
+        int maxR = GetDarkReviewStringList(isPositive, darkID, level).Count;
         int ranR = Random.Range(0, maxR);
         if (ranR >= maxR)
         {
@@ -408,9 +512,82 @@ public class PatternReview : MonoBehaviour
             ranR = 0;
         }
 
-        commentS = GetDarkReviewStringList(isPositive, darkID)[ranR];
+        commentS = GetDarkReviewStringList(isPositive, darkID, level)[ranR];
 
         return commentS;
     }
+
+
+    //生成评论
+    public void PlayerReviewDataCreate(bool isPositive, int level, int creatNum)
+    {
+        if (creatNum > 0)
+        {
+            for (int i = 0; i < creatNum; i++)
+            {
+                PlayerReview playerReview;
+
+                playerReview = new PlayerReview();
+
+                playerReview.id = playerReviewList.Count + temPlayerReviewList.Count;
+
+                int headOrder = Random.Range(0, playerHeadList.Count);
+                playerReview.playerHead = playerHeadList[headOrder].playerHead;
+                int nameOrder = Random.Range(0, playerHeadList.Count);
+                playerReview.playerName = playerHeadList[nameOrder].playerName;
+
+                playerReview.isPositive = isPositive;
+                playerReview.rating = gameMode.ratingList[gameMode.ratingList.Count - 1];
+                playerReview.level = level;
+                playerReview.commentDay = gameMode.statisticesTimes;
+
+                playerReview.darkID = GetRandomDarkPatternID();
+
+                string mainC = GetRandomMainReviewString(isPositive, level);
+                string linkW = "";
+                string darkC = "";
+                if(level >= 2)
+                {
+                    darkC = GetRandomDarkReviewString(isPositive, playerReview.darkID, level);
+                }
+                int randLinkW = Random.Range(0, 6);
+                if(randLinkW == 0)
+                {
+                    linkW = "In addition,";
+                }
+                else if (randLinkW == 1)
+                {
+                    linkW = "Especially,";
+                }
+                else if (randLinkW == 2)
+                {
+                    linkW = "Moreover,";
+                }
+                else if (randLinkW == 3)
+                {
+                    linkW = "Furthermore,";
+                }
+                else if (randLinkW == 4)
+                {
+                    linkW = "And that,";
+                }
+                else if (randLinkW >= 5)
+                {
+                    linkW = "";
+                }
+
+                if (darkC == "")
+                {
+                    playerReview.level = 1;
+                    linkW = "";
+                }
+                playerReview.comment = mainC + " " + linkW + " " + darkC;
+
+                temPlayerReviewList.Add(playerReview);
+            }
+
+        }
+    }
+
 
 }

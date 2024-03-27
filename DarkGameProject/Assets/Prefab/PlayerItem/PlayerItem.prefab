@@ -97,7 +97,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1560229695552277998
 Transform:
   m_ObjectHideFlags: 0
@@ -407,6 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81534a9b7572d4d8ea31b7c1075a7494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPromotingPlayer: 0
   batchOrder: 0
   moveAnime: 0
   currentObject: {fileID: 0}
