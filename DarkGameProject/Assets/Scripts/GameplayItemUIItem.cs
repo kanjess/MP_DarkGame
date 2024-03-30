@@ -162,6 +162,10 @@ public class GameplayItemUIItem : MonoBehaviour
                     if (newItemShow == false)
                     {
                         newItemShow = true;
+                        if(designPanel.designItemNewAnime == false)
+                        {
+                            designPanel.designItemNewAnime = true;
+                        }
                     }
                 }
             }
@@ -184,6 +188,19 @@ public class GameplayItemUIItem : MonoBehaviour
             int addChange = shouldNum - itemNumMax;
             itemNumMax += addChange;
             itemNum += addChange;
+
+            //新道具提示
+            if (gameMode.playerLevel > 1)
+            {
+                if (newItemShow == false)
+                {
+                    newItemShow = true;
+                    if (designPanel.designItemNewAnime == false)
+                    {
+                        designPanel.designItemNewAnime = true;
+                    }
+                }
+            }
         }        
     }
 }

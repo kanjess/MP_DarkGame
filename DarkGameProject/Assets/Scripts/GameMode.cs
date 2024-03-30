@@ -5,10 +5,14 @@ using System.Linq;
 
 public class GameMode : MonoBehaviour
 {
+    public bool testMode = false;
+
     public int maxPlayer0;
     private int maxPlayer;
     public int maxPlayerAdd;
     public int mainRoadDistance = 0;
+
+    public bool gameEnd = false;
 
     public float testOffset;
 
@@ -43,7 +47,7 @@ public class GameMode : MonoBehaviour
     public int playerExp = 0;
     public int basicLevelUpExp = 1000;
     public int levelUpExp = 1000;
-    public float levelUpExpIncreaseValue = 0.5f;
+    public float levelUpExpIncreaseValue;
 
     //升级解锁
     public List<GameObject> gameItemList;
@@ -119,10 +123,15 @@ public class GameMode : MonoBehaviour
     public int promotingUserNum = 0;
     public float promotingRevenue = 0f;
     private float promotingPlayerCreateIntervalValue;
+    public int promotionCount = 0;
 
     private void Awake()
     {
-        testOffset = 3f; //测试修正参数 应该=1
+        levelUpExpIncreaseValue = 1.2f;
+        //测试模式
+        testMode = false;
+
+        testOffset = 1f; //测试修正参数 应该=1
 
         maxPlayer0 = 20;  //20
         maxPlayer = maxPlayer0;
@@ -421,9 +430,9 @@ public class GameMode : MonoBehaviour
             }
 
             //全局平均
-            averageRetention = retentionRateList.Average();
-            averagePeymentConversion = purchaseRateList.Average();
-            averageRevenuePerPlayer = (float)cumulativeRevenue / (float)cumulativePlayers;
+            averageRetention = retentionRateList[retentionRateList.Count - 1];
+            averagePeymentConversion = purchaseRateList[purchaseRateList.Count - 1];
+            averageRevenuePerPlayer = revenuePerUsersList[revenuePerUsersList.Count - 1]; //(float)cumulativeRevenue / (float)cumulativePlayers;
 
         }
 
@@ -593,6 +602,8 @@ public class GameMode : MonoBehaviour
             playerCreateInterval = playerCreateInterval0 * promotingPlayerCreateIntervalValue;
 
             promotionMode = 1;
+
+            promotionCount++;
         }
     }
     private void GamePromotionEnd()

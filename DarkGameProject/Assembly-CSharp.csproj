@@ -65,15 +65,20 @@
     <Compile Include="Assets/Scripts/MappingNode.cs" />
     <Compile Include="Assets/Scripts/NestedScrollRect.cs" />
     <Compile Include="Assets/Scripts/GameplayItemUIItemDrag.cs" />
+    <Compile Include="Assets/Scripts/PlayerRating.cs" />
     <Compile Include="Assets/Scripts/PlayerItem.cs" />
     <Compile Include="Assets/Scripts/CameraControl.cs" />
     <Compile Include="Assets/Scripts/GameplayEffect.cs" />
     <Compile Include="Assets/Scripts/GameplayItemUIItem.cs" />
     <Compile Include="Assets/Scripts/GameplayItem.cs" />
+    <Compile Include="Assets/Scripts/ReviewItem.cs" />
     <Compile Include="Assets/Scripts/BasicAction.cs" />
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
-    <Compile Include="Assets/Scripts/PlayerRating.cs" />
-    <Compile Include="Assets/Scripts/ReviewItem.cs" />
+    <Compile Include="Assets/Scripts/GameEnding.cs" />
+    <Compile Include="Assets/Scripts/SimReviewItem.cs" />
+    <Compile Include="Assets/Scripts/SimReviewItemHover.cs" />
+    <Compile Include="Assets/Scripts/MemoPad.cs" />
+    <Compile Include="Assets/Scripts/GameTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -533,14 +533,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03213b1179890443abae6bfe679159e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameplayItemBtn: {fileID: 0}
   itemNumText: {fileID: 0}
   itemNum: 0
   itemNumMax: 0
   newItemShow: 0
   itemID: 401
+  itemLevel: 1
   isDark: 1
-  unlockLevelListString: 2,3,5,8,12,18,25
+  unlockLevelListString: 2,3,5
   levelUpBtn: {fileID: 98513383245147770}
+  itemName: 
+  levelContent: {fileID: 0}
+  levelNum: {fileID: 0}
+  levelPrice: 1
 --- !u!1 &2703484940971280212
 GameObject:
   m_ObjectHideFlags: 0

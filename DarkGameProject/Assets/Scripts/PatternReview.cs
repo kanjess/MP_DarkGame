@@ -72,6 +72,7 @@ public class PatternReview : MonoBehaviour
     private GameplayEffect gameplayEffect;
     private GameplayMapping gameplayMapping;
     private GameMode gameMode;
+    private PlayerRating playerRating;
 
     private string mainReviewJson;
     public LitJson.JsonData mainReviewData;
@@ -90,6 +91,7 @@ public class PatternReview : MonoBehaviour
 
     //玩家评论存储
     public List<PlayerReview> playerReviewList;
+    public List<PlayerReview> playerHelpfulReviewList;
     public List<PlayerReview> temPlayerReviewList;
 
 
@@ -98,10 +100,12 @@ public class PatternReview : MonoBehaviour
         gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
+        playerRating = GameObject.Find("Canvas").gameObject.GetComponent<PlayerRating>();
 
         MainReviewDataSetup();
         PlayerHeadDataSetup();
         playerReviewList = new List<PlayerReview>();
+        playerHelpfulReviewList = new List<PlayerReview>();
         temPlayerReviewList = new List<PlayerReview>();
     }
 
@@ -414,41 +418,62 @@ public class PatternReview : MonoBehaviour
             darkIdList.Add(darkID);
         }
 
+        if(playerRating.ratingTestMode == true)
+        {
+            darkIdList.Add(401);
+            darkIdList.Add(402);
+            darkIdList.Add(403);
+            darkIdList.Add(411);
+            darkIdList.Add(412);
+            darkIdList.Add(421);
+            darkIdList.Add(422);
+            darkIdList.Add(431);
+            darkIdList.Add(432);
+            darkIdList.Add(433);
+            darkIdList.Add(434);
+            darkIdList.Add(435);
+            darkIdList.Add(436);
+        }
+
         return darkIdList;
     }
     //从场上随机一个dark patterns的ID
     public int GetRandomDarkPatternID()
     {
-        int darkID = 401;
+        int darkID = 0;
         List<float> randomDarkList = new List<float>();
-        for(int i = 0; i < GetDarkPatternsIDList().Count; i++)
+
+        if(GetDarkPatternsIDList().Count != 0)
         {
-            int id = GetDarkPatternsIDList()[i];
-            float ranValue = gameplayEffect.GetGameItemEffectList(id).weight;
-
-            if(i == 0)
+            for (int i = 0; i < GetDarkPatternsIDList().Count; i++)
             {
-                //ranValue = ranValue;
-            }
-            else
-            {
-                ranValue += randomDarkList[i - 1];
+                int id = GetDarkPatternsIDList()[i];
+                float ranValue = gameplayEffect.GetGameItemEffectList(id).weight;
+
+                if (i == 0)
+                {
+                    //ranValue = ranValue;
+                }
+                else
+                {
+                    ranValue += randomDarkList[i - 1];
+                }
+
+                randomDarkList.Add(ranValue);
             }
 
-            randomDarkList.Add(ranValue);
+            float randR = Random.Range(0f, randomDarkList[randomDarkList.Count - 1]);
+
+            for (int i = 0; i < GetDarkPatternsIDList().Count; i++)
+            {
+                if (randR <= randomDarkList[i])
+                {
+                    darkID = GetDarkPatternsIDList()[i];
+                    break;
+                }
+            }
+
         }
-
-        float randR = Random.Range(0f, randomDarkList[randomDarkList.Count - 1]);
-
-        for(int i = 0; i < GetDarkPatternsIDList().Count; i++)
-        {
-            if(randR <= randomDarkList[i])
-            {
-                darkID = GetDarkPatternsIDList()[i];
-                break;
-            }
-        }
-
         return darkID;
     }
     //获得对应具体dark patterns的正/负评论数据结构
@@ -548,7 +573,10 @@ public class PatternReview : MonoBehaviour
                 string darkC = "";
                 if(level >= 2)
                 {
-                    darkC = GetRandomDarkReviewString(isPositive, playerReview.darkID, level);
+                    if(playerReview.darkID != 0)
+                    {
+                        darkC = GetRandomDarkReviewString(isPositive, playerReview.darkID, level);
+                    }   
                 }
                 int randLinkW = Random.Range(0, 6);
                 if(randLinkW == 0)
@@ -584,6 +612,11 @@ public class PatternReview : MonoBehaviour
                 playerReview.comment = mainC + " " + linkW + " " + darkC;
 
                 temPlayerReviewList.Add(playerReview);
+
+                if(level >= 2)
+                {
+                    playerHelpfulReviewList.Add(playerReview);
+                }
             }
 
         }

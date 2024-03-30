@@ -23,7 +23,7 @@ public class ChartPointItem : MonoBehaviour
     private GameObject pointContent;
     public GameObject pointImage;
     public GameObject lineImage;
-    private GameObject pointText;
+    public GameObject pointText;
 
     //private GameObject ratingStar;
 

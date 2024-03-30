@@ -1,0 +1,191 @@
+{
+    "gameTask": [
+        {
+            "id": 101,
+            "desc": "Have 2 Basic Functions or Gameplay on the blueprint scenario",
+            "func": 407,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": "",
+            "funcValue": 2,
+            "next": 102,
+            "reward": 500,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 102,
+            "desc": "Have 1 Grinding Pattern on the blueprint scenario",
+            "func": 402,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": 402,
+            "funcValue": 1,
+            "next": 103,
+            "reward": 600,
+            "newGuide": "101,102,103,104,105"
+            },
+            {
+            "id": 103,
+            "desc": "Reach Level 5",
+            "func": 401,
+            "image": "star",
+            "funcTarget": "",
+            "funcValue": 5,
+            "next": 104,
+            "reward": 700,
+            "newGuide": "101,102,103"
+            },
+            {
+            "id": 104,
+            "desc": "Have 1 In-App Advertising Pattern on the blueprint scenario",
+            "func": 402,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": 422,
+            "funcValue": 1,
+            "next": 105,
+            "reward": 800,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 105,
+            "desc": "Have at least 3 Design Patterns on the blueprint scenario",
+            "func": 403,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": "",
+            "funcValue": 3,
+            "next": 106,
+            "reward": 900,
+            "newGuide": "101,102,103,104,105"
+            },
+            {
+            "id": 106,
+            "desc": "Check the Operation Report 1 time",
+            "func": 410,
+            "image": "report",
+            "funcTarget": "",
+            "funcValue": 1,
+            "next": 107,
+            "reward": 1000,
+            "newGuide": "101,102,103"
+            },
+            {
+            "id": 107,
+            "desc": "Have 4 Basic Functions or Gameplay on the blueprint scenario",
+            "func": 407,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": "",
+            "funcValue": 4,
+            "next": 108,
+            "reward": 1100,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 108,
+            "desc": "Have at least 5 Design Patterns on the blueprint scenario",
+            "func": 403,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": "",
+            "funcValue": 5,
+            "next": 109,
+            "reward": 1200,
+            "newGuide": "101,102,103,104,105"
+            },
+            {
+            "id": 109,
+            "desc": "Reach Level 10",
+            "func": 401,
+            "image": "star",
+            "funcTarget": "",
+            "funcValue": 10,
+            "next": 110,
+            "reward": 1300,
+            "newGuide": "101,102,103"
+            },
+            {
+            "id": 110,
+            "desc": "Increase the Average Retention Rate to 40%",
+            "func": 404,
+            "image": "report",
+            "funcTarget": "",
+            "funcValue": 0.4,
+            "next": 111,
+            "reward": 1400,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 111,
+            "desc": "Increase the Average Payment Conversion Rate to 50%",
+            "func": 405,
+            "image": "report",
+            "funcTarget": "",
+            "funcValue": 0.5,
+            "next": 112,
+            "reward": 1500,
+            "newGuide": "101,102,103,104,105"
+            },
+            {
+            "id": 112,
+            "desc": "Upgrade any Design Patterns for a total of 5 times",
+            "func": 409,
+            "image": "star",
+            "funcTarget": "",
+            "funcValue": 5,
+            "next": 113,
+            "reward": 1600,
+            "newGuide": "101,102,103"
+            },
+            {
+            "id": 113,
+            "desc": "Have at least 10 Design Patterns on the blueprint scenario",
+            "func": 403,
+            "image": "game-design-3693549-3079928",
+            "funcTarget": "",
+            "funcValue": 10,
+            "next": 114,
+            "reward": 1700,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 114,
+            "desc": "Check the Player Reviews 1 time",
+            "func": 411,
+            "image": "rating",
+            "funcTarget": "",
+            "funcValue": 1,
+            "next": 115,
+            "reward": 1800,
+            "newGuide": "101,102,103,104,105"
+            },
+            {
+            "id": 115,
+            "desc": "Increase the Customer Lifetime Value to 3",
+            "func": 406,
+            "image": "report",
+            "funcTarget": "",
+            "funcValue": 3,
+            "next": 116,
+            "reward": 1900,
+            "newGuide": "101,102,103"
+            },
+            {
+            "id": 116,
+            "desc": "Performe the Game Promotion 1 time",
+            "func": 408,
+            "image": "promotionBtn",
+            "funcTarget": "",
+            "funcValue": 1,
+            "next": 117,
+            "reward": 2000,
+            "newGuide": "101,102"
+            },
+            {
+            "id": 117,
+            "desc": "Reach Level 15",
+            "func": 401,
+            "image": "star",
+            "funcTarget": "",
+            "funcValue": 15,
+            "next": -1,
+            "reward": 2100,
+            "newGuide": "101,102,103,104,105"
+            }
+    ]
+}

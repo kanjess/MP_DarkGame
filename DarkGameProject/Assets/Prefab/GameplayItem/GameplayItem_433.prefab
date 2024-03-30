@@ -521,8 +521,8 @@ MonoBehaviour:
   darkRoadContent: {fileID: 4822185331338537690}
   darkRoadEventNum: 1
   inToOutBlockNum: 0
-  isGlobalEffect: 0
-  isTriggerEffect: 1
+  isGlobalEffect: 1
+  isTriggerEffect: 0
   triggerEventType: 0
 --- !u!1 &4285811329151380652
 GameObject:

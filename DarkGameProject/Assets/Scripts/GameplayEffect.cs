@@ -17,6 +17,7 @@ public class GameItemEffect
     public float triggerRate;
     public string desc;
     public float weight;
+    public int level;
 }
 
 
@@ -110,6 +111,7 @@ public class GameplayEffect : MonoBehaviour
                 gameItemEffect.triggerRate = float.Parse(gameItemEffectData["gameplayPatterns"][i]["triggerRate"].ToString());
                 gameItemEffect.desc = gameItemEffectData["gameplayPatterns"][i]["desc"].ToString();
                 gameItemEffect.weight = float.Parse(gameItemEffectData["gameplayPatterns"][i]["weight"].ToString());
+                gameItemEffect.level = 1;
                 //
                 gameItemEffectList.Add(gameItemEffect);
             }
@@ -148,7 +150,7 @@ public class GameplayEffect : MonoBehaviour
         GetGameItemEffectList(itemID).payingRate *= (1 + effectLevelUp);
         GetGameItemEffectList(itemID).payingAmount *= (1 + effectLevelUp);
         GetGameItemEffectList(itemID).mood *= (1 + effectLevelUp);
-        
+        GetGameItemEffectList(itemID).level++;
     }
 
 }

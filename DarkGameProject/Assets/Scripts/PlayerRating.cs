@@ -53,8 +53,11 @@ public class PlayerRating : MonoBehaviour
     private int reviewEndOrder;
     private int mostHelpfulStartIndex;
 
+    public bool ratingTestMode = false;
+
     private void Awake()
     {
+
         isAllReviewPage = true;
 
         basicRatingCreateNum = 10;
@@ -198,6 +201,16 @@ public class PlayerRating : MonoBehaviour
     void Update()
     {
         
+    }
+
+    //测试用
+    public void RatingTest(float rating)
+    {
+        ratingTestMode = true;
+        gameMode.ratingList.Add(rating);
+        PlayerReviewCreate();
+        PlayerReviewCreate();
+        PlayerReviewCreate();
     }
 
     public void RatingChart()

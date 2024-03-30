@@ -103,6 +103,8 @@ public class PlayerItem : MonoBehaviour
     private GameObject moodPic08;
     private GameObject moodPic09;
 
+    private bool losingProcess = false;
+
 
     private void Awake()
     {
@@ -140,14 +142,13 @@ public class PlayerItem : MonoBehaviour
 
         activePlayer = false;
 
-        satisfactionIndex = 70;
-
         basicPayRate = 0.20f;  //基础付费率
         basicChurnRate = 0.10f;  //基础留存率 33
         basicPayAmount = 1;  //基础付费额
 
-        basicChurnDampingValue = 3f;
-        socialDampingValue = 1.6f;
+        //衰减系数
+        basicChurnDampingValue = 4f;
+        socialDampingValue = 3f;
         accountChurnDampingValue = 1.5f;
 
         playerInbornMood = 90f;  //出生心情
@@ -171,7 +172,6 @@ public class PlayerItem : MonoBehaviour
     {
         if(gameMode.gameDynamicProcess == false)
         {
-            //Destroy(this.gameObject);
             PlayerLosing();
         }
 
@@ -266,7 +266,7 @@ public class PlayerItem : MonoBehaviour
             }
         }
 
-            //累积生存时间
+        //累积生存时间
         if (gameMode.gameDynamicProcess == true && gameMode.gameProcessPause == false)
         {
             liveTime += Time.deltaTime;
@@ -495,65 +495,90 @@ public class PlayerItem : MonoBehaviour
     //角色流失效果
     void PlayerLosing()
     {
-        activePlayer = false;
-
-        //流失表情的变更
-        for(int i = 0; i < playerFaceContent.transform.childCount; i++)
+        if(losingProcess == false)
         {
-            GameObject pFaceI = playerFaceContent.transform.GetChild(i).gameObject;
-            if(pFaceI.transform.localScale == new Vector3(1, 1, 1))
+            losingProcess = true;
+
+            if (activePlayer == true)
             {
-                playerLosingFace.GetComponent<SpriteRenderer>().sprite = pFaceI.GetComponent<SpriteRenderer>().sprite;
-                break;
+                activePlayer = false;
+
+                //流失表情的变更
+                for (int i = 0; i < playerFaceContent.transform.childCount; i++)
+                {
+                    GameObject pFaceI = playerFaceContent.transform.GetChild(i).gameObject;
+                    if (pFaceI.transform.localScale == new Vector3(1, 1, 1))
+                    {
+                        playerLosingFace.GetComponent<SpriteRenderer>().sprite = pFaceI.GetComponent<SpriteRenderer>().sprite;
+                        break;
+                    }
+                }
+
+                playerFaceContent.transform.localScale = new Vector3(0, 0, 0);
+                playerLosingFace.transform.localScale = new Vector3(1, 1, 1);
+
+                gameMode.losingUsersPerTime += 1;
+
+                //lifetime添加
+                int circleN = circleNum - 1; //圈数
+                float halfCircle = 0f;
+                if (circleLifeTimeList.Count == 1)  //1圈都没跑完
+                {
+                    halfCircle = (liveTime - circleLifeTimeList[0]) / gameMode.statisticsInterval;
+                    if (halfCircle >= 1)
+                    {
+                        halfCircle = 0.9f;
+                    }
+                }
+                else if (circleLifeTimeList.Count > 1)  //大于1圈
+                {
+                    float avCircleT = (circleLifeTimeList[circleLifeTimeList.Count - 1] - circleLifeTimeList[0]) / circleN;
+                    halfCircle = (liveTime - circleLifeTimeList[circleLifeTimeList.Count - 1]) / avCircleT;
+                }
+                else if (circleLifeTimeList.Count == 0)
+                {
+                    halfCircle = 0.1f;
+                }
+                float wholeLifetime = circleN + halfCircle;
+                gameMode.userLifePerTimeListList[batchOrder].Add(wholeLifetime);
+                //金钱赋值
+                gameMode.userMoneyPerTimeListList[batchOrder].Add(cuMoney);  //死的时候加累计金钱
+                //心情赋值
+                //Debug.Log(satisfactionIndex);
+                //修正
+                float y = 200f / (1f + Mathf.Exp(-0.02f * (satisfactionIndex - 100f))) - (100f / (1 + Mathf.Exp(5f)));
+                if(y <= 0)
+                {
+                    y = 1;
+                }
+                satisfactionIndex = y;
+                gameMode.userMoodPerTimeListList[batchOrder].Add(satisfactionIndex);  //死的时候加
+
+                //本体列表销毁
+                gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
+
+                //终止金钱动画
+                if (moneyAnimeSequence.IsActive() == true)
+                {
+                    moneyAnimeSequence.Kill();
+                }
+
+                //动画
+                Sequence ss = DOTween.Sequence();
+                //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());
+                ss.Insert(1f, playerLosingFace.transform.DOScale(new Vector3(0, 0, 0), 0.6f));
+                ss.Insert(1.4f, playerLosingFace.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
+
+                ss.OnComplete(() => movingAnime.Kill());
+                ss.OnKill(() => DestroySelf());
+
+            }
+            else
+            {
+                Destroy(this.gameObject);
             }
         }
-
-        playerFaceContent.transform.localScale = new Vector3(0, 0, 0);
-        playerLosingFace.transform.localScale = new Vector3(1, 1, 1);
-
-        gameMode.losingUsersPerTime += 1;
-
-        //lifetime添加
-        int circleN = circleNum - 1; //圈数
-        float halfCircle = 0f;
-        if(circleLifeTimeList.Count == 1)  //1圈都没跑完
-        {
-            halfCircle = (liveTime - circleLifeTimeList[0]) / gameMode.statisticsInterval;
-            if(halfCircle >= 1)
-            {
-                halfCircle = 0.9f;
-            }
-        }
-        else   //大于1圈
-        {
-            float avCircleT = (circleLifeTimeList[circleLifeTimeList.Count - 1] - circleLifeTimeList[0]) / circleN;
-            halfCircle = (liveTime - circleLifeTimeList[circleLifeTimeList.Count - 1]) / avCircleT;
-        }
-        float wholeLifetime = circleN + halfCircle;
-        gameMode.userLifePerTimeListList[batchOrder].Add(wholeLifetime);
-        //金钱赋值
-        gameMode.userMoneyPerTimeListList[batchOrder].Add(cuMoney);  //死的时候加累计金钱
-        //心情赋值
-        gameMode.userMoodPerTimeListList[batchOrder].Add(satisfactionIndex);  //死的时候加
-
-        //本体列表销毁
-        gameMode.userObjectPerTimeListList[batchOrder].Remove(this.gameObject);
-
-        //终止金钱动画
-        if(moneyAnimeSequence.IsActive() == true)
-        {
-            moneyAnimeSequence.Kill();
-        }
-
-        //动画
-        Sequence ss = DOTween.Sequence();
-        //ss.Insert(0f, playerLosingFace.transform.DOMoveZ(1f, 1f).SetRelative());
-        ss.Insert(1f, playerLosingFace.transform.DOScale(new Vector3(0, 0, 0), 0.6f));
-        ss.Insert(1.4f, playerLosingFace.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
-
-        ss.OnComplete(() => movingAnime.Kill());
-        ss.OnKill(() => DestroySelf());
-
+        
     }
 
     //付费-基础监测（伴随时间）
@@ -663,6 +688,7 @@ public class PlayerItem : MonoBehaviour
             {
                 PlayerPaying(finalPayingAmount);
                 gameMode.purchaseRateS += 1;
+                //Debug.Log("基础付费率 = " + finalPayingRate);
             }
 
             basicMoneyCheckTiming = 0f;
@@ -795,6 +821,7 @@ public class PlayerItem : MonoBehaviour
             //Debug.Log("PayingEvent ++ " + cFinalPayingAmount);
             PlayerPaying(cFinalPayingAmount);
             gameMode.purchaseRateS += 1;
+            //Debug.Log(itemID + "事件付费率 = " + finalPayingRate);
         }
 
     }
@@ -907,10 +934,17 @@ public class PlayerItem : MonoBehaviour
 
             //概率
             float rate = Random.Range(0f, 1f);
-            if (rate <= (1 - finalChurnRate))
+            float finalR = 0.85f * (1 - Mathf.Exp(-1.24f * finalChurnRate)); ;
+
+            if (rate <= finalR)
+            {
+                //留下
+            }
+            else
             {
                 PlayerLosing();
                 gameMode.retentionRateS += 1;
+                //Debug.Log("基础留存率 = " + finalChurnRate);
             }
 
             basicLivingTiming = 0f;
@@ -966,10 +1000,9 @@ public class PlayerItem : MonoBehaviour
         accountChurnReset = accountChurn * (1 - accountDamping);
 
         finalChurnRate = basicChurnReset + socialChurnReset + accountChurnReset;
-        if(finalChurnRate > 1)
-        {
-            finalChurnRate = 1f;
-        }
+        //Debug.Log("最终: "+ finalChurnRate.ToString("0.00") + " 基础/道具" + basicChurnRate.ToString("0.00") + "/" + itemChurnRate.ToString("0.00") + "-" + basicChurnReset.ToString("0.00") + " 社交" + socialChurn.ToString("0.00") + "-" + socialChurnReset.ToString("0.00"));
+
+
     }
 
     void PlayerMoodLogic()
