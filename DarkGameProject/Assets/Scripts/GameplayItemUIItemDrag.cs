@@ -12,6 +12,7 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
 
     private DesignPanel designPenel;
     private BasicAction basicAction;
+    private GameMode gameMode;
 
 
     // Start is called before the first frame update
@@ -19,6 +20,7 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
     {
         designPenel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
         basicAction = GameObject.Find("Main Camera").gameObject.GetComponent<BasicAction>();
+        gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
     }
 
     // Update is called once per frame
@@ -36,6 +38,8 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         basicAction.InsNewGameplayItem(this.gameObject.GetComponentInParent<GameplayItemUIItem>().itemID, false, this.gameObject.GetComponentInParent<GameplayItemUIItem>().isDark);
         //禁用地图拖拽
         BasicAction.gameplayItemAction = true;
+
+        gameMode.gameProcessPause = true;
 
     }
 
@@ -56,6 +60,7 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
                 this.gameObject.transform.localScale = new Vector3(1, 0, 1);
             }
 
+            gameMode.gameProcessPause = true;
         }
     }
 
@@ -83,6 +88,11 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         BasicAction.gameplayItemAction = false;
         //
         this.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+
+        //刷新全局
+        designPenel.DesignReset();
+
+        gameMode.gameProcessPause = false;
     }
 
     public void CancelDrag()
@@ -94,5 +104,7 @@ public class GameplayItemUIItemDrag : MonoBehaviour, IDragHandler, IEndDragHandl
         this.gameObject.transform.localScale = new Vector3(1, 1, 1);
         //
         BasicAction.gameplayItemAction = false;
+
+        gameMode.gameProcessPause = false;
     }
 }

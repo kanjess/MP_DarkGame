@@ -142,7 +142,7 @@ public class PlayerItem : MonoBehaviour
 
         activePlayer = false;
 
-        basicPayRate = 0.20f;  //基础付费率
+        basicPayRate = 0.15f;  //基础付费率
         basicChurnRate = 0.10f;  //基础留存率 33
         basicPayAmount = 1;  //基础付费额
 

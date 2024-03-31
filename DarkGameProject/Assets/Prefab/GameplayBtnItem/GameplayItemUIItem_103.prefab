@@ -388,7 +388,7 @@ MonoBehaviour:
   itemID: 103
   itemLevel: 1
   isDark: 0
-  unlockLevelListString: 2,6
+  unlockLevelListString: 2,5
   levelUpBtn: {fileID: 7801525060961581893}
   itemName: 
   levelContent: {fileID: 0}

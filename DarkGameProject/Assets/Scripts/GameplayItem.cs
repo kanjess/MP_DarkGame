@@ -937,13 +937,19 @@ public class GameplayItem : MonoBehaviour
                 {
                     stablePic.transform.DOLocalRotate(new Vector3(0, 0, rz), 0.3f);
                 }
-                anime.OnComplete(() => rotationAnime = false);
-                anime.OnKill(() => basicAction.AutoRoadRecreateForItem(this.gameObject));
+                anime.OnComplete(() => RotateReset());
             }
 
             //
-            BasicAction.gameplayItemAction = false;
+            
         } 
+    }
+    void RotateReset()
+    {
+        basicAction.AutoRoadRecreateForItem(this.gameObject);
+        rotationAnime = false;
+        BasicAction.gameplayItemAction = false;
+        gameMode.gameProcessPause = false;
     }
 
     //非法通行-新坐标加入

@@ -147,6 +147,7 @@ public class BasicAction : MonoBehaviour
                 gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
                 mousHitObject.gameObject.GetComponentInParent<GameplayItem>().DirectionSet();
                 gameplayItemAction = true;
+                gameMode.gameProcessPause = true;
             }
         }
 
@@ -219,6 +220,7 @@ public class BasicAction : MonoBehaviour
                         temTargetOJ.GetComponent<GameplayItem>().moveBtn.GetComponent<BoxCollider2D>().enabled = false;
 
                         gameplayItemAction = true;
+                        gameMode.gameProcessPause = true;
                     }
                 }
                 //拖拽路线
@@ -278,6 +280,7 @@ public class BasicAction : MonoBehaviour
                     }
 
                     gameplayItemAction = true;
+                    gameMode.gameProcessPause = true;
 
                     gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
                 }
@@ -294,6 +297,8 @@ public class BasicAction : MonoBehaviour
             ojt.transform.localScale = new Vector3(1, 1, 1);
 
             gameplayItemAction = true;
+            gameMode.gameProcessPause = true;
+
             gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
         }
 
@@ -301,6 +306,7 @@ public class BasicAction : MonoBehaviour
         if (ojt != null && roadEditMode == false)
         {
             gameplayItemAction = true;
+            gameMode.gameProcessPause = true;
 
             if (mosIsDragging == true || panelIsDragging == true)
             {
@@ -528,6 +534,7 @@ public class BasicAction : MonoBehaviour
         else if (ojt != null && roadEditMode == true)
         {
             gameplayItemAction = true;
+            gameMode.gameProcessPause = true;
 
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             // 因为是2D，所以忽略Z轴
@@ -955,8 +962,12 @@ public class BasicAction : MonoBehaviour
             TemGameplayItemClear();
             //
             gameplayItemAction = false;
+            gameMode.gameProcessPause = false;
 
             Item101StartCheck();  //判定是否形成闭环
+
+            //刷新全局
+            designPenel.DesignReset();
         }
 
         // 释放鼠标左键（拖拽路线）
@@ -1092,8 +1103,12 @@ public class BasicAction : MonoBehaviour
             roadEditMode = false;
             //
             gameplayItemAction = false;
+            gameMode.gameProcessPause = false;
 
             Item101StartCheck();  //判定是否形成闭环
+
+            //刷新全局
+            designPenel.DesignReset();
         }
 
         //菜单拖拽取消或结束
@@ -1113,6 +1128,7 @@ public class BasicAction : MonoBehaviour
             TemGameplayItemClear();
             //
             gameplayItemAction = false;
+            gameMode.gameProcessPause = false;
         }
 
         // 检测鼠标右键点击
@@ -1133,6 +1149,7 @@ public class BasicAction : MonoBehaviour
                 TemGameplayItemClear();
                 //
                 gameplayItemAction = false;
+                gameMode.gameProcessPause = false;
             }
             else if (designPenel.designItemDragState)
             {
@@ -1148,6 +1165,7 @@ public class BasicAction : MonoBehaviour
                 TemGameplayItemClear();
                 //
                 gameplayItemAction = false;
+                gameMode.gameProcessPause = false;
             }
         }
     }
@@ -1184,6 +1202,7 @@ public class BasicAction : MonoBehaviour
                     TemGameplayItemClear();
                     //
                     gameplayItemAction = false;
+                    gameMode.gameProcessPause = false;
 
                     //ui数量变更
                     designPenel.GameItemNumChange(id, false, false);
@@ -1216,6 +1235,7 @@ public class BasicAction : MonoBehaviour
                     TemGameplayItemClear();
                     //
                     gameplayItemAction = false;
+                    gameMode.gameProcessPause = false;
 
                     //ui数量变更
                     designPenel.GameItemNumChange(id, true, false);

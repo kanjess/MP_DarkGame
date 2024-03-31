@@ -1,12 +1,15 @@
 ﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerItem.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="14" Column="42" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="145" Column="29" />
       <File FileName="Assets/Scripts/GameTask.cs" />
       <File FileName="Assets/Scripts/ReviewItem.cs" />
-      <File FileName="Assets/Scripts/PlayerRating.cs" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" />
-      <File FileName="Assets/Scripts/GameMode.cs" />
+      <File FileName="Assets/Scripts/PlayerRating.cs" Line="206" Column="10" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="1106" Column="18" />
+      <File FileName="Assets/Scripts/GameMode.cs" Line="47" Column="25" />
+      <File FileName="Assets/Scripts/BasicAction.cs" Line="1111" Column="39" />
+      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="90" Column="72" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="940" Column="55" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

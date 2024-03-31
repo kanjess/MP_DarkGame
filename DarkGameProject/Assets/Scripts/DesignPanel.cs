@@ -1068,7 +1068,7 @@ public class DesignPanel : MonoBehaviour
 
                 anime.OnComplete(() => designItemBtnAnime = false);
                 //暂停游戏
-                gameMode.gameProcessPause = true;
+                //gameMode.gameProcessPause = true;
 
                 moveSlide.transform.position = itemMoveBtn.transform.position;
 
@@ -1094,7 +1094,7 @@ public class DesignPanel : MonoBehaviour
 
                 anime.OnComplete(() => designItemBtnAnime = false);
                 //继续游戏
-                gameMode.gameProcessPause = false;
+                //gameMode.gameProcessPause = false;
 
                 //消除new
                 for (int i = 0; i < gameMode.gameItemList.Count; i++)
@@ -1105,18 +1105,22 @@ public class DesignPanel : MonoBehaviour
                     }
                 }
 
-                gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
-
-                //刷新一圈的距离
-                if(gameMode.gameDynamicProcess == true)
-                {
-                    GameObject.Find("GameplayItem_101(Clone)").GetComponent<GameplayItem>().MainRoadDistanceCal();
-                }
-
-                //检测场上item的全局效果并构建效果列表
-                gameMode.ObjectGlobalEffectListCreate();
+                DesignReset();
             }
         }
+    }
+    public void DesignReset()
+    {
+        gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
+
+        //刷新一圈的距离
+        if (gameMode.gameDynamicProcess == true)
+        {
+            GameObject.Find("GameplayItem_101(Clone)").GetComponent<GameplayItem>().MainRoadDistanceCal();
+        }
+
+        //检测场上item的全局效果并构建效果列表
+        gameMode.ObjectGlobalEffectListCreate();
     }
 
     void UIUpdate()
@@ -1227,7 +1231,7 @@ public class DesignPanel : MonoBehaviour
             if (no == 1 || no == 3)
             {
                 //游戏暂停
-                gameMode.gameProcessPause = true;
+                //gameMode.gameProcessPause = true;
                 //地图锁定
                 cameraControl.cameraCanMove = false;
 
@@ -1278,7 +1282,7 @@ public class DesignPanel : MonoBehaviour
                 scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0,0,0));
 
                 //游戏恢复
-                gameMode.gameProcessPause = false;
+                //gameMode.gameProcessPause = false;
                 cameraControl.cameraCanMove = true;
             }
         }
@@ -1299,7 +1303,7 @@ public class DesignPanel : MonoBehaviour
             scenePanelTweener.OnKill(() => sceneContentBg.transform.localScale = new Vector3(0, 0, 0));
 
             //游戏恢复
-            gameMode.gameProcessPause = false;
+            //gameMode.gameProcessPause = false;
             cameraControl.cameraCanMove = true;
         }
     }
@@ -1346,7 +1350,7 @@ public class DesignPanel : MonoBehaviour
     {
         if (gamePromotionPanelOpen == false)
         {
-            gameMode.gameProcessPause = true;
+            //gameMode.gameProcessPause = true;
             cameraControl.cameraCanMove = false;
 
             gamePromotionPanel.transform.localScale = new Vector3(0, 0, 0);
@@ -1369,7 +1373,7 @@ public class DesignPanel : MonoBehaviour
             anime.OnComplete(() => gamePromotionPanelBg.transform.localScale = new Vector3(0, 0, 0));
             anime.OnKill(() => gamePromotionPanelOpen = false);
 
-            gameMode.gameProcessPause = false;
+            //gameMode.gameProcessPause = false;
             cameraControl.cameraCanMove = true;
         }
     }
@@ -1379,7 +1383,7 @@ public class DesignPanel : MonoBehaviour
     {
         if (gameTaskPanelOpen == false)
         {
-            gameMode.gameProcessPause = true;
+            //gameMode.gameProcessPause = true;
             cameraControl.cameraCanMove = false;
 
             gameTaskPanel.transform.localScale = new Vector3(0, 0, 0);
@@ -1429,7 +1433,7 @@ public class DesignPanel : MonoBehaviour
             anime.OnComplete(() => gameTaskPanelBg.transform.localScale = new Vector3(0, 0, 0));
             anime.OnKill(() => gameTaskPanelOpen = false);
 
-            gameMode.gameProcessPause = false;
+            //gameMode.gameProcessPause = false;
             cameraControl.cameraCanMove = true;
         }
     }
@@ -2557,7 +2561,7 @@ public class DesignPanel : MonoBehaviour
     {
         if (gameEndingPanelOpen == false)
         {
-            gameMode.gameProcessPause = true;
+            //gameMode.gameProcessPause = true;
             cameraControl.cameraCanMove = false;
 
             gameEndingPanel.transform.localScale = new Vector3(0, 0, 0);
@@ -2580,7 +2584,7 @@ public class DesignPanel : MonoBehaviour
             anime.OnComplete(() => gameEndingPanelBg.transform.localScale = new Vector3(0, 0, 0));
             anime.OnKill(() => gameEndingPanelOpen = false);
 
-            gameMode.gameProcessPause = false;
+            //gameMode.gameProcessPause = false;
             cameraControl.cameraCanMove = true;
         }
     }
