@@ -1,22 +1,16 @@
 ﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameTask.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerItem.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerItem.cs" Line="612" Column="50" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" Line="1112" Column="6" />
-      <File FileName="Assets/Scripts/GameTask.cs" Line="185" Column="34" />
-      <File FileName="Assets/Scripts/ReviewItem.cs" />
-      <File FileName="Assets/Scripts/PlayerRating.cs" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="241" Column="30" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="2674" Column="6" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="153" Column="37" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" />
+      <File FileName="Assets/Scripts/GameTask.cs" Line="178" Column="6" />
       <File FileName="Assets/Scripts/GameMode.cs" Line="658" Column="92" />
-      <File FileName="Assets/Scripts/BasicAction.cs" Line="149" Column="45" />
-      <File FileName="Assets/Scripts/MainPathItem.cs" />
-      <File FileName="Assets/Scripts/GameplayItemUIItemDrag.cs" Line="38" Column="39" />
-      <File FileName="Assets/Scripts/BackgroundMusic.cs" Line="36" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f7daa2ca-434a-45e9-897f-fbd996bd5a56" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="e3ff03fc-13ad-4d03-8d10-88f5f113da0c" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

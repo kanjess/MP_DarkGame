@@ -1,79 +1,189 @@
 {
     "gameGuide": [
         {
-            "id": 101,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1001
+            "id": 1001,
+            "desc": "Here you can find the current quest assigned by your company. You can left click on the quest to see the detailed imformation and instructions.",
+            "image": "100-1"
             },
             {
-            "id": 102,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1002
+            "id": 1011,
+            "desc": "Here you can find <color=blue>Basic Functions or Gameplays</color> & <color=red>Design Patterns</color>.",
+            "image": "101-1"
             },
             {
-            "id": 103,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1003
+            "id": 1012,
+            "desc": "You can <b>drag</b> Basic Functions to anywere you want on the map. Please note that you can only do dragging & rotating on <b>design page</b>.",
+            "image": "101-2"
             },
             {
-            "id": 104,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1001
+            "id": 1021,
+            "desc": "<b>Drag</b> the arrow from <color=green>App Store</color> module to the <color=blue>Basic Function or Gameplay</color> module you want to connect with.",
+            "image": "102-1"
             },
             {
-            "id": 105,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1002
+            "id": 1022,
+            "desc": "Drag the arrow from one module to anothor module to connect two modules.",
+            "image": "102-2"
             },
             {
-            "id": 106,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1003
+            "id": 1023,
+            "desc": "Drag to connect all modules to form a loop.",
+            "image": "102-3"
             },
             {
-            "id": 107,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1001
+            "id": 1024,
+            "desc": "Now you have a game ready for your to play. Welcome your players!",
+            "image": "102-4"
             },
             {
-            "id": 108,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1002
+            "id": 1031,
+            "desc": "You can <b>scroll</b> to find different design patterns. Find and <b>drag</b> the <color=red>Grinding</color> design pattern on the <color=blue>Single-player Gameplay</color> module. ",
+            "image": "103-1"
             },
             {
-            "id": 109,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1003
+            "id": 1032,
+            "desc": "You can <b>click</b> on the <b>Name</b> to check detailed description and information of different design pattern and gameplays.",
+            "image": "103-2"
             },
             {
-            "id": 110,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1001
+            "id": 1041,
+            "desc": "Here shows your level, your level experience gradually growing as your players play your game. You can also gain experience while complete quests.  <color=red>(Tips: Game Promotion can generate a lot of EXP!)</color>",
+            "image": "104-1"
             },
             {
-            "id": 111,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1002
+            "id": 1051,
+            "desc": "<b>Drag</b> the <color=red>Ads</color> pattern on the <color=blue>System Structure</color> module. Please note that some design patterns can only be added on certain modules.",
+            "image": "105-1"
             },
             {
-            "id": 112,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1003
+            "id": 1061,
+            "desc": "<b>Drag</b> to add more different design patterns on your modules.",
+            "image": "106-1"
             },
             {
-            "id": 113,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1001
+            "id": 1071,
+            "desc": "<b>Left click</b> here to check your operation report. Always keep an eye on your financial statements, which is an important part of your mission as a game producer.",
+            "image": "107-1"
             },
             {
-            "id": 114,
-            "desc": "asdhngfdsbvcxvcbcdgrewrte    asda      qwedfdsvcscsa",
-            "image": 1002
+            "id": 1072,
+            "desc": "You can <b>scroll down</b> to view more data.",
+            "image": "107-2"
             },
             {
-            "id": 115,
-            "desc": "asdasdasdadasdsd,asjd lk maklsdjakldjlakjdla.",
-            "image": 1003
+            "id": 1073,
+            "desc": "<b>Left click</b> the report icon again to back to your game.",
+            "image": "107-3"
+            },
+            {
+            "id": 1081,
+            "desc": "Drag the modules from the Design page to where you want to put them on the map.",
+            "image": "108-1"
+            },
+            {
+            "id": 1082,
+            "desc": "Drag the arrow from privious module to the new module you want to connect with. And Drag the arrow beteen your new modules.",
+            "image": "108-2"
+            },
+            {
+            "id": 1083,
+            "desc": "Form a new loop.",
+            "image": "108-3"
+            },
+            {
+            "id": 1091,
+            "desc": "Drag to add more different design patterns on your modules.",
+            "image": "109-1"
+            },
+            {
+            "id": 1101,
+            "desc": "Game Promotion will be unlocked at Level 4. <b>Left click</b> the promotion icon. <color=red>(Tips: Game Promotion can bring in a lot of players and generate a lot of EXP)</color>",
+            "image": "110-1"
+            },
+            {
+            "id": 1102,
+            "desc": "Then <b>left click</b> the promote button.",
+            "image": "110-2"
+            },
+            {
+            "id": 1111,
+            "desc": "Please reach level 10.",
+            "image": "111-1"
+            },
+            {
+            "id": 1121,
+            "desc": "You can find your players' Retention Rate here on the operation report page. A high retention rate means players spend more time on your game, which is a good thing.",
+            "image": "112-1"
+            },
+            {
+            "id": 1122,
+            "desc": "<b>Click</b> on the name of design patterns on the design page to check their detailed functions. Find which of those suits your need.",
+            "image": "112-2"
+            },
+            {
+            "id": 1131,
+            "desc": "You can find your players' Payment Conversion Rate here on the operation report page. A high  conversion rate means more players are paying in your game, which is something our company loves to see.",
+            "image": "113-1"
+            },
+            {
+            "id": 1132,
+            "desc": "<b>Click</b> on the name of design patterns on the design page to check their detailed functions. Find which of those suits your need.",
+            "image": "113-2"
+            },
+            {
+            "id": 1141,
+            "desc": "Click on any of these design pattern's name on the design page.",
+            "image": "114-1"
+            },
+            {
+            "id": 1142,
+            "desc": "Click on the green button to upgrade your design pattern. Higher levels mean stronger effects (more enticing  login rewards or more insidious loot box drop rates?)",
+            "image": "114-2"
+            },
+            {
+            "id": 1151,
+            "desc": "Drag to add more different design patterns on your modules.",
+            "image": "115-1"
+            },
+            {
+            "id": 1161,
+            "desc": "By <b>left click</b> on the review icon here, you can go to the players' review & rating page. You don't have to be overly concerned it. Players are always complaining.",
+            "image": "116-1"
+            },
+            {
+            "id": 1162,
+            "desc": "You can <b>scroll down</b> to view more players' comments. And you can <b>left click</b> on the HELPFUL button to see those comments that are more specific.",
+            "image": "116-2"
+            },
+            {
+            "id": 1163,
+            "desc": "<b>Left click</b> the players' review & rating icon again to back to your game.",
+            "image": "116-3"
+            },
+            {
+            "id": 1171,
+            "desc": "Here on the operation report page you can find your players' Customer Lifetime Value records. A higher CLV means a higher profit return for each new player.",
+            "image": "117-1"
+            },
+            {
+            "id": 1172,
+            "desc": "Increase your players' CLV by increase your players' retention rate and payment conversion rate. You can achive these goals by add more design patterns to your module or upgrade more design patterns.",
+            "image": "117-2"
+            },
+            {
+            "id": 1181,
+            "desc": "Make 3 times in total game promotion by left click the promotion icon and then left click the promote button.",
+            "image": "118-1"
+            },
+            {
+            "id": 1191,
+            "desc": "Please reach level 15.",
+            "image": "119-1"
+            },
+            {
+            "id": 1201,
+            "desc": "You have finished all the quests. If you don't want to continue playing, you can now click on the annual summary to view the ending scene.",
+            "image": "120-1"
             }
     ]
 }

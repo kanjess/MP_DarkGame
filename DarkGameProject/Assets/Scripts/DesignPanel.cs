@@ -255,6 +255,7 @@ public class DesignPanel : MonoBehaviour
     private GameObject gameTaskPanelBg;
     private GameObject gameTaskPanel;
     private GameObject gameTaskCloseBtn;
+    private GameObject gameTaskGuideImageMask;
     private GameObject gameTaskGuideImage;
     private GameObject gameTaskFinishBtn;
     private GameObject gameTaskFinishReward;
@@ -350,7 +351,8 @@ public class DesignPanel : MonoBehaviour
         gameTaskPanelBg = gameTaskPanelContent.transform.Find("Bg").gameObject;
         gameTaskPanel = gameTaskPanelContent.transform.Find("TaskPanel").gameObject;
         gameTaskCloseBtn = gameTaskPanel.transform.Find("CloseBtn").gameObject;
-        GameObject gameTaskGuideImageMask = gameTaskPanel.transform.Find("GuideMask").gameObject;
+        GameObject gameTaskGuidePicContent = gameTaskPanel.transform.Find("GuidePicContent").gameObject;
+        gameTaskGuideImageMask = gameTaskGuidePicContent.transform.Find("GuideMask").gameObject;
         gameTaskGuideImage = gameTaskGuideImageMask.transform.Find("GuideImage").gameObject;
         gameTaskFinishBtn = gameTaskPanel.transform.Find("FinishBtn").gameObject;
         gameTaskFinishReward = gameTaskFinishBtn.transform.Find("RewardMoney").gameObject;
@@ -664,7 +666,7 @@ public class DesignPanel : MonoBehaviour
 
         gameTaskFinishBtn.GetComponent<Button>().onClick.AddListener(delegate
         {
-            GameTaskPanelAnime();
+            GameTaskPanelAnime(true);
             TaskBtnOut();
         });
         taskFinish.GetComponent<Button>().onClick.AddListener(delegate
@@ -672,17 +674,23 @@ public class DesignPanel : MonoBehaviour
             TaskBtnOut();
         });
 
-        taskDetailBtn.GetComponent<Button>().onClick.AddListener(GameTaskPanelAnime);
-        gameTaskCloseBtn.GetComponent<Button>().onClick.AddListener(GameTaskPanelAnime);
+        taskDetailBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            GameTaskPanelAnime(true);
+        });
+        gameTaskCloseBtn.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            GameTaskPanelAnime(true);
+        });
         gameTaskPanelGuideLeftBtn.GetComponent<Button>().onClick.AddListener(delegate
         {
             taskGuideStep--;
-            GuideInfoShow();
+            GuideInfoShow(true);
         });
         gameTaskPanelGuideRightBtn.GetComponent<Button>().onClick.AddListener(delegate
         {
             taskGuideStep++;
-            GuideInfoShow();
+            GuideInfoShow(true);
         });
 
         //开始状态设置
@@ -1184,7 +1192,8 @@ public class DesignPanel : MonoBehaviour
 
         if (gameTask.allTaskFinish == false && hasTaskShow == false)
         {
-            Invoke("TaskBtnIn", 3f);
+            Invoke("TaskBtnIn", 2f);
+            Invoke("GameStartEnd1", 3f);
         }
 
         //音乐
@@ -1192,7 +1201,11 @@ public class DesignPanel : MonoBehaviour
         {
             this.gameObject.GetComponent<BackgroundMusic>().musicStart = true;
         }
+    }
 
+    void GameStartEnd1()
+    {
+        GameTaskPanelAnime(false);
     }
 
     void DesignPanelAnime()
@@ -1548,7 +1561,7 @@ public class DesignPanel : MonoBehaviour
     }
 
     //Task界面
-    public void GameTaskPanelAnime()
+    public void GameTaskPanelAnime(bool isTask)
     {
         if (gameTaskPanelOpen == false)
         {
@@ -1564,33 +1577,37 @@ public class DesignPanel : MonoBehaviour
 
             Tweener anime = gameTaskPanel.transform.DOScale(new Vector3(1, 1, 1), 0.3f);
 
-            //UI
-            gameTaskPanelDesc.GetComponent<Text>().text = "Task: " + gameTask.currentTask.desc;
-            if(gameTask.currentTask.function == 404 || gameTask.currentTask.function == 405)
+            if(isTask == true)
             {
-                gameTaskPanelProcess.GetComponent<Text>().text = (int)(gameTask.currentTaskProcess * 100f) + "%" + "/" + (int)(gameTask.currentTask.functionValue * 100f) + "%";
-            }
-            else
-            {
-                gameTaskPanelProcess.GetComponent<Text>().text = gameTask.currentTaskProcess + "/" + gameTask.currentTask.functionValue;
-            }
+                //UI
+                gameTaskPanelDesc.GetComponent<Text>().text = "Task: " + gameTask.currentTask.desc;
+                if (gameTask.currentTask.function == 404 || gameTask.currentTask.function == 405)
+                {
+                    gameTaskPanelProcess.GetComponent<Text>().text = (int)(gameTask.currentTaskProcess * 100f) + "%" + "/" + (int)(gameTask.currentTask.functionValue * 100f) + "%";
+                }
+                else
+                {
+                    gameTaskPanelProcess.GetComponent<Text>().text = gameTask.currentTaskProcess + "/" + gameTask.currentTask.functionValue;
+                }
 
-            gameTaskFinishReward.GetComponent<Text>().text = gameTask.currentTask.reward.ToString();
-            if(gameTask.currentTask.hasDone == true)
-            {
-                gameTaskFinishBtn.transform.localScale = new Vector3(1, 1, 1);
-                gameTaskPanelDesc.transform.localScale = new Vector3(1, 0, 1);
-                gameTaskPanelProcess.transform.localScale = new Vector3(1, 0, 1);
+                gameTaskFinishReward.GetComponent<Text>().text = gameTask.currentTask.reward.ToString();
+                if (gameTask.currentTask.hasDone == true)
+                {
+                    gameTaskFinishBtn.transform.localScale = new Vector3(1, 1, 1);
+                    gameTaskPanelDesc.transform.localScale = new Vector3(1, 0, 1);
+                    gameTaskPanelProcess.transform.localScale = new Vector3(1, 0, 1);
+                }
+                else
+                {
+                    gameTaskFinishBtn.transform.localScale = new Vector3(1, 0, 1);
+                    gameTaskPanelDesc.transform.localScale = new Vector3(1, 1, 1);
+                    gameTaskPanelProcess.transform.localScale = new Vector3(1, 1, 1);
+                }
             }
-            else
-            {
-                gameTaskFinishBtn.transform.localScale = new Vector3(1, 0, 1);
-                gameTaskPanelDesc.transform.localScale = new Vector3(1, 1, 1);
-                gameTaskPanelProcess.transform.localScale = new Vector3(1, 1, 1);
-            }
+            
             //guide
             taskGuideStep = 1;
-            GuideInfoShow();
+            GuideInfoShow(isTask);
             //
             gameTask.currentTask.guidePanelOpenNum++;
         }
@@ -1606,37 +1623,98 @@ public class DesignPanel : MonoBehaviour
             cameraControl.cameraCanMove = true;
         }
     }
-    void GuideInfoShow()
+    void GuideInfoShow(bool isTask)
     {
-        if(taskGuideStep < 1)
+        if(isTask == true)
         {
-            taskGuideStep = 1;
-        }else if(taskGuideStep > gameTask.currentTask.guideList.Count)
-        {
-            taskGuideStep = gameTask.currentTask.guideList.Count;
-        }
+            if (taskGuideStep < 1)
+            {
+                taskGuideStep = 1;
+            }
+            else if (taskGuideStep > gameTask.currentTask.guideList.Count)
+            {
+                taskGuideStep = gameTask.currentTask.guideList.Count;
+            }
 
-        int guideID = gameTask.currentTask.guideList[taskGuideStep - 1];
-        gameTaskPanelGuideDesc.GetComponent<Text>().text = gameTask.GetGameGuide(guideID).desc;
-        gameTaskGuideImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("UIElements/Guide/" + gameTask.GetGameGuide(guideID).image);
+            int guideID = gameTask.currentTask.guideList[taskGuideStep - 1];
+            gameTaskPanelGuideDesc.GetComponent<TextMeshProUGUI>().text = gameTask.GetGameGuide(guideID).desc;
 
-        if(gameTask.currentTask.guideList.Count > 1)
-        {
-            if(taskGuideStep == 1)
+            gameTaskGuideImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("UIElements/Guide/" + gameTask.GetGameGuide(guideID).image);
+            float originalWidth = gameTaskGuideImage.GetComponent<Image>().sprite.texture.width;
+            float originalHeight = gameTaskGuideImage.GetComponent<Image>().sprite.texture.height;
+            float setHeight = gameTaskGuideImageMask.GetComponent<RectTransform>().sizeDelta.y;
+            float setWidth = (originalWidth / originalHeight) * setHeight;
+            gameTaskGuideImage.GetComponent<RectTransform>().sizeDelta = new Vector2(setWidth, setHeight);
+
+            if (gameTask.currentTask.guideList.Count > 1)
+            {
+                if (taskGuideStep == 1)
+                {
+                    gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(0, 1, 1);
+                    gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(1, 1, 1);
+                }
+                else if (taskGuideStep == gameTask.currentTask.guideList.Count)
+                {
+                    gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(1, 1, 1);
+                    gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
+                }
+                else if (taskGuideStep > 1 && taskGuideStep < gameTask.currentTask.guideList.Count)
+                {
+                    gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(1, 1, 1);
+                    gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(1, 1, 1);
+                }
+            }
+            else
             {
                 gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(0, 1, 1);
-                gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(1, 1, 1);
-            }
-            else if (taskGuideStep == gameTask.currentTask.guideList.Count)
-            {
-                gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(1, 1, 1);
                 gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
             }
+
         }
-        else
+        //特殊唤起
+        else if(isTask == false)
         {
-            gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(0, 1, 1);
-            gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
+            //进入唤起
+            if(gameTask.allTaskFinish == false)
+            {
+                gameTaskPanelGuideDesc.GetComponent<TextMeshProUGUI>().text = "Here you can find the current quest assigned by your company. You can <b>left click</b> on the quest to see the detailed imformation and instructions.";
+                gameTaskPanelDesc.GetComponent<Text>().text = "";
+
+                gameTaskGuideImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("UIElements/Guide/" + "100-1");
+                float originalWidth = gameTaskGuideImage.GetComponent<Image>().sprite.texture.width;
+                float originalHeight = gameTaskGuideImage.GetComponent<Image>().sprite.texture.height;
+                float setHeight = gameTaskGuideImageMask.GetComponent<RectTransform>().sizeDelta.y;
+                float setWidth = (originalWidth / originalHeight) * setHeight;
+                gameTaskGuideImage.GetComponent<RectTransform>().sizeDelta = new Vector2(setWidth, setHeight);
+
+                gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(0, 1, 1);
+                gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
+
+                gameTaskFinishBtn.transform.localScale = new Vector3(1, 0, 1);
+                gameTaskPanelDesc.transform.localScale = new Vector3(1, 0, 1);
+                gameTaskPanelProcess.transform.localScale = new Vector3(1, 0, 1);
+
+            }
+            //结束唤起
+            else if (gameTask.allTaskFinish == true)
+            {
+                gameTaskPanelGuideDesc.GetComponent<TextMeshProUGUI>().text = "You have finished all the quests. If you don't want to continue playing, you can now <b>click</b> on the annual summary to view the ending scene.";
+                gameTaskPanelDesc.GetComponent<Text>().text = "";
+
+                gameTaskGuideImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("UIElements/Guide/" + "120-1");
+                float originalWidth = gameTaskGuideImage.GetComponent<Image>().sprite.texture.width;
+                float originalHeight = gameTaskGuideImage.GetComponent<Image>().sprite.texture.height;
+                float setHeight = gameTaskGuideImageMask.GetComponent<RectTransform>().sizeDelta.y;
+                float setWidth = (originalWidth / originalHeight) * setHeight;
+                gameTaskGuideImage.GetComponent<RectTransform>().sizeDelta = new Vector2(setWidth, setHeight);
+
+                gameTaskPanelGuideLeftBtn.transform.localScale = new Vector3(0, 1, 1);
+                gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
+
+                gameTaskFinishBtn.transform.localScale = new Vector3(1, 0, 1);
+                gameTaskPanelDesc.transform.localScale = new Vector3(1, 0, 1);
+                gameTaskPanelProcess.transform.localScale = new Vector3(1, 0, 1);
+            }
         }
     }
 
@@ -2589,7 +2667,12 @@ public class DesignPanel : MonoBehaviour
         //moveD *= scaleW;
 
         endingSceneBtnShow = true;
-        endingSceneBtn.transform.DOLocalMoveX(moveD, 0.3f).SetRelative();
+        Tweener anime = endingSceneBtn.transform.DOLocalMoveX(moveD, 0.3f).SetRelative();
+        anime.OnComplete(() => EndingSceneEnd1());
+    }
+    void EndingSceneEnd1()
+    {
+        GameTaskPanelAnime(false);
     }
 
     //任务
@@ -2617,7 +2700,7 @@ public class DesignPanel : MonoBehaviour
 
             gameMode.endingWaitingTime = 0f;
 
-            Invoke("TaskBtnIn", 2f);
+            Invoke("TaskBtnIn", 1f);
         }
         else if (gameTask.currentTask.nextID == -1)
         {
@@ -2734,7 +2817,7 @@ public class DesignPanel : MonoBehaviour
             gamePromotionBtnShow0.transform.localScale = new Vector3(1, 0, 1);
 
             float x = gamePromotionBtnShow1Item.transform.position.x;
-            x -= 0.1f * 2f * scaleW;
+            x -= 0.1f * 3f * scaleW;
             gamePromotionBtnShow1Item.transform.position = new Vector3(x, gamePromotionBtnShow1Item.transform.position.y, 0f);
             if(gamePromotionBtnShow1Item.transform.position.x <= gamePromotionBtnShow1Point1.transform.position.x)
             {

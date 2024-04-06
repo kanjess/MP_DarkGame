@@ -9,7 +9,7 @@
             "funcValue": 2,
             "next": 102,
             "reward": 200,
-            "newGuide": "101,102"
+            "newGuide": "1011,1012"
             },
             {
             "id": 102,
@@ -20,7 +20,7 @@
             "funcValue": 1,
             "next": 103,
             "reward": 350,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1021,1022,1023,1024"
             },
             {
             "id": 103,
@@ -31,7 +31,7 @@
             "funcValue": 1,
             "next": 104,
             "reward": 500,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1031,1032"
             },
             {
             "id": 104,
@@ -42,7 +42,7 @@
             "funcValue": 1,
             "next": 105,
             "reward": 650,
-            "newGuide": "101,102"
+            "newGuide": "1101,1102"
             },
             {
             "id": 105,
@@ -53,7 +53,7 @@
             "funcValue": 5,
             "next": 106,
             "reward": 800,
-            "newGuide": "101,102,103"
+            "newGuide": "1041"
             },
             {
             "id": 106,
@@ -64,7 +64,7 @@
             "funcValue": 10,
             "next": 107,
             "reward": 950,
-            "newGuide": "101,102"
+            "newGuide": "1061"
             },
             {
             "id": 107,
@@ -75,7 +75,7 @@
             "funcValue": 1,
             "next": 108,
             "reward": 1100,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1071,1072,1073"
             },
             {
             "id": 108,
@@ -86,7 +86,7 @@
             "funcValue": 2,
             "next": 109,
             "reward": 1250,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1171,1172"
             },
             {
             "id": 109,
@@ -97,7 +97,7 @@
             "funcValue": 5,
             "next": 110,
             "reward": 1400,
-            "newGuide": "101,102"
+            "newGuide": "1141,1142"
             },
             {
             "id": 110,
@@ -108,7 +108,7 @@
             "funcValue": 3,
             "next": 111,
             "reward": 1550,
-            "newGuide": "101,102,103"
+            "newGuide": "1101,1102"
             },
             {
             "id": 111,
@@ -119,7 +119,7 @@
             "funcValue": 1,
             "next": 112,
             "reward": 1700,
-            "newGuide": "101,102"
+            "newGuide": "1161,1162,1163"
             },
             {
             "id": 112,
@@ -130,7 +130,7 @@
             "funcValue": 1,
             "next": 113,
             "reward": 1850,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1051"
             },
             {
             "id": 113,
@@ -141,7 +141,7 @@
             "funcValue": 10,
             "next": 114,
             "reward": 2000,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1041"
             },
             {
             "id": 114,
@@ -152,7 +152,7 @@
             "funcValue": 0.6,
             "next": 115,
             "reward": 2150,
-            "newGuide": "101,102"
+            "newGuide": "1121,1122"
             },
             {
             "id": 115,
@@ -163,7 +163,7 @@
             "funcValue": 15,
             "next": 116,
             "reward": 2300,
-            "newGuide": "101,102,103"
+            "newGuide": "1141,1142"
             },
             {
             "id": 116,
@@ -174,7 +174,7 @@
             "funcValue": 0.7,
             "next": 117,
             "reward": 2450,
-            "newGuide": "101,102"
+            "newGuide": "1131,1132"
             },
             {
             "id": 117,
@@ -185,7 +185,7 @@
             "funcValue": 18,
             "next": 118,
             "reward": 2600,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1061"
             },
             {
             "id": 118,
@@ -196,7 +196,7 @@
             "funcValue": 5,
             "next": 119,
             "reward": 2750,
-            "newGuide": "101,102,103,104,105"
+            "newGuide": "1101,1102"
             },
             {
             "id": 119,
@@ -207,7 +207,7 @@
             "funcValue": 8,
             "next": 120,
             "reward": 2900,
-            "newGuide": "101,102"
+            "newGuide": "1171,1172"
             },
             {
             "id": 120,
@@ -218,7 +218,7 @@
             "funcValue": 15,
             "next": -1,
             "reward": 3050,
-            "newGuide": "101,102,103"
+            "newGuide": "1041"
             }
     ]
 }

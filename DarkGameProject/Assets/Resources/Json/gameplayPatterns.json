@@ -89,7 +89,7 @@
             "name": "Hard Currency vs. Soft Currency",
             "retention": 0,
             "socialBound": 0,
-            "payingRate": 0.2,
+            "payingRate": 0.15,
             "payingAmount": 0,
             "mood": -15,
             "triggerRate": 1,
