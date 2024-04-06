@@ -33,6 +33,8 @@ public class PlayerItem : MonoBehaviour
     public List<GameObject> gameplayActionObjectList;
     public List<Vector3Int> gameplayActionPosList;
     public List<bool> gameplayActionEventList;
+    public List<int> gameplayActionAnimeNOList;
+    public List<bool> gameplayActionAnimeList;
 
     private List<Vector3Int> pathList;
 
@@ -105,6 +107,7 @@ public class PlayerItem : MonoBehaviour
 
     private bool losingProcess = false;
 
+    private bool offLine = false;
 
     private void Awake()
     {
@@ -113,7 +116,7 @@ public class PlayerItem : MonoBehaviour
 
         moveSpeed = 3f;  //像素/s
      
-        expAdd = (int)(10 * gameMode.testOffset);   //exp  10
+        expAdd = (int)(10f * gameMode.testOffset * 0.33f);   //exp  10
 
         pathList = new List<Vector3Int>();
         circleLifeTimeList = new List<float>();
@@ -172,7 +175,17 @@ public class PlayerItem : MonoBehaviour
     {
         if(gameMode.gameDynamicProcess == false)
         {
-            PlayerLosing();
+            gameMode.gameProcessPause = true;
+            offLine = true;
+            //PlayerLosing();
+        }
+        else if(gameMode.gameDynamicProcess == true)
+        {
+            if(offLine == true)
+            {
+                //玩家归位
+                PlayerPosReset();
+            }
         }
 
         //时间刷新
@@ -320,6 +333,49 @@ public class PlayerItem : MonoBehaviour
         currentObject = startG;
     }
 
+    //重置归位
+    void PlayerPosReset()
+    {
+        offLine = false;
+        gameplayAction = false;
+        moveState = true;
+        moveAnime = true;
+
+        Vector3Int targetP = new Vector3Int();
+        GameObject targetG = this.gameObject;
+        if(currentObject != null && gameplayMapping.mainGameplayItemList.Contains(currentObject))
+        {
+            //瞬移回去
+            targetG = currentObject;
+            targetP = new Vector3Int(Mathf.RoundToInt(targetG.transform.position.x), Mathf.RoundToInt(targetG.transform.position.y), Mathf.RoundToInt(targetG.transform.position.z));
+        }
+        else if (nextObject != null && gameplayMapping.mainGameplayItemList.Contains(nextObject))
+        {
+            //瞬移到next
+            targetG = nextObject;
+            targetP = new Vector3Int(Mathf.RoundToInt(targetG.transform.position.x), Mathf.RoundToInt(targetG.transform.position.y), Mathf.RoundToInt(targetG.transform.position.z));
+        }
+        else
+        {
+            //瞬移到101
+            targetG = GameObject.Find("GameplayItem_101(Clone)").gameObject;
+            targetP = new Vector3Int(Mathf.RoundToInt(targetG.transform.position.x), Mathf.RoundToInt(targetG.transform.position.y), Mathf.RoundToInt(targetG.transform.position.z));
+        }
+
+        float distance = System.Math.Abs(Vector3.Distance(targetP, this.gameObject.transform.position));
+        float duration = distance / moveSpeed;
+        movingAnime = this.gameObject.transform.DOLocalMove(targetP, duration).SetEase(Ease.Linear);
+        movingAnime.OnComplete(() => PlayerPosReset2());
+    }
+    void PlayerPosReset2()
+    {
+        gameplayAction = false;
+        moveState = false;
+        moveAnime = false;
+        
+        gameMode.gameProcessPause = false;
+    }
+
     //角色移动 && 玩法逻辑触发
     void PlayerItemMove()
     {
@@ -334,6 +390,8 @@ public class PlayerItem : MonoBehaviour
                 gameplayActionObjectList = new List<GameObject>();
                 gameplayActionPosList = new List<Vector3Int>();
                 gameplayActionEventList = new List<bool>();
+                gameplayActionAnimeNOList = new List<int>();
+                gameplayActionAnimeList = new List<bool>();
 
                 currentObject.GetComponent<GameplayItem>().GameplayEventLogic(this.gameObject);
 
@@ -380,6 +438,13 @@ public class PlayerItem : MonoBehaviour
                         movingAnime.OnComplete(() => gameplayActionObjectList[moveOrder - 1].GetComponent<GameplayItem>().GameplayEvent(this.gameObject));
                     }
 
+                    //移动后动画
+                    if (gameplayActionAnimeList[moveOrder - 1] == true)
+                    {
+                        movingAnime.OnComplete(() => gameplayActionObjectList[moveOrder - 1].GetComponent<GameplayItemAnime>().AnimePlay(gameplayActionAnimeNOList[moveOrder - 1]));
+                        //Debug.Log(gameplayActionObjectList[moveOrder - 1].GetComponent<GameplayItem>().itemID + " - " + gameplayActionAnimeNOList[moveOrder - 1]);
+                    }
+
                     movingAnime.OnKill(() => moveAnime = false);
                 }
                 else if (eventDone == true)
@@ -398,7 +463,8 @@ public class PlayerItem : MonoBehaviour
         //触发移动
         if(gameplayAction == false)
         {
-            if (moveState == false && moveAnime == false)
+            //抵达gameitem，寻找路线
+            if (moveState == false && moveAnime == false)  
             {
                 //寻找路线（优先特殊，其次普通）
                 if (currentObject.GetComponent<GameplayItem>().specialOutputLinkItemList.Count > 0)
@@ -420,14 +486,15 @@ public class PlayerItem : MonoBehaviour
                 }
             }
 
-            if (moveState == true && moveAnime == false)
+            //开始移动
+            if (moveState == true && moveAnime == false)  
             {
                 //移动
                 Vector3Int nextPoint = new Vector3Int(0, 0, 0);
 
                 if (moveOrder == pathList.Count)
                 {
-                    nextPoint = new Vector3Int(Mathf.RoundToInt(nextObject.transform.position.x), Mathf.RoundToInt(nextObject.transform.position.y), Mathf.RoundToInt(nextObject.transform.position.z));
+                    //nextPoint = new Vector3Int(Mathf.RoundToInt(nextObject.transform.position.x), Mathf.RoundToInt(nextObject.transform.position.y), Mathf.RoundToInt(nextObject.transform.position.z));
                 }
                 else if (moveOrder < pathList.Count)
                 {
@@ -444,7 +511,7 @@ public class PlayerItem : MonoBehaviour
                 movingAnime.OnComplete(() => moveAnime = false);
                 movingAnime.OnKill(() => movingAnime = null);
 
-                if (moveOrder > pathList.Count)
+                if (moveOrder >= pathList.Count)
                 {
                     //移动完成。
                     currentObject = nextObject;
@@ -471,7 +538,7 @@ public class PlayerItem : MonoBehaviour
             moneyAnimeSequence.Insert(0.8f, moneyIcon.transform.DOScaleX(-1f, 0.4f));
             moneyAnimeSequence.Insert(1.2f, moneyIcon.transform.DOScaleX(1f, 0.4f));
 
-            moneyAnimeSequence.Insert(0f, moneyIcon.transform.DOLocalMoveY(0.6f, 2f).SetRelative()).SetEase(Ease.OutCubic);
+            moneyAnimeSequence.Insert(0f, moneyIcon.transform.DOLocalMoveY(0.65f, 2f).SetRelative()).SetEase(Ease.OutCubic);
             moneyAnimeSequence.Insert(1.8f, moneyIcon.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f));
 
             moneyAnimeSequence.OnComplete(() => moneyIcon.transform.localPosition = new Vector3(0, 0, 0));

@@ -25,6 +25,8 @@ public class MainPathItem : MonoBehaviour
 
     public bool defaltDirection = true;
 
+    public bool specialPath = false;
+
     private void Awake()
     {
         pathItem01 = this.gameObject.transform.Find("PathContent").gameObject.transform.Find("Path_01").gameObject;
@@ -51,7 +53,7 @@ public class MainPathItem : MonoBehaviour
         
     }
 
-    public void SetDetail(Vector3Int p, Vector3Int startPoint1, Vector3Int endPoint1)
+    public void SetDetail(Vector3Int p, Vector3Int startPoint1, Vector3Int endPoint1, bool isSpe)
     {
         if(pos != p)
         {
@@ -69,10 +71,26 @@ public class MainPathItem : MonoBehaviour
 
         startEndPosList.Add(startPoint1);
         startEndPosList.Add(endPoint1);
+
+        specialPath = isSpe;
     }
 
     public void RoadPicSet()
     {
+        if(specialPath == false)
+        {
+            pathItem01.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "path1");
+            pathItem02.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "path3");
+            pathItem03.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "path2");
+        }
+        else
+        {
+            pathItem01.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "spPath1");
+            pathItem02.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "spPath3");
+            pathItem03.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("PathItem/" + "spPath2");
+        }
+
+
         if(startEndPosList.Count == 2)
         {
             pathItem02.transform.localScale = new Vector3(0, 0, 0);
@@ -80,7 +98,6 @@ public class MainPathItem : MonoBehaviour
             Vector3Int p1 = startEndPosList[0];
             Vector3Int p2 = startEndPosList[1];
             Vector3Int p0 = new Vector3Int(Mathf.RoundToInt(this.gameObject.transform.position.x), Mathf.RoundToInt(this.gameObject.transform.position.y), Mathf.RoundToInt(this.gameObject.transform.position.z));
-
 
             if (p1.x == p2.x && p1.y != p2.y)
             {
@@ -146,7 +163,7 @@ public class MainPathItem : MonoBehaviour
                 GameObject pItem = Instantiate(pathItem) as GameObject;
                 pItem.transform.SetParent(pathLayer.transform);
                 pItem.transform.position = this.gameObject.transform.position;
-                pItem.GetComponent<MainPathItem>().SetDetail(pos, startEndPosList[0], startEndPosList[1]);
+                pItem.GetComponent<MainPathItem>().SetDetail(pos, startEndPosList[0], startEndPosList[1], specialPath);
                 pItem.GetComponent<MainPathItem>().RoadPicSet();
                 pItem.GetComponent<MainPathItem>().SetValid(true);
                 pItem.GetComponent<MainPathItem>().linkGameItemList = new List<GameObject>();

@@ -6,6 +6,7 @@ using System.Linq;
 public class GameMode : MonoBehaviour
 {
     public bool testMode = false;
+    private bool levelTestMode = false;
 
     public int maxPlayer0;
     private int maxPlayer;
@@ -15,6 +16,8 @@ public class GameMode : MonoBehaviour
     public bool gameEnd = false;
 
     public float testOffset;
+
+    public float endingWaitingTime = 0f;
 
     //在场效果
     public List<int> globalEffectObject;  //生效中的全局效果（进场后添加）
@@ -130,6 +133,19 @@ public class GameMode : MonoBehaviour
         levelUpExpIncreaseValue = 1.2f;
         //测试模式
         testMode = false;
+        levelTestMode = false;
+
+        if(testMode == true)
+        {
+            playerLevel += 20;
+            companyMoney += 100000;
+        }
+
+        if(levelTestMode == true)
+        {
+            playerLevel += 20;
+            companyMoney += 100000;
+        }
 
         testOffset = 1f; //测试修正参数 应该=1
 
@@ -216,10 +232,12 @@ public class GameMode : MonoBehaviour
             {
                 StatisticsCalculating();
             }
-            
+
+            endingWaitingTime += Time.deltaTime;
         }
 
         GamePromotionLogic();
+
     }
 
     //生成新玩家
@@ -239,6 +257,8 @@ public class GameMode : MonoBehaviour
                 pItem.GetComponent<PlayerItem>().PlayerDetailSet(playerStartObject);
                 pItem.GetComponent<PlayerItem>().batchOrder = userBatchOrder;
                 cumulativePlayers++;
+
+                playerStartObject.GetComponent<GameplayItemAnime>().AnimePlay(0);
 
                 if(promotionMode == 1)
                 {
@@ -338,6 +358,19 @@ public class GameMode : MonoBehaviour
                     {
                         userLifetimeList.Add(lifeT);
                         //CLV
+                        //clv = 0的虚假矫正
+                        if(moneyT == 0f)
+                        {
+                            if(clvList.Count == 0)
+                            {
+                                //不管
+                            }
+                            else
+                            {
+                                Debug.Log("CLV Reset...");
+                                moneyT = Random.Range(clvList[clvList.Count - 1] * 0.9f, clvList[clvList.Count - 1] * 1.1f);
+                            }
+                        }
                         clvList.Add(moneyT);
                         //心情
                         moodList.Add(moodT);
@@ -565,30 +598,37 @@ public class GameMode : MonoBehaviour
     public void GamePromotionCalculation()
     {
         //cost随机
-        if(lastCLV > 0)
+        float clvC = 0f;
+        if (lastCLV > 0)
         {
-            float costRMin = lastCLV * promotionUserCostRandomValueMin;
-            if(costRMin < 1f)
-            {
-                costRMin = 1f;
-            }
-            float costRMax = lastCLV * promotionUserCostRandomValueMax;
-            if(costRMax < costRMin)
-            {
-                costRMax = costRMin * 1.1f;
-            }
-
-            float costR = Random.Range(costRMin, costRMax);
-
-            promotionUserCost = costR;
-
-            int shouldUser = Mathf.RoundToInt(promotionPriceValue / promotionUserCost);
-
-            promotionUserNumRandomMinNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMin);
-            promotionUserNumRandomMaxNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMax);
-
-            promotionLegalUserNum = Random.Range(promotionUserNumRandomMinNum, promotionUserNumRandomMaxNum);
+            clvC = lastCLV;
         }
+        else
+        {
+            clvC = 1f;
+        }
+
+        float costRMin = clvC * promotionUserCostRandomValueMin;
+        if (costRMin < 1f)
+        {
+            costRMin = 1f;
+        }
+        float costRMax = clvC * promotionUserCostRandomValueMax;
+        if (costRMax < costRMin)
+        {
+            costRMax = costRMin * 1.1f;
+        }
+
+        float costR = Random.Range(costRMin, costRMax);
+
+        promotionUserCost = costR;
+
+        int shouldUser = Mathf.RoundToInt(promotionPriceValue / promotionUserCost);
+
+        promotionUserNumRandomMinNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMin);
+        promotionUserNumRandomMaxNum = Mathf.RoundToInt(shouldUser * promotionUserNumRandomMax);
+
+        promotionLegalUserNum = Random.Range(promotionUserNumRandomMinNum, promotionUserNumRandomMaxNum);
     }
     //推广开始
     public void GamePromotionStart()
@@ -614,6 +654,8 @@ public class GameMode : MonoBehaviour
 
             maxPlayer = maxPlayer0;
             playerCreateInterval = playerCreateInterval0;
+
+            designPanel.promotionBtnNew.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
         } 
     }
     //推广重置
@@ -633,7 +675,7 @@ public class GameMode : MonoBehaviour
                 promotionUserCostRandomValueMax = 0.8f;
             }
 
-            promotionPriceValue *= 1.5f;
+            promotionPriceValue *= 1.7f;
             if (promotionPriceValue >= 2000f)
             {
                 promotionPriceValue = 2000f;

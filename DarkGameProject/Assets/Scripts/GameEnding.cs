@@ -321,6 +321,13 @@ public class GameEnding : MonoBehaviour
                 pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(233f / 255f, 23f / 255f, 8f / 255f, 1f);
                 pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(233f / 255f, 23f / 255f, 8f / 255f, 1f);
             }
+
+            //数量不足
+            if(endingCLVList.Count < endingDataNum)
+            {
+                float originalSpcing = endingCLVItemContent.GetComponent<HorizontalLayoutGroup>().spacing;
+                endingCLVItemContent.GetComponent<HorizontalLayoutGroup>().spacing = (originalSpcing * endingDataNum) / endingCLVList.Count;
+            }
         }
 
         if (endingRatingList.Count != 0)
@@ -348,6 +355,13 @@ public class GameEnding : MonoBehaviour
 
                 pItem.GetComponent<ChartPointItem>().pointImage.GetComponent<Image>().color = new Color(207f / 255f, 161f / 255f, 30f / 255f, 1f);
                 pItem.GetComponent<ChartPointItem>().lineImage.GetComponent<Image>().color = new Color(207f / 255f, 161f / 255f, 30f / 255f, 1f);
+            }
+
+            //数量不足
+            if (endingRatingList.Count < endingDataNum)
+            {
+                float originalSpcing = endingRatingItemContent.GetComponent<HorizontalLayoutGroup>().spacing;
+                endingRatingItemContent.GetComponent<HorizontalLayoutGroup>().spacing = (originalSpcing * endingDataNum) / endingRatingList.Count;
             }
         }
 

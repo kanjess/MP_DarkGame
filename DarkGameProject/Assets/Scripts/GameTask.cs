@@ -190,7 +190,18 @@ public class GameTask : MonoBehaviour
     {
         if(designPanel.hasTaskShow == true && currentTask.hasDone == false)
         {
-            if(currentTask.function == 401) //401 达到x等级
+            if (currentTask.function == 400) //400 构成基础循环
+            {
+                if(gameMode.gameDynamicProcess == true)
+                {
+                    currentTaskProcess = 1;
+                }
+                else
+                {
+                    currentTaskProcess = 0;
+                }
+            }
+            else if (currentTask.function == 401) //401 达到x等级
             {
                 currentTaskProcess = gameMode.playerLevel;
             }

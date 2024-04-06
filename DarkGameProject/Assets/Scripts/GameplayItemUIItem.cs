@@ -24,6 +24,7 @@ public class GameplayItemUIItem : MonoBehaviour
 
     public int itemID;
     public int itemLevel = 1;
+    public bool itemCanLevelUp = true;
     public bool isDark = false;
     public string unlockLevelListString;
     private List<int> unlockLevelList;
@@ -70,7 +71,6 @@ public class GameplayItemUIItem : MonoBehaviour
             }
         }
 
-        
     }
 
     // Start is called before the first frame update
@@ -84,7 +84,6 @@ public class GameplayItemUIItem : MonoBehaviour
         });
 
         UnlockListen();
-
 
     }
 
@@ -106,10 +105,17 @@ public class GameplayItemUIItem : MonoBehaviour
                 levelUpBtn.GetComponent<Image>().color = new Color(115 / 255f, 255 / 255f, 60 / 255f, 255 / 255f);
                 itemNameItem.transform.localPosition = new Vector3(8f, 0, 0);
 
+                if (itemCanLevelUp == false)
+                {
+                    levelUpBtn.GetComponent<Image>().color = new Color(119f / 255f, 201f / 255f, 225f / 255f, 1f);
+                    levelUpBtn.transform.localPosition = new Vector3(0, -101, 0);
+                    itemNameItem.transform.localPosition = new Vector3(0, 0, 0);
+                }
+
                 if (itemNum <= 0 && hasUnlock == true)
                 {
                     gameplayItemBtn.transform.localScale = new Vector3(0, 0, 0);
-                    itemNumText.GetComponent<Text>().color = Color.red;
+                    itemNumText.GetComponent<Text>().color = Color.white;
                 }
                 else
                 {

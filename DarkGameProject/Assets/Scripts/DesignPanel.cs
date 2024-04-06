@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
+using TMPro;
 
 public class DesignPanel : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class DesignPanel : MonoBehaviour
     private GameObject gamePromotionBtnShow1Item;
     private GameObject gamePromotionBtnShow1Point0;
     private GameObject gamePromotionBtnShow1Point1;
+    private float promotionBtnNewAnimeY0;
+    private float promotionBtnNewAnimeY1;
+    private int promotionBtnNewAnimeDirection = 1;
 
     private GameObject itemMoveBtn;
     private GameObject itemRotationBtn;
@@ -213,6 +217,7 @@ public class DesignPanel : MonoBehaviour
     private GameObject promoteBtnInfoText;
     private bool gamePromotionBtnShow = false;
     public bool gamePromotionPanelPointAnime = false;
+    public GameObject promotionBtnNew;
 
     //ending
     private bool gameEndingPanelOpen = false;
@@ -236,10 +241,14 @@ public class DesignPanel : MonoBehaviour
     private Vector3 taskPos0;
     private Vector3 taskPos1;
 
-    private GameObject gameStartUI;
+    public GameObject gameStartUI;
     private GameObject gameStartBg;
     private GameObject gameStartLOGO;
     private GameObject gameStartBtn;
+    private GameObject gameStartDialog;
+    private GameObject gameStartDialogBtn;
+    private GameObject gameStartBtnText;
+    private float gameStartBtnTextAnimeDirection = 1f;
 
     public bool gameTaskPanelOpen = false;
     private GameObject gameTaskPanelContent;
@@ -259,6 +268,11 @@ public class DesignPanel : MonoBehaviour
     public int operationPanelCheckNum = 0;
     public int ratingPanelCheckNum = 0;
 
+    private List<string> startDialogList;
+    private int startDialogNum = 0;
+    private int startDialogStringL = 0;
+    private bool startDialogAnime = false;
+
     private void Awake()
     {
         scaleW = 1f;
@@ -267,6 +281,14 @@ public class DesignPanel : MonoBehaviour
         sceneNo = 2;
         canvasScaler = GameObject.Find("Canvas").gameObject.GetComponent<CanvasScaler>();
         designItemNewAnimeDirection = 1;
+
+        startDialogList = new List<string>();
+        string dia1 = "Greetings from Dark Digit, the game studio that hooks players in. \nWe used to be the brightest light in the galaxy of video games, but things are getting bad today. \nThat's where you come in, our newest game developer.";
+        string dia2 = "Your mission, should you accept it (and we really hope you do because we're kinda desperate), is to design a game that doesn't just attract players but mesmerizes them. \nWe are talking about developing the perfect gaming experience while maximizing profits in ways that are... let's say, creatively ambitious. Push limits, and maybe bending the rules a bit.";
+        string dia3 = "Now take out your blueprint and toolkit and prepare to create the gaming empire. \nTime to save the studio, and maybe change the game world a bit. \nLet's go!";
+        startDialogList.Add(dia1);
+        startDialogList.Add(dia2);
+        startDialogList.Add(dia3);
 
         mainSceneUI = this.gameObject.transform.Find("MainSceneUI").gameObject;
         designItemBtn = mainSceneUI.transform.Find("DesignItemBtn").gameObject;
@@ -283,6 +305,7 @@ public class DesignPanel : MonoBehaviour
         gamePromotionBtnShow1Item = gamePromotionBtnShow1.transform.Find("PromotionMode_1Item").gameObject;
         gamePromotionBtnShow1Point0 = gamePromotionBtnShow1.transform.Find("Point0").gameObject;
         gamePromotionBtnShow1Point1 = gamePromotionBtnShow1.transform.Find("Point1").gameObject;
+        promotionBtnNew = gamePromotionBtn.transform.Find("NewBanner").gameObject;
 
         GameObject moveRotationContent = designPanel.transform.Find("MoveRotationContent").gameObject;
         moveSlide = moveRotationContent.transform.Find("Slide").gameObject;
@@ -313,7 +336,8 @@ public class DesignPanel : MonoBehaviour
         playerExpBar = levelContent.transform.Find("ExpBar").gameObject;
 
         //任务
-        taskContent = topContent.transform.Find("TaskContent").gameObject;
+        GameObject taskSysContent = topContent.transform.Find("TaskSysContent").gameObject;
+        taskContent = taskSysContent.transform.Find("TaskContent").gameObject;
         taskDetailBtn = taskContent.transform.Find("TaskDetailBtn").gameObject;
         GameObject taskImageContent = taskContent.transform.Find("TaskImageContent").gameObject;
         taskImage = taskImageContent.transform.Find("TaskImage").gameObject;
@@ -523,6 +547,9 @@ public class DesignPanel : MonoBehaviour
         gameStartBg = gameStartUI.transform.Find("Bg").gameObject;
         gameStartLOGO = gameStartUI.transform.Find("LOGO").gameObject;
         gameStartBtn = gameStartUI.transform.Find("GameStartBtn").gameObject;
+        gameStartBtnText = gameStartBtn.transform.Find("Text").gameObject;
+        gameStartDialog = gameStartUI.transform.Find("Dialog").gameObject;
+        gameStartDialogBtn = gameStartUI.transform.Find("DialogBtn").gameObject;
 
     }
 
@@ -530,6 +557,9 @@ public class DesignPanel : MonoBehaviour
     void Start()
     {
         gameStartUI.transform.localScale = new Vector3(1, 1, 1);
+        gameStartDialog.transform.localScale = new Vector3(1, 0, 1);
+        gameStartDialogBtn.transform.localScale = new Vector3(1, 0, 1);
+        gameStartDialog.GetComponent<TextMeshProUGUI>().text = "";
         //GameItemIn();
         sceneContentBg.transform.localScale = new Vector3(0, 0, 0);
 
@@ -604,9 +634,6 @@ public class DesignPanel : MonoBehaviour
             }
         });
 
-        //临时测试
-        //Invoke("EndingSceneBtnIn", 2f);
-
         endingSceneBtn.GetComponent<Button>().onClick.AddListener(GameEndingPanelAnime);
         gameEndingCloseBtn.GetComponent<Button>().onClick.AddListener(GameEndingPanelAnime);
         gameEndingOKBtn.GetComponent<Button>().onClick.AddListener(delegate
@@ -619,14 +646,19 @@ public class DesignPanel : MonoBehaviour
         });
 
         //新道具提示
-        designItemNewAnimeY0 = designItemNew.transform.position.y;
+        designItemNewAnimeY0 = designItemNew.transform.localPosition.y;
         designItemNewAnimeY1 = designItemNewAnimeY0 + 10f;
         designItemNew.transform.localScale = new Vector3(0, 0.3f, 1);
 
+        //promotion系统解锁提示
+        promotionBtnNewAnimeY0 = promotionBtnNew.transform.localPosition.y;
+        promotionBtnNewAnimeY1 = promotionBtnNewAnimeY0 + 10f;
+        promotionBtnNew.transform.localScale = new Vector3(0, 0.3f, 1);
+
         //任务触发
-        taskPos1 = taskContent.transform.position;
+        taskPos1 = taskContent.transform.localPosition;
         taskPos0 = new Vector3(taskPos1.x, taskPos1.y + 200f, 0);
-        taskContent.transform.position = taskPos0;
+        taskContent.transform.localPosition = taskPos0;
 
         gameStartBtn.GetComponent<Button>().onClick.AddListener(GameStart);
 
@@ -653,11 +685,31 @@ public class DesignPanel : MonoBehaviour
             GuideInfoShow();
         });
 
+        //开始状态设置
+        gameMode.gameProcessPause = true;
+        cameraControl.cameraCanMove = false;
+
+        gameStartDialogBtn.GetComponent<Button>().onClick.AddListener(GameStartDialogNext);
+
+        gameStartBg.GetComponent<Button>().onClick.AddListener(GameDialogInstant);
+
+
+        //临时测试
+        if (gameMode.testMode == true)
+        {
+            Invoke("EndingSceneBtnIn", 2f);
+            Invoke("ComReportBtnIn", 2f);
+            Invoke("PlayerReportBtnIn", 2f);
+            Invoke("GamePromotionBtnIn", 2f);
+        }
+        //
     }
 
     // Update is called once per frame
     void Update()
     {
+        //this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
+
         scaleW = Screen.width / screenW;
         scaleH = Screen.height / screenH;
 
@@ -696,7 +748,7 @@ public class DesignPanel : MonoBehaviour
             designItemLevelNum.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemLevel.ToString();
             designItemLevelItemName.GetComponent<Text>().text = designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemName;
 
-            designItemLevelPanelLevelUpCost.GetComponent<Text>().text = numberText(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice);
+            designItemLevelPanelLevelUpCost.GetComponent<Text>().text = numberText2(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice);
             if (designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().levelPrice <= gameMode.companyMoney)
             {
                 designItemLevelPanelLevelUpCost.GetComponent<Text>().color = Color.black;
@@ -705,7 +757,7 @@ public class DesignPanel : MonoBehaviour
             {
                 designItemLevelPanelLevelUpCost.GetComponent<Text>().color = Color.red;
             }
-            designItemLevelPanelLevelUpAllMoney.GetComponent<Text>().text = numberText(gameMode.companyMoney);
+            designItemLevelPanelLevelUpAllMoney.GetComponent<Text>().text = numberText2(gameMode.companyMoney);
 
             //图片
             for (int i = 0; i < designItemLevelBgPicContent.transform.childCount; i++)
@@ -994,6 +1046,12 @@ public class DesignPanel : MonoBehaviour
         }
 
         PromotingUI();
+
+        //若严重超时
+        if(gameMode.endingWaitingTime >= 900f && gameTask.allTaskFinish == false && endingSceneBtnShow == false)   //15mins
+        {
+            Invoke("EndingSceneBtnIn", 2f);
+        }
     }
 
     private void FixedUpdate()
@@ -1004,17 +1062,17 @@ public class DesignPanel : MonoBehaviour
             if (designItemNewAnime == true)
             {
                 designItemNew.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-                if (designItemNew.transform.position.y > designItemNewAnimeY1)
+                if (designItemNew.transform.localPosition.y > designItemNewAnimeY1)
                 {
                     designItemNewAnimeDirection = -1;
                 }
-                else if (designItemNew.transform.position.y < designItemNewAnimeY0)
+                else if (designItemNew.transform.localPosition.y < designItemNewAnimeY0)
                 {
                     designItemNewAnimeDirection = 1;
                 }
-                float xxx = designItemNew.transform.position.x;
-                float yyy = designItemNew.transform.position.y + (0.5f * designItemNewAnimeDirection);
-                designItemNew.transform.position = new Vector3(xxx, yyy);
+                float xxx = designItemNew.transform.localPosition.x;
+                float yyy = designItemNew.transform.localPosition.y + (0.5f * designItemNewAnimeDirection);
+                designItemNew.transform.localPosition = new Vector3(xxx, yyy);
             }
             else
             {
@@ -1022,27 +1080,120 @@ public class DesignPanel : MonoBehaviour
 
             }
         }
+
+        //promotion解锁
+        if(promotionBtnNew.transform.localScale.x == 0.3f)
+        {
+            promotionBtnNew.transform.localScale = new Vector3(0.3f, 0.3f, 1);
+            if (promotionBtnNew.transform.localPosition.y > promotionBtnNewAnimeY1)
+            {
+                promotionBtnNewAnimeDirection = -1;
+            }
+            else if (promotionBtnNew.transform.localPosition.y < promotionBtnNewAnimeY0)
+            {
+                promotionBtnNewAnimeDirection = 1;
+            }
+            float xxx = promotionBtnNew.transform.localPosition.x;
+            float yyy = promotionBtnNew.transform.localPosition.y + (0.5f * promotionBtnNewAnimeDirection);
+            promotionBtnNew.transform.localPosition = new Vector3(xxx, yyy);
+        }
+
+        if(gameStartLOGO.transform.localScale == new Vector3(1, 1, 1))
+        {
+            if(gameStartBtnText.GetComponent<TextMeshProUGUI>().color.a >= 0.95f)
+            {
+                gameStartBtnTextAnimeDirection = -1f;
+            }
+            else if (gameStartBtnText.GetComponent<TextMeshProUGUI>().color.a <= 0.1f)
+            {
+                gameStartBtnTextAnimeDirection = 1f;
+            }
+            //Debug.Log(gameStartBtnText.GetComponent<TextMeshProUGUI>().color.a);
+            float aaa = gameStartBtnText.GetComponent<TextMeshProUGUI>().color.a + gameStartBtnTextAnimeDirection * 0.01f;
+
+            gameStartBtnText.GetComponent<TextMeshProUGUI>().color = new Color(1f, 1f, 1f, aaa);
+        }
+        else
+        {
+            gameStartBtnText.GetComponent<TextMeshProUGUI>().color = new Color(1f, 1f, 1f,1f);
+        }
+
+        GameStartDialog();
     }
 
     //游戏开始
     public void GameStart()
     {
-        Tweener anime = gameStartBg.GetComponent<Image>().DOFade(0, 1f);
-        gameStartLOGO.GetComponent<Text>().DOFade(0, 1f);
+        //Tweener anime = gameStartBg.GetComponent<Image>().DOFade(0, 1f);
+        Tweener anime = gameStartLOGO.GetComponent<Image>().DOFade(0, 1f);
         gameStartBtn.transform.localScale = new Vector3(0, 0, 0);
-
-        anime.OnComplete(() => GameStart01());
+        startDialogNum = 0;
+        gameStartDialogBtn.transform.localScale = new Vector3(1, 0, 1);
+        anime.OnComplete(() => startDialogAnime = true);
     }
-    private void GameStart01()
+    private void GameStartDialog()
     {
-        gameStartUI.transform.localScale = new Vector3(0, 0, 0);
-
-        if (gameTask.allTaskFinish == false && hasTaskShow == false)
+        if(startDialogAnime == true)
         {
-            Invoke("TaskBtnIn", 2f);
+            gameStartDialog.transform.localScale = new Vector3(1, 1, 1);
+            startDialogStringL++;
+            if(startDialogStringL >= startDialogList[startDialogNum].Length)
+            {
+                startDialogStringL = startDialogList[startDialogNum].Length;
+                gameStartDialogBtn.transform.localScale = new Vector3(1, 1, 1);
+                startDialogAnime = false;
+            }
+            gameStartDialog.GetComponent<TextMeshProUGUI>().text = startDialogList[startDialogNum].Substring(0, startDialogStringL);
+            
+        }
+    }
+    private void GameDialogInstant()
+    {
+        if(startDialogAnime == true)
+        {
+            startDialogStringL = startDialogList[startDialogNum].Length;
         }
     }
 
+    private void GameStartDialogNext()
+    {
+        startDialogNum++;
+        startDialogStringL = 0;
+        if(startDialogNum >= startDialogList.Count)
+        {
+            startDialogAnime = false;
+            GameStartEnd();
+        }
+        else
+        {
+            gameStartDialogBtn.transform.localScale = new Vector3(1, 0, 1);
+            startDialogAnime = true;
+        }
+    }
+
+    private void GameStartEnd()
+    {
+        gameStartDialog.transform.localScale = new Vector3(1, 0, 1);
+        gameStartDialogBtn.transform.localScale = new Vector3(1, 0, 1);
+
+        Tweener anime = gameStartBg.GetComponent<Image>().DOFade(0, 1f);
+        anime.OnComplete(() => gameStartUI.transform.localScale = new Vector3(0, 0, 0));
+
+        gameMode.gameProcessPause = false;
+        cameraControl.cameraCanMove = true;
+
+        if (gameTask.allTaskFinish == false && hasTaskShow == false)
+        {
+            Invoke("TaskBtnIn", 3f);
+        }
+
+        //音乐
+        if(gameMode.testMode == false)
+        {
+            this.gameObject.GetComponent<BackgroundMusic>().musicStart = true;
+        }
+
+    }
 
     void DesignPanelAnime()
     {
@@ -1106,6 +1257,11 @@ public class DesignPanel : MonoBehaviour
                 }
 
                 DesignReset();
+
+                if (designItemNewAnime == true)
+                {
+                    designItemNewAnime = false;
+                }
             }
         }
     }
@@ -1172,7 +1328,7 @@ public class DesignPanel : MonoBehaviour
             }
 
             //玩家界面解锁
-            if (playerReportBtnShow == false && gameMode.lastCLV > 0 && gameMode.playerLevel >= 8)
+            if (playerReportBtnShow == false && gameMode.lastCLV > 0 && gameMode.playerLevel >= 7)
             {
                 playerReportBtnShow = true;
 
@@ -1180,13 +1336,13 @@ public class DesignPanel : MonoBehaviour
             }
 
             //推广界面解锁
-            if (gamePromotionBtnShow == false && gameMode.lastCLV > 0 && gameMode.playerLevel >= 5)
+            if (gamePromotionBtnShow == false && gameMode.lastCLV > 0 && gameMode.playerLevel >= 4)
             {
                 gamePromotionBtnShow = true;
 
                 GamePromotionBtnIn();
 
-                gameMode.GamePromotionCalculation();
+                
             }
         }
 
@@ -1330,10 +1486,21 @@ public class DesignPanel : MonoBehaviour
 
             designItemPanelOpen = true;
 
+            cameraControl.cameraCanMove = false;
+
             designItemLevelPanelBg.transform.localScale = new Vector3(1, 1, 1);
             designItemLevelPanelBg.GetComponent<Image>().DOFade(0.8f, 0.3f);
 
             designItemLevelPanel.transform.DOScale(new Vector3(1,1,1), 0.3f);
+
+            if(designItemLevelPanelTarget.GetComponent<GameplayItemUIItem>().itemCanLevelUp == true)
+            {
+                designItemLevelPanelLevelUpBtn.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                designItemLevelPanelLevelUpBtn.transform.localScale = new Vector3(1, 0, 1);
+            }
         }
         else
         {
@@ -1342,6 +1509,8 @@ public class DesignPanel : MonoBehaviour
 
             anime.OnComplete(() => designItemLevelPanelBg.transform.localScale = new Vector3(0, 0, 0));
             anime.OnKill(() => designItemPanelOpen = false);
+
+            cameraControl.cameraCanMove = true;
         }
     }
 
@@ -1470,7 +1639,6 @@ public class DesignPanel : MonoBehaviour
             gameTaskPanelGuideRightBtn.transform.localScale = new Vector3(0, 1, 1);
         }
     }
-
 
     //item次数变更
     public void GameItemNumChange(int itemid, bool isDark, bool isAdd)
@@ -2372,6 +2540,20 @@ public class DesignPanel : MonoBehaviour
 
         return ttt;
     }
+    public string numberText2(float num)
+    {
+        string ttt = "";
+        if(num < 1000)
+        {
+            ttt = num.ToString("0");
+        }
+        else
+        {
+            ttt = numberText(num);
+        }
+
+        return ttt;
+    }
 
     //报表按钮入场
     public void ReportBtnIn(int type)
@@ -2414,14 +2596,14 @@ public class DesignPanel : MonoBehaviour
     public void TaskBtnIn()
     {
         hasTaskShow = true;
-        taskContent.transform.DOMove(taskPos1, 0.3f);
+        taskContent.transform.DOLocalMove(taskPos1, 0.3f);
     }
     public void TaskBtnOut()
     {
         hasTaskShow = false;
         gameMode.playerExp += gameTask.currentTask.reward;  //派发奖励(EXP)
 
-        Tweener anime = taskContent.transform.DOMove(taskPos0, 0.3f);
+        Tweener anime = taskContent.transform.DOLocalMove(taskPos0, 0.3f);
         anime.OnComplete(() => TaskReset());
     }
     void TaskReset()
@@ -2433,13 +2615,19 @@ public class DesignPanel : MonoBehaviour
             gameTask.currentTaskID = nextT.id;
             gameTask.currentTaskProcess = 0;
 
+            gameMode.endingWaitingTime = 0f;
+
             Invoke("TaskBtnIn", 2f);
         }
         else if (gameTask.currentTask.nextID == -1)
         {
             //全部完成
             gameTask.allTaskFinish = true;
-            Invoke("EndingSceneBtnIn", 2f);
+            if(endingSceneBtnShow == false)
+            {
+                Invoke("EndingSceneBtnIn", 2f);
+            }
+            
         }
     }
 
@@ -2450,7 +2638,10 @@ public class DesignPanel : MonoBehaviour
         //moveD *= scaleW;
 
         gamePromotionBtnShow = true;
-        gamePromotionBtn.transform.DOLocalMoveY(moveD, 0.3f).SetRelative();
+        Tweener anime = gamePromotionBtn.transform.DOLocalMoveY(moveD, 0.3f).SetRelative();
+        anime.OnComplete(() => promotionBtnNew.transform.localScale = new Vector3(0.3f, 0.3f, 1f));
+        //价格评估
+        gameMode.GamePromotionCalculation();
     }
 
     string itemName(int itemID)
@@ -2467,6 +2658,8 @@ public class DesignPanel : MonoBehaviour
     {
         if(gamePromotionPanelOpen == true)
         {
+            promotionBtnNew.transform.localScale = new Vector3(0, 0, 0);
+
             if(gameMode.promotionMode == 0)
             {
                 promotionBasicInfo.transform.localScale = new Vector3(1, 1, 1);

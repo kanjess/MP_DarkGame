@@ -38,6 +38,7 @@ public class GameplayItem : MonoBehaviour
     public GameObject specialInputBtn;
     public GameObject specialOutputBtn;
 
+    public GameObject rotationBg;
     public GameObject rotationBtn;
     public GameObject moveBtn;
 
@@ -82,6 +83,7 @@ public class GameplayItem : MonoBehaviour
 
     private GameMode gameMode;
     private GameplayEffect gameplayEffect;
+    private CameraControl cameraControl;
 
     //黑暗模式
     public bool canDark = false;
@@ -102,6 +104,29 @@ public class GameplayItem : MonoBehaviour
     public bool isTriggerEffect;
     public int triggerEventType;  //0数值事件，1付费事件
 
+    private float rotationBtnAnimeDirection = 1f;
+
+    private bool normalOutputAnime = false;
+    private bool normalInputAnime = false;
+    private bool specialOutputAnime = false;
+    private bool specialInputAnime = false;
+    public GameObject normalOutputAnimeP;
+    public GameObject normalInputAnimeP;
+    public GameObject specialOutputAnimeP;
+    public GameObject specialInputAnimeP;
+
+    private float darkTipsAnimeDirection = 1f;
+    public GameObject darkTipsNotMe;
+    public GameObject darkTipsTips;
+
+    //道具内路径
+    public GameObject itemInternalPath;
+
+    //未连接图片展示
+    public GameObject inputBlockPath;
+    public GameObject outputBlockPath;
+    public GameObject specialInputBlockPath;
+    public GameObject specialOutputBlockPath;
 
 
     private void Awake()
@@ -110,6 +135,7 @@ public class GameplayItem : MonoBehaviour
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
+        cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
 
         itemOccupiedAreaList0 = new List<Vector3Int>();
         itemOccupiedAreaList = new List<Vector3Int>();
@@ -209,6 +235,7 @@ public class GameplayItem : MonoBehaviour
     {
         if(isValidItem == false)
         {
+            canRotate = false;
             gameplayPic.GetComponent<SpriteRenderer>().DOFade(0.7f, 0.1f);
             gameplayPic.GetComponent<SpriteRenderer>().sortingOrder = 10;
             //
@@ -220,7 +247,11 @@ public class GameplayItem : MonoBehaviour
             {
                 outputBtn.transform.localScale = new Vector3(0, 0, 0);
             }
-            if(rotationBtn != null)
+            if (rotationBg != null)
+            {
+                rotationBg.transform.localScale = new Vector3(0, 0, 0);
+            }
+            if (rotationBtn != null)
             {
                 rotationBtn.transform.localScale = new Vector3(0, 0, 0);
             }
@@ -295,12 +326,28 @@ public class GameplayItem : MonoBehaviour
 
             if (canRotate == true)
             {
-                rotationBtn.transform.localScale = new Vector3(1, 1, 1);
-                rotationBtn.GetComponent<SpriteRenderer>().DOFade(0f, 0f);
+                //rotationBtn.transform.localScale = new Vector3(1, 1, 1);
+                if(rotationBg != null)
+                {
+                    rotationBg.GetComponent<SpriteRenderer>().DOFade(0f, 0f);
+                }
+                if(rotationBtn != null)
+                {
+                    rotationBtn.GetComponent<SpriteRenderer>().DOFade(0f, 0f);
+                }
+                
             }
             else
             {
-                rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+                if (rotationBg != null)
+                {
+                    rotationBg.transform.localScale = new Vector3(0, 0, 0);
+                }
+                if (rotationBtn != null)
+                {
+                    rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+                }
+                
             }
 
             //角度调整
@@ -469,20 +516,44 @@ public class GameplayItem : MonoBehaviour
             //
             if (BasicAction.gameplayItemRotationMode == true && canRotate == true)
             {
-                rotationBtn.transform.localScale = new Vector3(1, 1, 1);
+                //rotationBtn.transform.localScale = new Vector3(1, 1, 1);
                 moveBtn.transform.localScale = new Vector3(0, 0, 0);
-                rotationBtn.GetComponent<SpriteRenderer>().DOFade(1f, 0f);
+                if(rotationBg != null)
+                {
+                    rotationBg.GetComponent<SpriteRenderer>().DOFade(0.8f, 0f);
+                }
+                if (rotationBtn != null)
+                {
+                    rotationBtn.GetComponent<SpriteRenderer>().DOFade(1f, 0f);
+                }
+                
             }
             else
             {
-                rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+                if (rotationBg != null)
+                {
+                    rotationBg.transform.localScale = new Vector3(0, 0, 0);
+                }
+                if (rotationBtn != null)
+                {
+                    rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+                }
+                
                 moveBtn.transform.localScale = new Vector3(1, 1, 1);
             }
 
         }
         else
         {
-            rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+            if (rotationBg != null)
+            {
+                rotationBg.transform.localScale = new Vector3(0, 0, 0);
+            }
+            if (rotationBtn != null)
+            {
+                rotationBtn.transform.localScale = new Vector3(0, 0, 0);
+            }
+            
             moveBtn.transform.localScale = new Vector3(1, 1, 1);
         }
 
@@ -812,6 +883,81 @@ public class GameplayItem : MonoBehaviour
             }
         }
 
+        PathUnlinkShow();
+    }
+
+    private void FixedUpdate()
+    {
+        if(BasicAction.gameplayItemRotationMode == true && canRotate == true)
+        {
+            rotationBg.transform.localScale = new Vector3(1, 1, 1);
+
+            if (rotationBtn.transform.localScale.x > 1.1f)
+            {
+                rotationBtn.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                rotationBtnAnimeDirection = -1;
+            }
+            else if (rotationBtn.transform.localScale.x < 0.9f)
+            {
+                rotationBtn.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                rotationBtnAnimeDirection = 1;
+            }
+            float dc = rotationBtnAnimeDirection * 0.005f;
+            float dcc = rotationBtn.transform.localScale.x + dc;
+
+            rotationBtn.transform.localScale = new Vector3(dcc, dcc, dcc);
+        }
+        else
+        {
+            //rotationBtn.transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        if (isValidItem == true)
+        {
+            if(BasicAction.gameplayItemSetMode == true && BasicAction.gameplayItemAction == true)
+            {
+                RoadEditAnime();
+                DarkTipsAnime();
+            }
+            else
+            {
+                if (normalInputAnimeP != null)
+                {
+                    normalInputAnimeP.transform.localScale = new Vector3(0, 0, 0);
+                }
+                if (normalOutputAnimeP != null)
+                {
+                    normalOutputAnimeP.transform.localScale = new Vector3(0, 0, 0);
+                }
+                if (specialInputAnimeP != null)
+                {
+                    specialInputAnimeP.transform.localScale = new Vector3(0, 0, 0);
+                }
+                if (specialOutputAnimeP != null)
+                {
+                    specialOutputAnimeP.transform.localScale = new Vector3(0, 0, 0);
+                }
+
+                if(darkTipsNotMe != null)
+                {
+                    darkTipsNotMe.transform.localScale = new Vector3(0, 0, 0);
+
+                    if(this.gameObject.GetComponent<GameplayItemAnime>().animeContent != null)
+                    {
+                        for(int i = 0; i < this.gameObject.GetComponent<GameplayItemAnime>().animeContent.transform.childCount; i++)
+                        {
+                            GameObject animeP = this.gameObject.GetComponent<GameplayItemAnime>().animeContent.transform.GetChild(i).gameObject;
+                            animeP.GetComponent<SpriteRenderer>().color = Color.white;
+                        }
+                    }
+                }
+                if (darkTipsTips != null)
+                {
+                    darkTipsTips.transform.localScale = new Vector3(0, 0, 0);
+                }
+            }
+            
+        }
     }
 
     public void SetItemID(int id)
@@ -931,6 +1077,9 @@ public class GameplayItem : MonoBehaviour
             //可以旋转
             if (noBlock == true)
             {
+                //先移除非法占位
+                IllegalMapRemove();
+
                 Tweener anime = this.gameObject.transform.DOLocalRotate(new Vector3(0, 0, z), 0.3f);
                 rotationBtn.transform.DOLocalRotate(new Vector3(0, 0, rz), 0.3f);
                 if(stablePic != null)
@@ -939,9 +1088,14 @@ public class GameplayItem : MonoBehaviour
                 }
                 anime.OnComplete(() => RotateReset());
             }
+            else
+            {
+                Sequence s = DOTween.Sequence();
+                s.Insert(0f, this.gameObject.transform.DOLocalRotate(new Vector3(0, 0, -10f), 0.1f));
+                s.Insert(0.1f, this.gameObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
 
-            //
-            
+                s.OnComplete(() => RotateReset0());
+            }
         } 
     }
     void RotateReset()
@@ -950,6 +1104,19 @@ public class GameplayItem : MonoBehaviour
         rotationAnime = false;
         BasicAction.gameplayItemAction = false;
         gameMode.gameProcessPause = false;
+        //cameraControl.cameraCanMove = true;
+
+        //再加入新占位
+        IllegalMapAdd();
+        OccupiedAreaListUpdate();
+    }
+    void RotateReset0()
+    {
+        //不可旋转
+        rotationAnime = false;
+        BasicAction.gameplayItemAction = false;
+        gameMode.gameProcessPause = false;
+        //cameraControl.cameraCanMove = true;
     }
 
     //非法通行-新坐标加入
@@ -1042,7 +1209,6 @@ public class GameplayItem : MonoBehaviour
 
     }
 
-
     //101特殊逻辑，gamemode打开监听
     public void GameProcessStart()
     {
@@ -1120,37 +1286,75 @@ public class GameplayItem : MonoBehaviour
         gameMode.mainRoadDistance = (roadCount + gItemCount - roudCRemove) * 100;
     }
 
-
     //玩法触发
     public void GameplayEventLogic(GameObject playerItem)
     {
         //为玩家填充玩法事件
         if(isMain == true)
         {
-            if(canDark == true)
+            //划定item内路径
+            int gotoDark = 0;
+            int animeNO = 0;
+            for(int i = 0; i < itemInternalPath.transform.childCount; i++)
             {
-                //填充黑暗事件
-                for(int i = 0; i < darkSocketContent.transform.childCount; i++)
+                GameObject pathIII = itemInternalPath.transform.GetChild(i).gameObject;
+                if(pathIII.name.Contains("DarkPath_") == false)  //非dark
                 {
-                    GameObject soc = darkSocketContent.transform.GetChild(i).gameObject;
+                    //普通路点
+                    Vector3Int roadPPP = new Vector3Int(Mathf.RoundToInt(pathIII.transform.position.x), Mathf.RoundToInt(pathIII.transform.position.y), Mathf.RoundToInt(pathIII.transform.position.z));
+                    playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+                    playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(roadPPP);  
+                    playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(false);
 
-                    if(soc.transform.childCount > 1)  //有dark patterns
+                    //是否动画
+                    if(pathIII.name.Contains("AnimePath_") == true)
                     {
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(true);
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
+                        animeNO++;
+                    }
+                    else
+                    {
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(false);
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
+                    }
+
+
+                }
+                else
+                {
+                    //先加进去再看dark路径
+                    Vector3Int roadPPP0 = new Vector3Int(Mathf.RoundToInt(pathIII.transform.position.x), Mathf.RoundToInt(pathIII.transform.position.y), Mathf.RoundToInt(pathIII.transform.position.z));
+                    playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+                    playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(roadPPP0);
+                    playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(false);
+
+                    playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(false);
+                    playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
+
+                    //导向dark路点
+                    GameObject soc = darkSocketContent.transform.GetChild(gotoDark).gameObject;
+
+                    if (soc.transform.childCount > 1)  //有dark patterns
+                    {
+                        //遍历找到dark 
                         for (int aa = 0; aa < soc.transform.childCount; aa++)
                         {
                             GameObject dItem = soc.transform.GetChild(aa).gameObject;
+                            //找到dark
                             if (dItem.name.Contains("GameplayItem_"))
                             {
-                                if(dItem.GetComponent<GameplayItem>().hasPath == true)  //有路径可触发
+                                if (dItem.GetComponent<GameplayItem>().hasPath == true)  //有路径可触发
                                 {
-                                    if(dItem.GetComponent<GameplayItem>().darkRoadContent != null)
+                                    //dark之路
+                                    if (dItem.GetComponent<GameplayItem>().darkRoadContent != null)
                                     {
                                         int eventNum = dItem.GetComponent<GameplayItem>().darkRoadEventNum;
                                         //判断距离远近
                                         float dis0 = Vector2.Distance(playerItem.transform.position, dItem.GetComponent<GameplayItem>().darkRoadContent.transform.GetChild(0).gameObject.transform.position);
                                         float dis1 = Vector2.Distance(playerItem.transform.position, dItem.GetComponent<GameplayItem>().darkRoadContent.transform.GetChild(dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1).gameObject.transform.position);
                                         bool checkOrder = true;
-                                        if(dis0 > dis1)
+                                        if (dis0 > dis1)
                                         {
                                             checkOrder = false;
                                         }
@@ -1159,7 +1363,7 @@ public class GameplayItem : MonoBehaviour
                                         {
                                             int or = bb;
 
-                                            if(checkOrder == false)
+                                            if (checkOrder == false)
                                             {
                                                 or = dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1 - bb;
                                             }
@@ -1172,38 +1376,42 @@ public class GameplayItem : MonoBehaviour
                                             playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(pItemP);
 
                                             bool isEvent = false;
-                                            if(pathPosItem.name == "ActionPoint" && eventNum > 0)
+                                            if (pathPosItem.name == "ActionPoint" && eventNum > 0)
                                             {
                                                 isEvent = true;
                                                 eventNum--;
                                             }
                                             playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(isEvent);
 
-                                            //是否具有进入检测
-                                            if(bb == 0)
+                                            //dark的动画检测
+                                            playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(false);
+                                            playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
+
+                                            //是否具有进入检测（概率进入）
+                                            if (bb == 0)
                                             {
-                                                if(pathPosItem.name == "EnterCheckPoint")
+                                                if (pathPosItem.name == "EnterCheckPoint")
                                                 {
                                                     bool canIn = false;
                                                     //检测是否进入
                                                     float ra = Random.Range(0f, 1f);
                                                     float enterR = gameplayEffect.GameItemEffect(itemID, "triggerRate");
                                                     //422广告的特殊处理
-                                                    if(enterR == -1 && itemID == 422)
+                                                    if (enterR == -1 && itemID == 422)
                                                     {
                                                         enterR = 1 - playerItem.GetComponent<PlayerItem>().finalPayingRate;
-                                                        if(enterR < 0)
+                                                        if (enterR < 0)
                                                         {
                                                             enterR = 0;
                                                         }
                                                     }
 
-                                                    if(ra <= enterR)
+                                                    if (ra <= enterR)
                                                     {
                                                         canIn = true;
                                                     }
 
-                                                    if(canIn == false)
+                                                    if (canIn == false)
                                                     {
                                                         //不能进，直接跳到最后一点
                                                         bb = dItem.GetComponent<GameplayItem>().darkRoadContent.transform.childCount - 1 - 1;
@@ -1216,21 +1424,30 @@ public class GameplayItem : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        //如果这个点没有dark patterns, 视为普通路点
+                        Vector3Int roadPPP = new Vector3Int(Mathf.RoundToInt(pathIII.transform.position.x), Mathf.RoundToInt(pathIII.transform.position.y), Mathf.RoundToInt(pathIII.transform.position.z));
+                        playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+                        playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(roadPPP);
+                        playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(false);
+
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(false);
+                        playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
+                    }
+
+                    gotoDark++;
                 }
 
-                //最后是主玩法事件填充
-                playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
-                playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(new Vector3Int(0,0,0));  //最后一个坐标要忽略
-                playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(true);
+            }
 
-            }
-            else
-            {
-                //直接填充主玩法事件（如果有）
-                playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
-                playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(new Vector3Int(0, 0, 0));  //若只有一个坐标要忽略
-                playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(true);
-            }
+            //最后是主玩法事件填充
+            playerItem.GetComponent<PlayerItem>().gameplayActionObjectList.Add(this.gameObject);
+            playerItem.GetComponent<PlayerItem>().gameplayActionPosList.Add(new Vector3Int(0, 0, 0));  //最后一个坐标要忽略
+            playerItem.GetComponent<PlayerItem>().gameplayActionEventList.Add(true);
+
+            playerItem.GetComponent<PlayerItem>().gameplayActionAnimeList.Add(false);
+            playerItem.GetComponent<PlayerItem>().gameplayActionAnimeNOList.Add(animeNO);
         }
     }
     //触发玩法事件
@@ -1307,6 +1524,15 @@ public class GameplayItem : MonoBehaviour
                 //Debug.Log("付费事件触发, 来源" + itemID);
             }
         }
+
+        //dark动画效果
+        if(isMain == false)
+        {
+            if (this.gameObject.GetComponent<GameplayItemAnime>().animeContent != null)
+            {
+                this.gameObject.GetComponent<GameplayItemAnime>().AnimePlay(0);
+            }
+        }
     }
 
     //具体玩法事件
@@ -1320,5 +1546,266 @@ public class GameplayItem : MonoBehaviour
     {
         playerItem.GetComponent<PlayerItem>().PlayerPayingCheckMethod2(itemID, payR, payM);
     }
+
+    //路径编辑提示器
+    void RoadEditAnime()
+    {
+        normalInputAnime = false;
+        normalOutputAnime = false;
+        specialInputAnime = false;
+        specialOutputAnime = false;
+
+        //路面编辑模式
+        if (BasicAction.roadEditMode == true && isMain == true && basicAction.targetOJ != this.gameObject)
+        {
+            if(basicAction.specialItemLink == true) //特殊链接
+            {
+                if(basicAction.roadEditDefaultDirection == true)  //output拉出
+                {
+                    if (basicAction.targetOJ.GetComponent<GameplayItem>().specialOutputLinkTargetList.Contains(itemID))
+                    {
+                        //可以
+                        if(specialInputLinkItemList.Count == 0)
+                        {
+                            specialInputAnime = true;
+                        }  
+                    }
+                }
+                else  //input拉出
+                {
+                    if (basicAction.targetOJ.GetComponent<GameplayItem>().specialInputLinkTargetList.Contains(itemID))
+                    {
+                        //可以
+                        if(specialOutputLinkItemList.Count == 0)
+                        {
+                            specialOutputAnime = true;
+                        }
+                        
+                    }
+                }
+            }
+            else
+            {
+                if (basicAction.roadEditDefaultDirection == true)  //output拉出
+                {
+                    if (inputLinkItemList.Count == 0)
+                    {
+                        normalInputAnime = true;
+                    } 
+                }
+                else  //input拉出
+                {
+                    if (outputLinkItemList.Count == 0)
+                    {
+                        normalOutputAnime = true;
+                    }  
+                }
+            }
+
+            //动画
+            if(normalInputAnime == true && normalInputAnimeP != null)
+            {
+                normalInputAnimeP.transform.localScale = new Vector3(1, 1, 1);
+                float zz = normalInputAnimeP.transform.eulerAngles.z;
+                zz -= 3f;
+                normalInputAnimeP.transform.eulerAngles = new Vector3(0,0, zz);
+            }
+
+            if (normalOutputAnime == true && normalOutputAnimeP != null)
+            {
+                normalOutputAnimeP.transform.localScale = new Vector3(1, 1, 1);
+                float zz = normalOutputAnimeP.transform.eulerAngles.z;
+                zz -= 3f;
+                normalOutputAnimeP.transform.eulerAngles = new Vector3(0, 0, zz);
+            }
+
+            if (specialInputAnime == true && specialInputAnimeP != null)
+            {
+                specialInputAnimeP.transform.localScale = new Vector3(1, 1, 1);
+                float zz = specialInputAnimeP.transform.eulerAngles.z;
+                zz -= 3f;
+                specialInputAnimeP.transform.eulerAngles = new Vector3(0, 0, zz);
+            }
+
+            if (specialOutputAnime == true && specialOutputAnimeP != null)
+            {
+                specialOutputAnimeP.transform.localScale = new Vector3(1, 1, 1);
+                float zz = specialOutputAnimeP.transform.eulerAngles.z;
+                zz -= 3f;
+                specialOutputAnimeP.transform.eulerAngles = new Vector3(0, 0, zz);
+            }
+
+
+        }
+    }
+
+    //黑暗提示器
+    void DarkTipsAnime()
+    {
+        if (isMain == true)
+        {
+            if(basicAction.temTargetOJ != null && basicAction.temTargetOJ.GetComponent<GameplayItem>().isMain == false)
+            {
+                bool darkA = false;
+                if (canDarkList.Contains(basicAction.temTargetOJ.GetComponent<GameplayItem>().itemID))
+                {
+                    //合法
+                    //是否有空位
+                    for(int i = 0; i < darkSocketContent.transform.childCount; i++)
+                    {
+                        GameObject sock = darkSocketContent.transform.GetChild(i).gameObject;
+                        if(sock.transform.childCount <= 1)
+                        {
+                            //最终合法
+                            darkA = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(darkA == true)
+                {
+                    if (darkTipsTips.transform.localScale.x > 1f)
+                    {
+                        darkTipsTips.transform.localScale = new Vector3(1f, 1f, 1f);
+                        darkTipsAnimeDirection = -1;
+                    }
+                    else if (darkTipsTips.transform.localScale.x < 0.9f)
+                    {
+                        darkTipsTips.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                        darkTipsAnimeDirection = 1;
+                    }
+                    float dc = darkTipsAnimeDirection * 0.005f;
+                    float dcc = darkTipsTips.transform.localScale.x + dc;
+
+                    darkTipsTips.transform.localScale = new Vector3(dcc, dcc, dcc);
+                }
+                else
+                {
+                    //非法
+                    darkTipsNotMe.transform.localScale = new Vector3(1, 1, 1);
+
+                    if (this.gameObject.GetComponent<GameplayItemAnime>().animeContent != null)
+                    {
+                        for (int i = 0; i < this.gameObject.GetComponent<GameplayItemAnime>().animeContent.transform.childCount; i++)
+                        {
+                            GameObject animeP = this.gameObject.GetComponent<GameplayItemAnime>().animeContent.transform.GetChild(i).gameObject;
+                            animeP.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 160f / 255f);
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+
+    //路径未连接时的显示
+    void PathUnlinkShow()
+    {
+        if(inputBlockPath != null)
+        {
+            if(isValidItem == true)
+            {
+                if (inputLinkItemList.Count == 0)
+                {
+                    if (BasicAction.roadEditMode == true && (basicAction.targetOJ == this.gameObject || basicAction.otherTargetOJ == this.gameObject))
+                    {
+                        inputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        inputBlockPath.transform.localScale = new Vector3(1, 1, 1);
+                    }
+                }
+                else if (inputLinkItemList.Count != 0)
+                {
+                    inputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                }
+            }
+            else if(isValidItem == false)
+            {
+                inputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+            }   
+        }
+
+        if (outputBlockPath != null)
+        {
+            if (isValidItem == true)
+            {
+                if (outputLinkItemList.Count == 0)
+                {
+                    if (BasicAction.roadEditMode == true && (basicAction.targetOJ == this.gameObject || basicAction.otherTargetOJ == this.gameObject))
+                    {
+                        outputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        outputBlockPath.transform.localScale = new Vector3(1, 1, 1);
+                    }
+                }
+                else if (outputLinkItemList.Count != 0)
+                {
+                    outputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                }
+            }
+            else if (isValidItem == false)
+            {
+                outputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+            }
+        }
+
+        if (specialInputBlockPath != null)
+        {
+            if (isValidItem == true)
+            {
+                if (specialInputLinkItemList.Count == 0)
+                {
+                    if (BasicAction.roadEditMode == true && (basicAction.targetOJ == this.gameObject || basicAction.otherTargetOJ == this.gameObject))
+                    {
+                        specialInputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        specialInputBlockPath.transform.localScale = new Vector3(1, 1, 1);
+                    }
+                }
+                else if (specialInputLinkItemList.Count != 0)
+                {
+                    specialInputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                }
+            }
+            else if (isValidItem == false)
+            {
+                specialInputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+            }
+        }
+
+        if (specialOutputBlockPath != null)
+        {
+            if (isValidItem == true)
+            {
+                if (specialOutputLinkItemList.Count == 0)
+                {
+                    if (BasicAction.roadEditMode == true && (basicAction.targetOJ == this.gameObject || basicAction.otherTargetOJ == this.gameObject))
+                    {
+                        specialOutputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        specialOutputBlockPath.transform.localScale = new Vector3(1, 1, 1);
+                    }
+                }
+                else if (specialOutputLinkItemList.Count != 0)
+                {
+                    specialOutputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+                }
+            }
+            else if (isValidItem == false)
+            {
+                specialOutputBlockPath.transform.localScale = new Vector3(0, 0, 0);
+            }
+        }
+    }
+
 
 }

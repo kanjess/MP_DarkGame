@@ -11,6 +11,8 @@ public class BasicAction : MonoBehaviour
     static public bool gameplayItemRotationMode = false;
     static public bool roadEditMode = false;
 
+    private CameraControl cameraControl;
+
     public GameObject mousHitObject;
 
     private GameObject gameplayItem;
@@ -54,8 +56,8 @@ public class BasicAction : MonoBehaviour
     //鼠标拖动
     private Vector3 mosStartPosition;
     private bool mosIsDragging = false;
-    private GameObject targetOJ;
-    private GameObject temTargetOJ;
+    public GameObject targetOJ;
+    public GameObject temTargetOJ;
     private GameObject ojt;
     private GameObject uijt;
     public GameObject otherTargetOJ;
@@ -90,6 +92,7 @@ public class BasicAction : MonoBehaviour
 
     private void Awake()
     {
+        cameraControl = this.gameObject.GetComponent<CameraControl>();
         //preItemOcuPosList = new List<Vector3Int>();
     }
 
@@ -130,6 +133,7 @@ public class BasicAction : MonoBehaviour
         //鼠标移动监听
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D mHit = Physics2D.Raycast(mPosition, Vector2.zero);
+
         if(mHit.collider != null)
         {
             mousHitObject = mHit.collider.gameObject;
@@ -142,8 +146,9 @@ public class BasicAction : MonoBehaviour
         //旋转
         if(mousHitObject != null && mousHitObject.gameObject.name == "RotationBtn" && gameplayItemRotationMode == true)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
+                //cameraControl.cameraCanMove = false;
                 gameplayMapping.AllMapRoadListNew(); //地图位置列表获取
                 mousHitObject.gameObject.GetComponentInParent<GameplayItem>().DirectionSet();
                 gameplayItemAction = true;
@@ -157,7 +162,16 @@ public class BasicAction : MonoBehaviour
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
 
-            if (hit.collider != null)
+            if (designPenel.designItemBtnState == true && designPenel.designItemPanelOpen == false)
+            {
+                //Debug.Log(designPenel.designItemPanelOpen);
+                if (Input.mousePosition.x >= designPenalCheckPoint.transform.position.x)
+                {
+                    hit = new RaycastHit2D();
+                }
+            }
+
+            if (hit.collider != null && designPenel.designItemBtnState == true && designPenel.designItemPanelOpen == false)
             {
                 if(hit.collider.gameObject.name == "MoveBtn" && gameplayItemRotationMode == false)
                 {
@@ -177,8 +191,11 @@ public class BasicAction : MonoBehaviour
                         //如果可回收，则创建UI实体
                         if(targetOJ.GetComponent<GameplayItem>().canPutBack == true)
                         {
-                            if (designPenel.designItemBtnState == true)
+                            if (designPenel.designItemBtnState == true && designPenel.designItemPanelOpen == false)
                             {
+                                int iId = targetOJ.GetComponent<GameplayItem>().itemID;
+                                string obName = "GameplayItemUIItem_" + iId;
+                                gameplayItemUIItemTem = GameObject.Find(obName).gameObject.transform.Find("GameplayItemBtn").gameObject;
                                 uijt = Instantiate(gameplayItemUIItemTem) as GameObject;
                                 uijt.transform.SetParent(designPenel.designPanel.transform);
                                 uijt.transform.position = Input.mousePosition;
@@ -288,7 +305,7 @@ public class BasicAction : MonoBehaviour
         }
 
         //菜单拖拽（启动）
-        if(designPenel.designItemBtnState == true && designPenel.designItemDragState == true && ojt == null)
+        if(designPenel.designItemBtnState == true && designPenel.designItemDragState == true && ojt == null && designPenel.designItemPanelOpen == false)
         {
             panelIsDragging = true;
             ojt = Instantiate(gameplayItemTem) as GameObject;
@@ -332,7 +349,7 @@ public class BasicAction : MonoBehaviour
                 }
 
                 //鼠标位置&界面位置监听
-                if (Input.mousePosition.x >= designPenalCheckPoint.transform.position.x && designPenel.designItemBtnState == true)
+                if (Input.mousePosition.x >= designPenalCheckPoint.transform.position.x && designPenel.designItemBtnState == true && designPenel.designItemPanelOpen == false)
                 {
                     ojt.transform.localScale = new Vector3(0, 0, 0);
                     temTargetOJ.transform.localScale = new Vector3(0, 0, 0);
@@ -505,14 +522,126 @@ public class BasicAction : MonoBehaviour
                                     }
                                 }
                             }
-                        }
-                        else
+                        }  //点在了目标上
+                        else //啥也没点上
                         {
-                            ojt.transform.position = cellPosition;
-                            temTargetOJ.transform.position = ojt.transform.position;
-                            //
-                            temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 0);
-                            temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.localEulerAngles = new Vector3(0, 0, 0);
+                            //是否落在合法对接坐标上
+                            Vector3Int pluginP = new Vector3Int(Mathf.RoundToInt(temTargetOJ.GetComponent<GameplayItem>().darkPlugPoint.transform.position.x), Mathf.RoundToInt(temTargetOJ.GetComponent<GameplayItem>().darkPlugPoint.transform.position.y), Mathf.RoundToInt(temTargetOJ.GetComponent<GameplayItem>().darkPlugPoint.transform.position.z));
+                            List<Vector3Int> mainCanPlugList = new List<Vector3Int>();
+                            List<GameObject> mainCanPlugListOb = new List<GameObject>();
+                            for (int i = 0; i < gameplayMapping.mainGameplayItemList.Count; i++)
+                            {
+                                GameObject mainI = gameplayMapping.mainGameplayItemList[i].gameObject;
+                                if (mainI.GetComponent<GameplayItem>().canDarkList.Contains(temTargetOJ.GetComponent<GameplayItem>().itemID))
+                                {
+                                    for(int aa = 0; aa < mainI.GetComponent<GameplayItem>().darkSocketContent.transform.childCount; aa++)
+                                    {
+                                        GameObject mainSocketItem = mainI.GetComponent<GameplayItem>().darkSocketContent.transform.GetChild(aa).gameObject;
+                                        Vector3Int mainSocketP = new Vector3Int(Mathf.RoundToInt(mainSocketItem.transform.position.x), Mathf.RoundToInt(mainSocketItem.transform.position.y), Mathf.RoundToInt(mainSocketItem.transform.position.z));
+                                        mainCanPlugList.Add(mainSocketP);
+                                        mainCanPlugListOb.Add(mainSocketItem);
+                                    }
+                                }
+                            }
+
+                            darkHasLink = false;
+                            int posCountI = 0;
+                            for(int i = 0; i < mainCanPlugList.Count; i++)
+                            {
+                                if(pluginP == mainCanPlugList[i])
+                                {
+                                    darkHasLink = true;
+                                    posCountI = i;
+                                    break;
+                                }
+                            }
+
+                            if(darkHasLink == true)
+                            {
+                                //连上了
+                                darkLinkPoint = mainCanPlugListOb[posCountI];
+                                otherTargetOJ = darkLinkPoint.transform.parent.gameObject.transform.parent.gameObject;
+                                //如果链接的是连接点
+                                //查看连接点下面有没有东西，没有则直接放，有则无效
+                                int cc = darkLinkPoint.transform.childCount;
+                                if (cc > 1)
+                                {
+                                    darkHasLink = false;
+                                }
+
+                                if (darkHasLink == true)
+                                {
+                                    GameObject tpoint = darkLinkPoint.transform.Find("Point").gameObject;
+                                    //确认朝向并放置临时道具
+                                    Vector3Int p0 = new Vector3Int(Mathf.RoundToInt(darkLinkPoint.transform.position.x), Mathf.RoundToInt(darkLinkPoint.transform.position.y), Mathf.RoundToInt(darkLinkPoint.transform.position.z));
+                                    Vector3Int p1 = new Vector3Int(Mathf.RoundToInt(tpoint.transform.position.x), Mathf.RoundToInt(tpoint.transform.position.y), Mathf.RoundToInt(tpoint.transform.position.z));
+
+                                    if (p1.x > p0.x && p1.y == p0.y)
+                                    {
+                                        //右
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 0);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x < p0.x && p1.y == p0.y)
+                                    {
+                                        //左
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, -180);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x == p0.x && p1.y > p0.y)
+                                    {
+                                        //上
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 90);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+                                    else if (p1.x == p0.x && p1.y < p0.y)
+                                    {
+                                        //下
+                                        temTargetOJ.transform.eulerAngles = new Vector3(0, 0, -90);
+                                        temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.eulerAngles = new Vector3(0, 0, 0);
+                                    }
+
+                                    temTargetOJ.transform.position = darkLinkPoint.transform.position;
+                                    GameObject adPoint = temTargetOJ.GetComponent<GameplayItem>().darkPlugPoint;
+                                    Vector3Int adp2 = new Vector3Int(Mathf.RoundToInt(adPoint.transform.position.x), Mathf.RoundToInt(adPoint.transform.position.y), Mathf.RoundToInt(adPoint.transform.position.z));
+                                    if (adp2.x < p0.x && adp2.y == p0.y)
+                                    {
+                                        //右移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x + 1), Mathf.RoundToInt(temTargetOJ.transform.position.y), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x > p0.x && adp2.y == p0.y)
+                                    {
+                                        //左移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x - 1), Mathf.RoundToInt(temTargetOJ.transform.position.y), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x == p0.x && adp2.y < p0.y)
+                                    {
+                                        //上移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x), Mathf.RoundToInt(temTargetOJ.transform.position.y + 1), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                    else if (adp2.x == p0.x && adp2.y > p0.y)
+                                    {
+                                        //下移
+                                        darkLinkPos = new Vector3Int(Mathf.RoundToInt(temTargetOJ.transform.position.x), Mathf.RoundToInt(temTargetOJ.transform.position.y - 1), Mathf.RoundToInt(temTargetOJ.transform.position.z));
+                                        temTargetOJ.transform.position = darkLinkPos;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                //没连上
+                                ojt.transform.position = cellPosition;
+                                temTargetOJ.transform.position = ojt.transform.position;
+                                //
+                                temTargetOJ.transform.eulerAngles = new Vector3(0, 0, 0);
+                                temTargetOJ.GetComponent<GameplayItem>().stablePic.transform.localEulerAngles = new Vector3(0, 0, 0);
+                            }
+
+                            
                         }
                     }
                 }
@@ -544,7 +673,7 @@ public class BasicAction : MonoBehaviour
             Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
             //
             //鼠标位置&界面位置监听
-            if (Input.mousePosition.x >= designPenalCheckPoint.transform.position.x && designPenel.designItemBtnState == true)
+            if (Input.mousePosition.x >= designPenalCheckPoint.transform.position.x && designPenel.designItemBtnState == true && designPenel.designItemPanelOpen == false)
             {
                 ojt.transform.localScale = new Vector3(0, 0, 0);
                 dragPosState = 1;
@@ -709,13 +838,19 @@ public class BasicAction : MonoBehaviour
             //路线标识符
             if(otherTarget == true && (validPath || roadEditStartPos == roadEditEndPos))
             {
-                ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
-                ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                if(ojt != null)
+                {
+                    ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
+                    ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                }
             }
             else
             {
-                ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
-                ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
+                if(ojt != null)
+                {
+                    ojt.transform.Find("SuccessItem").gameObject.transform.localScale = new Vector3(0, 0, 0);
+                    ojt.transform.Find("WrongItem").gameObject.transform.localScale = new Vector3(1, 1, 1);
+                }
             }
             
         }
@@ -1112,7 +1247,7 @@ public class BasicAction : MonoBehaviour
         }
 
         //菜单拖拽取消或结束
-        if (designPenel.designItemBtnState == true && designPenel.designItemDragState == false && ojt != null && mosIsDragging == false && roadEditMode == false)
+        if (designPenel.designItemBtnState == true && designPenel.designItemDragState == false && ojt != null && mosIsDragging == false && roadEditMode == false && designPenel.designItemPanelOpen == false)
         {
             //Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             panelIsDragging = false;
@@ -1246,7 +1381,8 @@ public class BasicAction : MonoBehaviour
             {
                 //无效
             }
-        }else if(vv == false)
+        }
+        else if(vv == false)
         {
             InsGameplayItemSet(id);
             temTargetOJ = Instantiate(gameplayItem) as GameObject;
@@ -1405,7 +1541,7 @@ public class BasicAction : MonoBehaviour
                             endPPP = pathL[i + 1];
                         }
                         //赋值
-                        temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().SetDetail(pathL[i], startPPP, endPPP);
+                        temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().SetDetail(pathL[i], startPPP, endPPP, specialItemLink);
                         //绘图
                         temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().RoadPicSet();
                     }
@@ -1436,7 +1572,7 @@ public class BasicAction : MonoBehaviour
                         Vector3Int startPPP = roadEditStart0Pos;
                         Vector3Int endPPP = roadEditEnd1Pos;
                         //赋值
-                        temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().SetDetail(roadEditStartPos, startPPP, endPPP);
+                        temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().SetDetail(roadEditStartPos, startPPP, endPPP, specialItemLink);
                         //绘图
                         temRoadObjectLayer.transform.GetChild(i).gameObject.GetComponent<MainPathItem>().RoadPicSet();
                     }
@@ -1766,7 +1902,7 @@ public class BasicAction : MonoBehaviour
                         pointStartPos = pathL[i - 1];
                         pointEndPos = pathL[i + 1];
                     }
-                    pItem.GetComponent<MainPathItem>().SetDetail(pathL[i], pointStartPos, pointEndPos);
+                    pItem.GetComponent<MainPathItem>().SetDetail(pathL[i], pointStartPos, pointEndPos, isSpecial);
                     pItem.GetComponent<MainPathItem>().RoadPicSet();
                     pItem.GetComponent<MainPathItem>().SetValid(true);
                     pItem.GetComponent<MainPathItem>().linkGameItemList = new List<GameObject>();
