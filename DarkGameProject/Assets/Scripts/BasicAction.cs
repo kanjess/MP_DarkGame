@@ -122,7 +122,11 @@ public class BasicAction : MonoBehaviour
     {
         if(gameplayItemSetMode == true)
         {
-            MouseDragCheck();
+            if(designPenel.gameTaskPanelOpen == false && designPenel.gamePromotionPanelOpen == false && designPenel.designItemPanelOpen == false)
+            {
+                MouseDragCheck();
+            }
+            
         }
 
     }

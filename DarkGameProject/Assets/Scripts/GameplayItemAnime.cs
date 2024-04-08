@@ -71,13 +71,14 @@ public class GameplayItemAnime : MonoBehaviour
                 if (anime1State == false)
                 {
                     anime1State = true;
-                    GameObject animeItem = animeContent.transform.GetChild(order).gameObject;
-                    Vector3 pos0 = animeItem.transform.position;
-                    Vector3 pos1 = animeItem.transform.GetChild(0).gameObject.transform.position;
+                    GameObject animeItem = animeContent.transform.GetChild(0).gameObject;
+                    GameObject animeItemT = animeContent.transform.GetChild(1).gameObject;
+                    Vector3 pos0 = animeItem.transform.localPosition;
+                    Vector3 pos1 = animeItemT.transform.localPosition;
 
                     Sequence s = DOTween.Sequence();
-                    s.Insert(0f, animeItem.transform.DOMove(pos1, 0.15f));
-                    s.Insert(0.15f, animeItem.transform.DOMove(pos0, 0.15f));
+                    s.Insert(0f, animeItem.transform.DOLocalMove(pos1, 0.15f));
+                    s.Insert(0.15f, animeItem.transform.DOLocalMove(pos0, 0.15f));
 
                     s.OnComplete(() => anime1State = false);
                 }
@@ -87,13 +88,14 @@ public class GameplayItemAnime : MonoBehaviour
                 if (anime2State == false)
                 {
                     anime2State = true;
-                    GameObject animeItem = animeContent.transform.GetChild(order).gameObject;
-                    Vector3 pos0 = animeItem.transform.position;
-                    Vector3 pos1 = animeItem.transform.GetChild(0).gameObject.transform.position;
+                    GameObject animeItem = animeContent.transform.GetChild(2).gameObject;
+                    GameObject animeItemT = animeContent.transform.GetChild(3).gameObject;
+                    Vector3 pos0 = animeItem.transform.localPosition;
+                    Vector3 pos1 = animeItemT.transform.localPosition;
 
                     Sequence s = DOTween.Sequence();
-                    s.Insert(0f, animeItem.transform.DOMove(pos1, 0.15f));
-                    s.Insert(0.15f, animeItem.transform.DOMove(pos0, 0.15f));
+                    s.Insert(0f, animeItem.transform.DOLocalMove(pos1, 0.15f));
+                    s.Insert(0.15f, animeItem.transform.DOLocalMove(pos0, 0.15f));
 
                     s.OnComplete(() => anime2State = false);
                 }

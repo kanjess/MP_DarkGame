@@ -266,6 +266,13 @@ public class DesignPanel : MonoBehaviour
     private GameObject gameTaskPanelGuideLeftBtn;
     private int taskGuideStep = 1;
 
+    private float taskRightBtnPx0;
+    private float taskRightBtnPx1;
+    private float taskRightBtnPD = 1f;
+    private float taskLeftBtnPx0;
+    private float taskLeftBtnPx1;
+    private float taskLeftBtnPD = -1f;
+
     public int operationPanelCheckNum = 0;
     public int ratingPanelCheckNum = 0;
 
@@ -273,6 +280,8 @@ public class DesignPanel : MonoBehaviour
     private int startDialogNum = 0;
     private int startDialogStringL = 0;
     private bool startDialogAnime = false;
+
+    private GameObject blockAllControl;
 
     private void Awake()
     {
@@ -553,6 +562,13 @@ public class DesignPanel : MonoBehaviour
         gameStartDialog = gameStartUI.transform.Find("Dialog").gameObject;
         gameStartDialogBtn = gameStartUI.transform.Find("DialogBtn").gameObject;
 
+        blockAllControl = mainSceneUI.transform.Find("BlockAllControl").gameObject;
+
+        taskRightBtnPx0 = gameTaskPanelGuideRightBtn.transform.localPosition.x - 5f;
+        taskRightBtnPx1 = gameTaskPanelGuideRightBtn.transform.localPosition.x + 5f;
+        taskLeftBtnPx0 = gameTaskPanelGuideLeftBtn.transform.localPosition.x - 5f;
+        taskLeftBtnPx1 = gameTaskPanelGuideLeftBtn.transform.localPosition.x + 5f;
+
     }
 
     // Start is called before the first frame update
@@ -721,7 +737,7 @@ public class DesignPanel : MonoBehaviour
         scaleW = Screen.width / screenW;
         scaleH = Screen.height / screenH;
 
-        if (BasicAction.gameplayItemSetMode == true)
+        if (BasicAction.gameplayItemSetMode == true && gameTaskPanelOpen == false && gamePromotionPanelOpen == false && designItemPanelOpen == false)
         {
             if (Input.mousePosition.x > designPanelPosCheckPoint.transform.position.x)
             {
@@ -1127,6 +1143,33 @@ public class DesignPanel : MonoBehaviour
         }
 
         GameStartDialog();
+
+        if(gameTaskPanelOpen == true)
+        {
+            if(gameTaskPanelGuideRightBtn.transform.localPosition.x >= taskRightBtnPx1)
+            {
+                taskRightBtnPD = -1f;
+            }
+            else if (gameTaskPanelGuideRightBtn.transform.localPosition.x <= taskRightBtnPx0)
+            {
+                taskRightBtnPD = 1f;
+            }
+            float ryyy = gameTaskPanelGuideRightBtn.transform.localPosition.y;
+            float rxxx = gameTaskPanelGuideRightBtn.transform.localPosition.x + taskRightBtnPD * 1f * 0.2f;
+            gameTaskPanelGuideRightBtn.transform.localPosition = new Vector3(rxxx, ryyy, 0f);
+
+            if (gameTaskPanelGuideLeftBtn.transform.localPosition.x >= taskLeftBtnPx1)
+            {
+                taskLeftBtnPD = -1f;
+            }
+            else if (gameTaskPanelGuideLeftBtn.transform.localPosition.x <= taskLeftBtnPx0)
+            {
+                taskLeftBtnPD = 1f;
+            }
+            float lyyy = gameTaskPanelGuideLeftBtn.transform.localPosition.y;
+            float lxxx = gameTaskPanelGuideLeftBtn.transform.localPosition.x + taskLeftBtnPD * 1f * 0.2f;
+            gameTaskPanelGuideLeftBtn.transform.localPosition = new Vector3(lxxx, lyyy, 0f);
+        }
     }
 
     //游戏开始
@@ -1206,6 +1249,7 @@ public class DesignPanel : MonoBehaviour
     void GameStartEnd1()
     {
         GameTaskPanelAnime(false);
+        blockAllControl.transform.localScale = new Vector3(0, 0, 0);
     }
 
     void DesignPanelAnime()

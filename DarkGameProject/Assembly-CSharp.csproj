@@ -78,6 +78,7 @@
     <Compile Include="Assets/Scripts/GameplayItemUIItemDrag.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
     <Compile Include="Assets/Scripts/PlayerRating.cs" />
+    <Compile Include="Assets/Scripts/GameplayItemAnime.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexShakeA.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark04.cs" />
     <Compile Include="Assets/Scripts/GameTask.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextEventCheck.cs" />
-    <Compile Include="Assets/Scripts/GameplayItemAnime.cs" />
+    <Compile Include="Assets/Scripts/InfoBtn.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

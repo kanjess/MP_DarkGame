@@ -16,6 +16,7 @@ public class PlayerItem : MonoBehaviour
     private GameObject playerLosingFace;
 
     private GameMode gameMode;
+    private BasicAction basicAction;
 
     public int batchOrder;  //诞生批次，用以计算lifetime
 
@@ -113,6 +114,7 @@ public class PlayerItem : MonoBehaviour
     {
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
+        basicAction = GameObject.Find("Main Camera").gameObject.GetComponent<BasicAction>();
 
         moveSpeed = 3f;  //像素/s
      
@@ -173,6 +175,16 @@ public class PlayerItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(BasicAction.gameplayItemAction == false)
+        {
+            this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if(BasicAction.gameplayItemAction == true)
+        {
+            this.gameObject.transform.localScale = new Vector3(0, 1, 1);
+        }
+
+
         if(gameMode.gameDynamicProcess == false)
         {
             gameMode.gameProcessPause = true;
