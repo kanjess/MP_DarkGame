@@ -1,19 +1,20 @@
 ﻿<Properties StartupConfiguration="{1B2E5F10-1698-5788-FD06-F3711AD713AE}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameMode.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CashSE.cs">
     <Files>
-      <File FileName="Assets/Scripts/InfoBtn.cs" Line="32" Column="18" />
-      <File FileName="Assets/Scripts/PlayerItem.cs" />
-      <File FileName="Assets/Scripts/DesignPanel.cs" Line="1170" Column="104" />
-      <File FileName="Assets/Scripts/GameplayItem.cs" />
-      <File FileName="Assets/Scripts/GameTask.cs" />
-      <File FileName="Assets/Scripts/GameMode.cs" Line="136" Column="31" />
-      <File FileName="Assets/Scripts/BasicAction.cs" />
-      <File FileName="Assets/Scripts/GameplayItemAnime.cs" Line="94" Column="71" />
+      <File FileName="Assets/Scripts/DesignPanel.cs" Line="696" Column="46" />
+      <File FileName="Assets/Scripts/BasicAction.cs" Line="2073" Column="74" />
+      <File FileName="Assets/Scripts/PlayerItem.cs" Line="568" Column="32" />
+      <File FileName="Assets/Scripts/GameMode.cs" Line="135" Column="25" />
+      <File FileName="Assets/Scripts/BackgroundMusic.cs" />
+      <File FileName="Assets/Scripts/GameplayItemUIItem.cs" />
+      <File FileName="Assets/Scripts/GameplayItem.cs" Line="1252" Column="61" />
+      <File FileName="Assets/Scripts/SoundEffect.cs" Line="39" Column="6" />
+      <File FileName="Assets/Scripts/CashSE.cs" Line="13" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="c02cd72a-705c-4191-86ed-a4a1a632fc93" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="311295df-aeed-41c5-a14c-fbe4381c15fe" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

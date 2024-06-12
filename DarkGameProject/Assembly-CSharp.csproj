@@ -65,6 +65,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" />
     <Compile Include="Assets/Scripts/GameEnding.cs" />
     <Compile Include="Assets/Scripts/DesignPanel.cs" />
+    <Compile Include="Assets/Scripts/InfoBtn.cs" />
     <Compile Include="Assets/Scripts/MemoPad.cs" />
     <Compile Include="Assets/Scripts/ChartPointItem.cs" />
     <Compile Include="Assets/Scripts/GameMode.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TextMeshSpawner.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01_UGUI.cs" />
     <Compile Include="Assets/Scripts/NestedScrollRect.cs" />
+    <Compile Include="Assets/Scripts/SoundEffect.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextSelector_A.cs" />
     <Compile Include="Assets/Scripts/GameplayItemUIItemDrag.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="Assets/Scripts/MainPathItem.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextEventCheck.cs" />
-    <Compile Include="Assets/Scripts/InfoBtn.cs" />
+    <Compile Include="Assets/Scripts/CashSE.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

@@ -21,6 +21,7 @@ public class GameplayItemUIItem : MonoBehaviour
     public bool newItemShow = false;
 
     private DesignPanel designPanel;
+    private SoundEffect soundEffect;
 
     public int itemID;
     public int itemLevel = 1;
@@ -54,6 +55,7 @@ public class GameplayItemUIItem : MonoBehaviour
         levelNum = levelContent.transform.Find("ItemNum").gameObject;
 
         designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
+        soundEffect = GameObject.Find("Canvas").gameObject.GetComponent<SoundEffect>();
 
         itemNum = 1;
         itemNumMax = 1;
@@ -81,6 +83,7 @@ public class GameplayItemUIItem : MonoBehaviour
         levelUpBtn.GetComponent<Button>().onClick.AddListener(delegate
         {
             designPanel.DesignItemLevelPanel(this.gameObject);
+            soundEffect.ButtonClick();
         });
 
         UnlockListen();

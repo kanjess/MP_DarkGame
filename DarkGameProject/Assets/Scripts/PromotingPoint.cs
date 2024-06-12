@@ -17,11 +17,14 @@ public class PromotingPoint : MonoBehaviour
 
     private float coolDown;
 
+    //private SoundEffect soundEffect;
+
     private void Awake()
     {
         coolDown = Random.Range(0.1f, 1f);
 
         designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
+        //soundEffect = GameObject.Find("Canvas").gameObject.GetComponent<SoundEffect>();
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
 
         point1 = this.gameObject.transform.parent.gameObject;

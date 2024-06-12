@@ -2501,6 +2501,7 @@ MonoBehaviour:
   outputBlockPath: {fileID: 7813984813400739042}
   specialInputBlockPath: {fileID: 357601725676239382}
   specialOutputBlockPath: {fileID: 0}
+  touchBtn: {fileID: 0}
 --- !u!114 &584039370717242153
 MonoBehaviour:
   m_ObjectHideFlags: 0

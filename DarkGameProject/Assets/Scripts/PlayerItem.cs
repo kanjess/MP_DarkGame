@@ -110,11 +110,14 @@ public class PlayerItem : MonoBehaviour
 
     private bool offLine = false;
 
+    private CashSE cashSE;
+
     private void Awake()
     {
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         gameplayMapping = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayMapping>();
         basicAction = GameObject.Find("Main Camera").gameObject.GetComponent<BasicAction>();
+        cashSE = GameObject.Find("Canvas").gameObject.GetComponent<CashSE>();
 
         moveSpeed = 3f;  //像素/s
      
@@ -562,6 +565,7 @@ public class PlayerItem : MonoBehaviour
             gameMode.revenuePerTime += pay;
 
             cuMoney += pay;
+            cashSE.CashStart();
 
             if(isPromotingPlayer == true)
             {

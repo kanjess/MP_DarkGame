@@ -128,6 +128,11 @@ public class GameplayItem : MonoBehaviour
     public GameObject specialInputBlockPath;
     public GameObject specialOutputBlockPath;
 
+    //点击打开编辑
+    //public GameObject touchBtn;
+    private DesignPanel designPanel;
+    private SoundEffect soundEffect;
+
 
     private void Awake()
     {
@@ -136,6 +141,8 @@ public class GameplayItem : MonoBehaviour
         gameMode = GameObject.Find("Main Camera").gameObject.GetComponent<GameMode>();
         gameplayEffect = GameObject.Find("Main Camera").gameObject.GetComponent<GameplayEffect>();
         cameraControl = GameObject.Find("Main Camera").gameObject.GetComponent<CameraControl>();
+        designPanel = GameObject.Find("Canvas").gameObject.GetComponent<DesignPanel>();
+        soundEffect = GameObject.Find("Canvas").gameObject.GetComponent<SoundEffect>();
 
         itemOccupiedAreaList0 = new List<Vector3Int>();
         itemOccupiedAreaList = new List<Vector3Int>();
@@ -884,6 +891,8 @@ public class GameplayItem : MonoBehaviour
         }
 
         PathUnlinkShow();
+
+
     }
 
     private void FixedUpdate()
@@ -1212,6 +1221,16 @@ public class GameplayItem : MonoBehaviour
     //101特殊逻辑，gamemode打开监听
     public void GameProcessStart()
     {
+        bool seReset = false;
+        if(gameMode.gameDynamicProcess == true)
+        {
+            seReset = false;
+        }
+        else
+        {
+            seReset = true;
+        }
+
         gameMode.gameDynamicProcess = false;
 
         if (itemID == 101)
@@ -1232,6 +1251,11 @@ public class GameplayItem : MonoBehaviour
                         //如果包含101则闭环
                         if(checkL.Contains(this.gameObject))
                         {
+                            if(seReset == true)
+                            {
+                                soundEffect.LoopStart();
+                            }
+                            
                             gameMode.gameDynamicProcess = true;
                             break;
                         }

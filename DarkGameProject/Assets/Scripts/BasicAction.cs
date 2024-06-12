@@ -90,9 +90,12 @@ public class BasicAction : MonoBehaviour
     private GameObject darkLinkPoint;
     private Vector3Int darkLinkPos;
 
+    private SoundEffect soundEffect;
+
     private void Awake()
     {
         cameraControl = this.gameObject.GetComponent<CameraControl>();
+        soundEffect = GameObject.Find("Canvas").gameObject.GetComponent<SoundEffect>();
         //preItemOcuPosList = new List<Vector3Int>();
     }
 
@@ -126,7 +129,34 @@ public class BasicAction : MonoBehaviour
             {
                 MouseDragCheck();
             }
-            
+
+        }
+        else if (gameplayItemSetMode == false)
+        {
+            if (designPenel.gameTaskPanelOpen == false && designPenel.gamePromotionPanelOpen == false && designPenel.designItemPanelOpen == false)
+            {
+                //鼠标移动监听
+                Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D mHit = Physics2D.Raycast(mPosition, Vector2.zero);
+
+                if (mHit.collider != null)
+                {
+                    mousHitObject = mHit.collider.gameObject;
+                }
+                else
+                {
+                    mousHitObject = null;
+                }
+                //Debug.Log(mousHitObject.name);
+
+                if (mousHitObject != null && (mousHitObject.gameObject.name == "MoveBtn" || mousHitObject.gameObject.name == "OutputBtn" || mousHitObject.gameObject.name == "InputBtn" || mousHitObject.gameObject.name == "SpecialInputBtn" || mousHitObject.gameObject.name == "SpecialOutputBtn"))
+                {
+                    if (Input.GetMouseButton(0))
+                    {
+                        designPenel.DesignPanelAnime();
+                    }    
+                }
+            }
         }
 
     }
@@ -873,10 +903,11 @@ public class BasicAction : MonoBehaviour
             //mousePosition.z = 0;
             //放置
             if (dragPosState == 0)
-            {
+            {             
                 //重新放置（普通）
                 if(dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == true)
                 {
+                    soundEffect.FuncIn();
                     //非法坐标调整
                     //前占位坐标移除
                     targetOJ.GetComponent<GameplayItem>().IllegalMapRemove();
@@ -957,6 +988,7 @@ public class BasicAction : MonoBehaviour
                 //dark patterns 重新放置
                 else if (dragMapValid == true && targetOJ.GetComponent<GameplayItem>().isMain == false && darkHasLink == true)
                 {
+                    soundEffect.FuncInDark();
                     //是否变位置？
                     if (darkLinkPoint == targetOJ.GetComponent<GameplayItem>().linkDarkSocketPoint)
                     {
@@ -983,6 +1015,7 @@ public class BasicAction : MonoBehaviour
                 //判定是否回收
                 if(targetOJ.GetComponent<GameplayItem>().canPutBack == true)
                 {
+                    soundEffect.FuncBack();
                     //回收
                     if (targetOJ != null)
                     {
@@ -1178,6 +1211,8 @@ public class BasicAction : MonoBehaviour
             {
                 if (temRoadObjectLayer.transform.childCount > 0)
                 {
+                    soundEffect.FuncLink();
+
                     //两个连接体相互连接 && 数据更新 && 清理
                     LinkObjectDataClear(targetOJ, otherTargetOJ, roadEditDefaultDirection, specialItemLink);
 
@@ -1316,8 +1351,9 @@ public class BasicAction : MonoBehaviour
         {
             if (dragPosState == 0)
             {
-                if(isdark == false)
+                if (isdark == false)
                 {
+                    soundEffect.FuncIn();
                     //创建
                     InsGameplayItemSet(id);
                     GameObject oj = Instantiate(gameplayItem) as GameObject;
@@ -1348,6 +1384,7 @@ public class BasicAction : MonoBehaviour
                 }
                 else if(isdark == true && darkHasLink == true)
                 {
+                    soundEffect.FuncInDark();
                     //创建
                     InsGameplayItemSet(id);
                     GameObject oj = Instantiate(gameplayItem) as GameObject;
